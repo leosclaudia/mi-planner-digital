@@ -189,6 +189,9 @@
   .portada-lang{position:absolute;top:20px;right:20px;z-index:2;}
   .printbtn{flex-shrink:0;background:var(--card);border:1px solid var(--mintLine);color:var(--ink);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:2px;}
   .printbtn svg{width:16px;height:16px;}
+  .card-h-printbtn{background:none;border:none;color:inherit;opacity:.6;cursor:pointer;padding:2px;display:flex;align-items:center;}
+  .card-h-printbtn svg{width:15px;height:15px;}
+  .card-h-printbtn:hover{opacity:1;}
 
   /* ---------- vista de impresión / exportación ---------- */
   #printArea{display:none;}
@@ -588,7 +591,7 @@ function renderInicio(){
   const d = state.inicio;
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard(t('card_hoy'),'r_inicio_hoy',t('ph_hoy'))}
+    ${richCard(t('card_hoy'),'r_inicio_hoy',t('ph_hoy'),'','inicio_hoy')}
     ${cardBox(t('card_prioridades'), `
       ${d.prioridades.map(p=>`
         <div class="row">
@@ -598,8 +601,8 @@ function renderInicio(){
         </div>
       `).join('')}
       <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_prioridad'))}</button>
-    `, 'terracota')}
-    ${richCard(t('card_recordatorios'),'r_inicio_recordatorios',t('ph_recordatorios'))}
+    `, 'terracota', null, 'inicio_prioridades')}
+    ${richCard(t('card_recordatorios'),'r_inicio_recordatorios',t('ph_recordatorios'),'','inicio_recordatorios')}
   `;
 }
 
@@ -626,7 +629,10 @@ function renderSemana(){
       <div class="card ${tint}">
         <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
           <span>${esc(label.toUpperCase())}</span>
-          <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
+          <span style="display:flex;align-items:center;gap:6px;">
+            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${DIA_SLUGS[dia]}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
+            <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
+          </span>
         </div>
         ${isOpen ? richBoxOnly(key, label, t('ph_dia_notas')) : ''}
       </div>`;
@@ -751,7 +757,7 @@ function renderProyectos(){
 function renderNotasRich(){
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard(t('title_notas'),'r_notas', state.lang==='en' ? 'Text, images, stickers, hand-drawing...' : 'Texto, imágenes, stickers, dibujo a mano...')}
+    ${richCard(t('title_notas'),'r_notas', state.lang==='en' ? 'Text, images, stickers, hand-drawing...' : 'Texto, imágenes, stickers, dibujo a mano...', '', 'notas')}
   `;
 }
 
@@ -898,11 +904,12 @@ function toggleBoard(boardKey, slotKey){
   render();
 }
 /* Caja de tarjeta simple (sin lienzo/pizarra — ese sistema fue reemplazado por el de texto enriquecido) */
-function cardBox(title, content, tint, bodyClass){
+function cardBox(title, content, tint, bodyClass, printKey){
   const cls = 'card-b' + (bodyClass ? ' '+bodyClass : '');
+  const printBtn = printKey ? `<button class="card-h-printbtn" onclick="App.printCard('${printKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
   return `
     <div class="card${tint?' '+tint:''}">
-      <div class="card-h"><span>${esc(title)}</span></div>
+      <div class="card-h"><span>${esc(title)}</span>${printBtn}</div>
       <div class="${cls}">${content}</div>
     </div>
   `;
@@ -1496,11 +1503,12 @@ let richDrawHistory = {}, richDrawFuture = {};
 let richCopied = '';
 let richCustomTextColor = '#7A3B3B', richCustomHighlightColor = '#FFF59D';
 
-function richCard(title, key, placeholder, tint){
+function richCard(title, key, placeholder, tint, printKey){
   const data = getRich(key);
+  const printBtn = printKey ? `<button class="card-h-printbtn" onclick="App.printCard('${printKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
   return `
     <div class="card${tint?' '+tint:''}">
-      <div class="card-h"><span>${esc(title)}</span></div>
+      <div class="card-h"><span>${esc(title)}</span>${printBtn}</div>
       ${richBoxOnly(key, title, placeholder)}
     </div>
   `;
@@ -2268,6 +2276,17 @@ const App = {
     div.innerHTML = buildPrintSectionHTML(screenKey);
     document.body.appendChild(div);
     setTimeout(() => window.print(), 50);
+  },
+
+  /* --- imprimir solo una caja puntual (ej: HOY, PRIORIDADES) --- */
+  printCard(cardKey){
+    const old = document.getElementById('printArea');
+    if (old) old.remove();
+    const div = document.createElement('div');
+    div.id = 'printArea';
+    div.innerHTML = buildPrintSectionHTML(cardKey);
+    document.body.appendChild(div);
+    setTimeout(() => window.print(), 50);
   }
 };
 
@@ -2297,6 +2316,17 @@ const PRINT_BUILDERS = {
     html += prioridades.length ? `<ul class="p-checklist">${prioridades.map(p=>`<li class="${p.done?'p-done':''}">${p.done?'☑':'☐'} ${esc(p.text)}</li>`).join('')}</ul>` : pEmpty();
     html += `<h3>${esc(t('card_recordatorios'))}</h3>${pRichBlock('r_inicio_recordatorios')}`;
     return html + `</section>`;
+  },
+  inicio_hoy(){
+    return `<section class="p-section"><h2>${esc(t('card_hoy'))}</h2>${pRichBlock('r_inicio_hoy')}</section>`;
+  },
+  inicio_prioridades(){
+    const prioridades = state.inicio.prioridades.filter(p=>p.text);
+    const body = prioridades.length ? `<ul class="p-checklist">${prioridades.map(p=>`<li class="${p.done?'p-done':''}">${p.done?'☑':'☐'} ${esc(p.text)}</li>`).join('')}</ul>` : pEmpty();
+    return `<section class="p-section"><h2>${esc(t('card_prioridades'))}</h2>${body}</section>`;
+  },
+  inicio_recordatorios(){
+    return `<section class="p-section"><h2>${esc(t('card_recordatorios'))}</h2>${pRichBlock('r_inicio_recordatorios')}</section>`;
   },
   semana(){
     let html = `<section class="p-section"><h2>${esc(t('title_semana'))}</h2>`;
@@ -2376,6 +2406,12 @@ const PRINT_BUILDERS = {
     return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pRichBlock('r_notas')}</section>`;
   }
 };
+/* Constructores de impresión para cada día individual de Semana */
+DIAS.forEach(dia=>{
+  PRINT_BUILDERS['semana_dia_'+DIA_SLUGS[dia]] = function(){
+    return `<section class="p-section"><h2>${esc(dayLabel(dia).toUpperCase())}</h2>${pRichBlock('semana_'+DIA_SLUGS[dia])}</section>`;
+  };
+});
 const PRINT_ORDER = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
 
 function printCover(){
