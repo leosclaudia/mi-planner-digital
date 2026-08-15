@@ -2,9 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 <title>Mi Planner Digital</title>
-<meta name="theme-color" content="#65475F" />
+<meta name="theme-color" content="#2F5D50" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -13,9 +13,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FBF8F1; --card:#FFFDFC; --ink:#65475F; --sub:#6E7772;
+    --bg:#FBF8F1; --card:#FFFDFC; --ink:#2F5D50; --sub:#6E7772;
     --mint:#DDE9DF; --mintLine:#AFC8B7; --terracota:#F2DFD6; --terracotaLine:#D9B3A3;
-    --accent:#9B7A94;
+    --accent:#79B553;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   svg{width:16px;height:16px;display:block;flex-shrink:0;}
@@ -142,8 +142,8 @@
   .richswatch{width:28px;height:28px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--mintLine);cursor:pointer;flex-shrink:0;}
   .richswatch.square{border-radius:8px;}
   .richlabel{font-size:11px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:5px;width:100%;margin-bottom:2px;}
-  .richstickergrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:220px;overflow-y:auto;margin-bottom:8px;}
-  .richstickergrid button{background:#fff;border:1px solid var(--mintLine);border-radius:10px;height:44px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .richstickergrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-height:150px;overflow-y:auto;margin-bottom:8px;}
+  .richstickergrid button{background:var(--mint);border:none;border-radius:8px;height:32px;font-size:16px;cursor:pointer;}
   .richediting{font-size:11px;color:var(--sub);margin-top:6px;}
   .richbox{position:relative;min-height:110px;}
   .richtext{position:relative;z-index:10;min-height:110px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--ink);outline:none;}
@@ -183,42 +183,6 @@
   .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
   .card-h-btn svg{width:14px;height:14px;}
-  .langtoggle{flex-shrink:0;display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--mintLine);border-radius:20px;padding:3px;gap:2px;margin-top:2px;}
-  .langtoggle-seg{border:none;background:none;color:var(--sub);font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:6px 13px;border-radius:16px;cursor:pointer;}
-  .langtoggle-seg.active{background:var(--ink);color:#fff;}
-  .portada-lang{position:absolute;top:20px;right:20px;z-index:2;}
-  .printbtn{flex-shrink:0;background:var(--card);border:1px solid var(--mintLine);color:var(--ink);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:2px;}
-  .printbtn svg{width:16px;height:16px;}
-  .card-h-printbtn{background:none;border:none;color:inherit;opacity:.6;cursor:pointer;padding:2px;display:flex;align-items:center;}
-  .card-h-printbtn svg{width:15px;height:15px;}
-  .card-h-printbtn:hover{opacity:1;}
-
-  /* ---------- vista de impresión / exportación ---------- */
-  #printArea{display:none;}
-  @media print{
-    body > *:not(#printArea){display:none !important;}
-    #printArea{display:block !important;}
-    .p-doc{font-family:'Inter',system-ui,sans-serif;color:#65475F;max-width:100%;}
-    .p-cover{text-align:center;padding:20px 0 24px;border-bottom:2px solid #65475F;margin-bottom:18px;}
-    .p-cover h1{font-family:'Lora',serif;font-size:26px;margin:0 0 6px;}
-    .p-cover p{font-size:13px;color:#6E7772;margin:0;text-transform:capitalize;}
-    .p-section{page-break-inside:avoid;margin-bottom:22px;}
-    .p-section h2{font-family:'Lora',serif;font-size:18px;background:#EADFE7;padding:6px 10px;border-radius:6px;margin:0 0 10px;}
-    .p-section h3{font-size:13px;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.03em;color:#65475F;}
-    .p-sub{font-size:12.5px;margin:2px 0 6px;}
-    .p-empty{font-size:12px;color:#999;margin:2px 0 8px;}
-    .p-rich{font-size:12.5px;line-height:1.5;margin-bottom:6px;}
-    .p-rich img{max-width:200px;height:auto;}
-    .p-drawing{max-width:100%;max-height:220px;border:1px solid #DDE9DF;border-radius:6px;margin-bottom:8px;}
-    .p-checklist{list-style:none;padding:0;margin:0 0 8px;font-size:12.5px;}
-    .p-checklist li{padding:2px 0;}
-    .p-checklist li.p-done{color:#999;text-decoration:line-through;}
-    .p-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;}
-    .p-table th,.p-table td{border:1px solid #DDE9DF;padding:4px 8px;text-align:left;}
-    .p-subcard{border:1px solid #DDE9DF;border-radius:8px;padding:10px 12px;margin-bottom:10px;page-break-inside:avoid;}
-    @page{margin:16mm;}
-  }
-  img.emoji{height:1.4em;width:1.4em;vertical-align:-0.3em;}
 </style>
 </head>
 <body>
@@ -237,171 +201,6 @@ const DB = {
 };
 const uid = () => Math.random().toString(36).slice(2,9);
 
-/* ---------- traducciones ---------- */
-const I18N = {
-  es: {
-    tab_inicio:'Inicio', tab_semana:'Semana', tab_habitos:'Hábitos', tab_asistente:'Asistente', tab_mas:'Más',
-    title_inicio:'Inicio', sub_inicio:'Un espacio simple para ordenar lo importante',
-    title_semana:'Semana', sub_semana:'Tocá un día para abrirlo',
-    title_habitos:'Hábitos', sub_habitos:'Marcá cada día sin buscar perfección',
-    title_mas:'Más', sub_mas:'El resto de tu planner',
-    title_finanzas:'Finanzas', sub_finanzas:'Lo que entra, lo que sale y lo que querés cuidar',
-    title_proyectos:'Proyectos', sub_proyectos:'Uno por cada idea que querés llevar a la práctica',
-    title_notas:'Notas', sub_notas:'Escribí, dibujá o pegá lo que quieras',
-    title_objetivos:'Objetivos', sub_objetivos:'Elegí pocas metas, claras y posibles',
-    title_asistente:'Asistente', sub_asistente:'Pedile una mano para organizarte',
-    title_compras:'Compras', sub_compras:'Lo que tenés que comprar',
-    title_turnos:'Turnos', sub_turnos:'Citas, clases y encuentros',
-    title_comidas:'Comidas', sub_comidas:'Un menú simple para la semana',
-    title_sync:'Sincronizar', sub_sync:'Compartí tu planner entre dispositivos',
-    back_mas:'Más',
-    menu_finanzas:'Finanzas', menu_finanzas_sub:'Ingresos, gastos y ahorro',
-    menu_proyectos:'Proyectos', menu_proyectos_sub:'Uno por cada idea',
-    menu_objetivos:'Objetivos', menu_objetivos_sub:'Metas del año',
-    menu_notas:'Notas', menu_notas_sub:'Espacio libre',
-    menu_compras:'Compras', menu_compras_sub:'Lista para el mercado',
-    menu_turnos:'Turnos', menu_turnos_sub:'Citas y encuentros',
-    menu_comidas:'Comidas', menu_comidas_sub:'Menú de la semana',
-    menu_sync:'Sincronizar', menu_sync_sub:'Entre tus dispositivos',
-    portada_title1:'MI PLANNER', portada_title2:'DIGITAL', portada_tagline:'para vos',
-    portada_desc:'Organizá tu día a día, tu huerta y tus proyectos, a tu manera',
-    portada_start:'TOCÁ PARA COMENZAR',
-    card_hoy:'HOY', ph_hoy:'¿Qué es lo más importante de hoy?...',
-    card_prioridades:'PRIORIDADES', ph_prioridad:'Escribí una prioridad', btn_agregar_prioridad:'Agregar prioridad',
-    card_recordatorios:'RECORDATORIOS', ph_recordatorios:'Cosas para no olvidar...',
-    card_enfoque:'ENFOQUE DE LA SEMANA', ph_enfoque:'¿En qué te querés enfocar?',
-    ph_dia_notas:'Tareas, notas...',
-    dia_lunes:'Lunes', dia_martes:'Martes', dia_miercoles:'Miércoles', dia_jueves:'Jueves', dia_viernes:'Viernes', dia_sabado:'Sábado', dia_domingo:'Domingo',
-    card_ingresos:'INGRESOS', card_gastos:'GASTOS', card_ahorro:'AHORRO / META',
-    card_movimientos:'MOVIMIENTOS', ph_fecha:'Fecha', ph_detalle:'Detalle', ph_monto:'Monto', btn_agregar_mov:'Agregar movimiento',
-    card_para_recordar:'PARA RECORDAR', ph_algo_recordar:'Algo para recordar', btn_agregar:'Agregar',
-    ph_nombre_proyecto:'Nombre del proyecto', ph_fecha_objetivo:'Fecha objetivo',
-    card_objetivo:'OBJETIVO / RESULTADO', ph_objetivo:'¿Cómo se ve el éxito?',
-    card_pasos:'PRÓXIMOS PASOS', ph_paso:'Paso siguiente', btn_agregar_paso:'Agregar paso',
-    card_ideas:'IDEAS, RECURSOS Y NOTAS', ph_ideas:'Anotá lo que sirva...',
-    btn_nuevo_proyecto:'Nuevo proyecto', ph_objetivo_generico:'Objetivo del proyecto', ph_ideas_generico:'Ideas y notas',
-    lbl_meta:'Meta', ph_meta:'¿Qué querés lograr?',
-    lbl_primer_paso:'1er paso', ph_primer_paso:'¿Cuál es el primer paso?',
-    lbl_senal:'Señal', ph_senal:'fecha / señal de avance',
-    cat_personal:'PERSONAL', cat_trabajo:'TRABAJO / PROYECTOS', cat_bienestar:'BIENESTAR', cat_dinero:'DINERO',
-    card_lista_compras:'LISTA DE COMPRAS', ph_compra:'¿Qué falta comprar?',
-    ph_turno_titulo:'¿Con quién / qué es?', btn_avisarme:'Avisarme', btn_te_avisare:'Te voy a avisar',
-    btn_activar_recordatorios:'Activar recordatorios en este dispositivo', btn_nuevo_turno:'Nuevo turno',
-    ph_notas_turno:'Notas...', ph_notas_turno_generico:'Notas del turno',
-    ph_comida:'¿Qué vas a comer?',
-    ph_nombre_habito:'Nombre del hábito', btn_agregar_habito:'Agregar hábito',
-    card_conectado:'CONECTADO', txt_sync_con:'Este dispositivo está sincronizando con el código:',
-    txt_sync_instrucciones:'Ingresá el mismo código y la misma configuración en tu otro dispositivo para que compartan los datos.',
-    btn_desconectar:'Desconectar este dispositivo',
-    card_config_firebase:'CONFIGURACIÓN DE FIREBASE',
-    txt_firebase_instrucciones:'Creá un proyecto gratis en <b>console.firebase.google.com</b> → Firestore Database → y pegá acá la config web (Configuración del proyecto → tus apps → SDK setup and configuration).',
-    card_codigo_sync:'CÓDIGO DE SINCRONIZACIÓN',
-    txt_codigo_instrucciones:'Inventá una palabra o frase. Usá la misma en todos tus dispositivos.',
-    ph_codigo_sync:'ej: planner-familia-2026',
-    btn_conectar:'Conectar', txt_sync_privacidad:'Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.',
-    tab_chat:'Chat', tab_dump:'Volcar pendientes',
-    ph_chat_msg:'Escribí tu mensaje...', ph_chat_apikey:'Configurá tu API key primero (⚙)',
-    dump_intro:'Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.',
-    ph_dump:'Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta',
-    btn_organizar:'Organizar mis pendientes', btn_organizando:'Organizando…',
-    txt_propuesta:'Propuesta', btn_a_prioridades:'A Prioridades', btn_a_compras:'A Compras',
-    btn_agregar_todo:'Agregar todo a mi planner',
-    rich_editing:'Editando:', rich_choose_font:'Elegir fuente', rich_search_sticker:'Buscar o pegar cualquier emoji...',
-    rich_color_texto:'Color del texto', rich_resaltador:'Resaltador',
-    rich_texto_normal:'Texto normal', rich_quitar_resaltado:'Quitar resaltado',
-    rich_fino:'Fino', rich_medio:'Medio', rich_grueso:'Grueso', rich_muy_grueso:'Muy grueso',
-    rich_borrar_dibujo:'Borrar dibujo', rich_convertir_texto:'Convertir lo escrito a texto',
-    rich_cortar:'Cortar caja', rich_copiar:'Copiar caja', rich_pegar:'Pegar', rich_vaciar:'Vaciar',
-    chat_welcome:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.',
-    btn_print:'Imprimir / Exportar PDF',
-    lang_toggle:'English',
-  },
-  en: {
-    tab_inicio:'Home', tab_semana:'Week', tab_habitos:'Habits', tab_asistente:'Assistant', tab_mas:'More',
-    title_inicio:'Home', sub_inicio:'A simple space to sort out what matters',
-    title_semana:'Week', sub_semana:'Tap a day to open it',
-    title_habitos:'Habits', sub_habitos:'Check off each day, no need for perfection',
-    title_mas:'More', sub_mas:'The rest of your planner',
-    title_finanzas:'Finances', sub_finanzas:'What comes in, what goes out, and what you want to protect',
-    title_proyectos:'Projects', sub_proyectos:'One for each idea you want to put into action',
-    title_notas:'Notes', sub_notas:'Write, draw, or paste whatever you want',
-    title_objetivos:'Goals', sub_objetivos:'Choose a few goals, clear and achievable',
-    title_asistente:'Assistant', sub_asistente:'Ask for a hand getting organized',
-    title_compras:'Shopping', sub_compras:'What you need to buy',
-    title_turnos:'Appointments', sub_turnos:'Appointments, classes and meetings',
-    title_comidas:'Meals', sub_comidas:'A simple menu for the week',
-    title_sync:'Sync', sub_sync:'Share your planner across devices',
-    back_mas:'More',
-    menu_finanzas:'Finances', menu_finanzas_sub:'Income, expenses and savings',
-    menu_proyectos:'Projects', menu_proyectos_sub:'One for each idea',
-    menu_objetivos:'Goals', menu_objetivos_sub:'This year\'s goals',
-    menu_notas:'Notes', menu_notas_sub:'Free space',
-    menu_compras:'Shopping', menu_compras_sub:'Grocery list',
-    menu_turnos:'Appointments', menu_turnos_sub:'Appointments and meetings',
-    menu_comidas:'Meals', menu_comidas_sub:'Weekly menu',
-    menu_sync:'Sync', menu_sync_sub:'Between your devices',
-    portada_title1:'MY DIGITAL', portada_title2:'PLANNER', portada_tagline:'made for you',
-    portada_desc:'Organize your day to day, your garden, and your projects, your way',
-    portada_start:'TAP TO START',
-    card_hoy:'TODAY', ph_hoy:'What\'s most important today?...',
-    card_prioridades:'PRIORITIES', ph_prioridad:'Write a priority', btn_agregar_prioridad:'Add priority',
-    card_recordatorios:'REMINDERS', ph_recordatorios:'Things not to forget...',
-    card_enfoque:'FOCUS OF THE WEEK', ph_enfoque:'What do you want to focus on?',
-    ph_dia_notas:'Tasks, notes...',
-    dia_lunes:'Monday', dia_martes:'Tuesday', dia_miercoles:'Wednesday', dia_jueves:'Thursday', dia_viernes:'Friday', dia_sabado:'Saturday', dia_domingo:'Sunday',
-    card_ingresos:'INCOME', card_gastos:'EXPENSES', card_ahorro:'SAVINGS / GOAL',
-    card_movimientos:'TRANSACTIONS', ph_fecha:'Date', ph_detalle:'Detail', ph_monto:'Amount', btn_agregar_mov:'Add transaction',
-    card_para_recordar:'TO REMEMBER', ph_algo_recordar:'Something to remember', btn_agregar:'Add',
-    ph_nombre_proyecto:'Project name', ph_fecha_objetivo:'Target date',
-    card_objetivo:'GOAL / OUTCOME', ph_objetivo:'What does success look like?',
-    card_pasos:'NEXT STEPS', ph_paso:'Next step', btn_agregar_paso:'Add step',
-    card_ideas:'IDEAS, RESOURCES AND NOTES', ph_ideas:'Jot down anything useful...',
-    btn_nuevo_proyecto:'New project', ph_objetivo_generico:'Project goal', ph_ideas_generico:'Ideas and notes',
-    lbl_meta:'Goal', ph_meta:'What do you want to achieve?',
-    lbl_primer_paso:'1st step', ph_primer_paso:'What\'s the first step?',
-    lbl_senal:'Signal', ph_senal:'date / sign of progress',
-    cat_personal:'PERSONAL', cat_trabajo:'WORK / PROJECTS', cat_bienestar:'WELLNESS', cat_dinero:'MONEY',
-    card_lista_compras:'SHOPPING LIST', ph_compra:'What do you need to buy?',
-    ph_turno_titulo:'Who / what is it?', btn_avisarme:'Notify me', btn_te_avisare:'I\'ll remind you',
-    btn_activar_recordatorios:'Enable reminders on this device', btn_nuevo_turno:'New appointment',
-    ph_notas_turno:'Notes...', ph_notas_turno_generico:'Appointment notes',
-    ph_comida:'What are you eating?',
-    ph_nombre_habito:'Habit name', btn_agregar_habito:'Add habit',
-    card_conectado:'CONNECTED', txt_sync_con:'This device is syncing with the code:',
-    txt_sync_instrucciones:'Enter the same code and the same configuration on your other device so they share data.',
-    btn_desconectar:'Disconnect this device',
-    card_config_firebase:'FIREBASE CONFIGURATION',
-    txt_firebase_instrucciones:'Create a free project at <b>console.firebase.google.com</b> → Firestore Database → and paste the web config here (Project settings → your apps → SDK setup and configuration).',
-    card_codigo_sync:'SYNC CODE',
-    txt_codigo_instrucciones:'Make up a word or phrase. Use the same one on all your devices.',
-    ph_codigo_sync:'e.g: family-planner-2026',
-    btn_conectar:'Connect', txt_sync_privacidad:'None of this goes through our servers: it\'s saved directly to your own Firebase project, under your own account.',
-    tab_chat:'Chat', tab_dump:'Brain dump',
-    ph_chat_msg:'Type your message...', ph_chat_apikey:'Set up your API key first (⚙)',
-    dump_intro:'Write down everything on your mind, in any order. The assistant splits it into separate items and suggests whether they go to today\'s Priorities or the Shopping list. You can adjust everything before saving.',
-    ph_dump:'E.g: call the accountant, buy tomatoes and bread, water the garden, reply to client email',
-    btn_organizar:'Organize my to-dos', btn_organizando:'Organizing…',
-    txt_propuesta:'Proposal', btn_a_prioridades:'To Priorities', btn_a_compras:'To Shopping',
-    btn_agregar_todo:'Add everything to my planner',
-    rich_editing:'Editing:', rich_choose_font:'Choose font', rich_search_sticker:'Search or paste any emoji...',
-    rich_color_texto:'Text color', rich_resaltador:'Highlighter',
-    rich_texto_normal:'Normal text', rich_quitar_resaltado:'Remove highlight',
-    rich_fino:'Thin', rich_medio:'Medium', rich_grueso:'Thick', rich_muy_grueso:'Extra thick',
-    rich_borrar_dibujo:'Clear drawing', rich_convertir_texto:'Convert handwriting to text',
-    rich_cortar:'Cut box', rich_copiar:'Copy box', rich_pegar:'Paste', rich_vaciar:'Clear',
-    chat_welcome:'Hi! I\'m your planner assistant. Tell me what\'s going on and I\'ll help you get organized.',
-    btn_print:'Print / Export PDF',
-    lang_toggle:'Español',
-  }
-};
-function t(key){
-  const lang = (typeof state!=='undefined' && state.lang) ? state.lang : 'es';
-  const dict = I18N[lang] || I18N.es;
-  return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
-}
-function dayLabel(dia){ return t('dia_'+(DIA_SLUGS[dia]||'')); }
-
-
 /* ---------- estado ---------- */
 let state = {
   tab: 'portada',            // portada | inicio | semana | habitos | asistente | mas
@@ -418,12 +217,11 @@ let state = {
   compras: DB.get('compras', { lista:[{id:uid(),text:'',done:false}] }),
   turnos: DB.get('turnos', { lista:[] }),
   comidas: DB.get('comidas', { dias:{} }),
-  chat: [],
+  chat: [{role:'bot', text:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.'}],
   apiKey: DB.get('apiKey', ''),
   syncConfig: DB.get('syncConfig', null),
   syncStatus: '',
-  boards: {},
-  lang: DB.get('lang', 'es')
+  boards: {}
 };
 
 /* tableros dinámicos: uno por cada caja, se crean solos la primera vez que se abren */
@@ -455,7 +253,6 @@ const ICONS = {
   trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg>',
   type:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>',
   sticker:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9V4a1 1 0 0 0-1-1z"/><path d="M15 3v6a3 3 0 0 0 3 3h6"/></svg>',
-  gif:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M7 9.5v5M17 9.5h-2.5a1.5 1.5 0 0 0-1.5 1.5v2a1.5 1.5 0 0 0 1.5 1.5H17v-2.5h-1.5"/></svg>',
   pencil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>',
   eraser:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H9L4.5 15.5a1 1 0 0 1 0-1.4l9-9a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L13 20"/></svg>',
   scissors:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/></svg>',
@@ -466,9 +263,7 @@ const ICONS = {
   palette:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.2-.8-.4-1.1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-4.9-4.5-9-11-9z"/></svg>',
   more:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8M3 10l4-4M3 10l4 4"/></svg>',
-  redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>',
-  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  printer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
+  redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>'
 };
 
 const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -479,31 +274,22 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 function chkSvg(done){ return done ? ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>','').replace('stroke="currentColor"','stroke="white"') : ''; }
 
 /* ---------- render principal ---------- */
-function renderLangToggle(extraClass){
-  return `
-    <div class="langtoggle${extraClass?' '+extraClass:''}">
-      <button class="langtoggle-seg ${state.lang==='es'?'active':''}" onclick="App.setLang('es')">ES</button>
-      <button class="langtoggle-seg ${state.lang==='en'?'active':''}" onclick="App.setLang('en')">EN</button>
-    </div>
-  `;
-}
-
 function render(){
   const app = document.getElementById('app');
   const titles = {
-    inicio:[t('title_inicio'), t('sub_inicio')],
-    semana:[t('title_semana'), t('sub_semana')],
-    habitos:[t('title_habitos'), t('sub_habitos')],
-    mas:[t('title_mas'), t('sub_mas')],
-    finanzas:[t('title_finanzas'), t('sub_finanzas')],
-    proyectos:[t('title_proyectos'), t('sub_proyectos')],
-    notas:[t('title_notas'), t('sub_notas')],
-    objetivos:[t('title_objetivos'), t('sub_objetivos')],
-    asistente:[t('title_asistente'), t('sub_asistente')],
-    compras:[t('title_compras'), t('sub_compras')],
-    turnos:[t('title_turnos'), t('sub_turnos')],
-    comidas:[t('title_comidas'), t('sub_comidas')],
-    sync:[t('title_sync'), t('sub_sync')],
+    inicio:['Inicio','Un espacio simple para ordenar lo importante'],
+    semana:['Semana','Tocá un día para abrirlo'],
+    habitos:['Hábitos','Marcá cada día sin buscar perfección'],
+    mas:['Más','El resto de tu planner'],
+    finanzas:['Finanzas','Lo que entra, lo que sale y lo que querés cuidar'],
+    proyectos:['Proyectos','Uno por cada idea que querés llevar a la práctica'],
+    notas:['Notas','Escribí, dibujá o pegá lo que quieras'],
+    objetivos:['Objetivos','Elegí pocas metas, claras y posibles'],
+    asistente:['Asistente','Pedile una mano para organizarte'],
+    compras:['Compras','Lo que tenés que comprar'],
+    turnos:['Turnos','Citas, clases y encuentros'],
+    comidas:['Comidas','Un menú simple para la semana'],
+    sync:['Sincronizar','Compartí tu planner entre dispositivos'],
   };
   let screenKey = state.tab === 'mas' && state.masScreen ? state.masScreen : state.tab;
 
@@ -515,7 +301,7 @@ function render(){
   let [title, subtitle] = titles[screenKey];
   let backRow = '';
   if (state.tab === 'mas' && state.masScreen){
-    backRow = `<div class="backrow" onclick="App.goto('mas', null)">${ICONS.chevron} ${t('back_mas')}</div>`;
+    backRow = `<div class="backrow" onclick="App.goto('mas', null)">${ICONS.chevron} Más</div>`;
   }
 
   let contentHtml = '';
@@ -524,9 +310,7 @@ function render(){
     headerHtml = '';
     contentHtml = renderAsistente();
   } else {
-    const langBtn = screenKey==='inicio' ? renderLangToggle() : '';
-    const printBtn = (screenKey!=='mas' && screenKey!=='sync') ? `<button class="printbtn" onclick="App.printSection('${screenKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
-    headerHtml = `<header class="top">${backRow}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">${printBtn}${langBtn}</div></div><div class="rule"></div></header>`;
+    headerHtml = `<header class="top">${backRow}<h1>${title}</h1><p>${subtitle}</p><div class="rule"></div></header>`;
     if (screenKey==='inicio') contentHtml = renderInicio();
     else if (screenKey==='semana') contentHtml = renderSemana();
     else if (screenKey==='habitos') contentHtml = renderHabitos();
@@ -549,7 +333,7 @@ function render(){
   if (screenKey === 'asistente') scrollChatToBottom();
   if (expandedBoardKey) attachPizarraEvents();
   if (expandedBoardKey && pzDrawMode) initDrawCanvas();
-  if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
+  if (screenKey === 'inicio' || screenKey === 'notas'){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
 }
@@ -558,16 +342,15 @@ function render(){
 function renderPortada(){
   return `
     <div class="portada">
-      ${renderLangToggle('portada-lang')}
       <div class="blob blob-a"></div>
       <div class="blob blob-b"></div>
       <div class="blob blob-c"></div>
       <div class="portada-card">
-        <h1>${esc(t('portada_title1'))}<br/>${esc(t('portada_title2'))}</h1>
-        <p class="tagline">${esc(t('portada_tagline'))}</p>
+        <h1>MI PLANNER<br/>DIGITAL</h1>
+        <p class="tagline">para vos</p>
         <div class="rule2"></div>
-        <p class="desc">${esc(t('portada_desc'))}</p>
-        <button class="startbtn" onclick="App.goto('inicio')">${esc(t('portada_start'))}</button>
+        <p class="desc">Organizá tu día a día, tu huerta y tus proyectos, a tu manera</p>
+        <button class="startbtn" onclick="App.goto('inicio')">TOCÁ PARA COMENZAR</button>
       </div>
     </div>
   `;
@@ -575,14 +358,14 @@ function renderPortada(){
 
 function renderTabBar(){
   const tabs = [
-    ['inicio', ICONS.home, t('tab_inicio')],
-    ['semana', ICONS.calendar, t('tab_semana')],
-    ['habitos', ICONS.check, t('tab_habitos')],
-    ['asistente', ICONS.sparkle, t('tab_asistente')],
-    ['mas', ICONS.grid, t('tab_mas')],
+    ['inicio', ICONS.home, 'Inicio'],
+    ['semana', ICONS.calendar, 'Semana'],
+    ['habitos', ICONS.check, 'Hábitos'],
+    ['asistente', ICONS.sparkle, 'Asistente'],
+    ['mas', ICONS.grid, 'Más'],
   ];
   return `<div class="tabbar">${tabs.map(([id,icon,label])=>`
-    <button class="tab ${state.tab===id?'active':''}" onclick="App.goto('${id}')">${icon}<span>${esc(label)}</span></button>
+    <button class="tab ${state.tab===id?'active':''}" onclick="App.goto('${id}')">${icon}<span>${label}</span></button>
   `).join('')}</div>`;
 }
 
@@ -591,50 +374,54 @@ function renderInicio(){
   const d = state.inicio;
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard(t('card_hoy'),'r_inicio_hoy',t('ph_hoy'),'','inicio_hoy')}
-    ${cardBox(t('card_prioridades'), `
+    ${richCard('HOY','r_inicio_hoy','¿Qué es lo más importante de hoy?...')}
+    ${cardBox('PRIORIDADES','inicio', `
       ${d.prioridades.map(p=>`
         <div class="row">
           <button class="chk ${p.done?'done':''}" onclick="App.toggle('inicio','prioridades','${p.id}')">${p.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-          <input type="text" value="${esc(p.text)}" placeholder="${esc(t('ph_prioridad'))}" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
+          <input type="text" value="${esc(p.text)}" placeholder="Escribí una prioridad" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('inicio','prioridades','${p.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
-      <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_prioridad'))}</button>
-    `, 'terracota', null, 'inicio_prioridades')}
-    ${richCard(t('card_recordatorios'),'r_inicio_recordatorios',t('ph_recordatorios'),'','inicio_recordatorios')}
+      <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} Agregar prioridad</button>
+    `, 'terracota', null, false)}
+    ${richCard('RECORDATORIOS','r_inicio_recordatorios','Cosas para no olvidar...')}
   `;
 }
 
 /* ---------- SEMANA ---------- */
 let openDay = DIAS[0];
-const DIA_SLUGS = {Lunes:'lunes',Martes:'martes','Miércoles':'miercoles',Jueves:'jueves',Viernes:'viernes','Sábado':'sabado',Domingo:'domingo'};
 function renderSemana(){
   const d = state.semana;
   return `
-    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     <div class="card">
       <div class="card-b">
-        <label style="font-size:11px;font-weight:700;">${esc(t('card_enfoque'))}</label>
-        <input type="text" value="${esc(d.enfoque)}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
+        <label style="font-size:11px;font-weight:700;">ENFOQUE DE LA SEMANA</label>
+        <input type="text" value="${esc(d.enfoque)}" placeholder="¿En qué te querés enfocar?" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
       </div>
     </div>
-    ${DIAS.map((dia)=>{
+    ${DIAS.map((dia,dIdx)=>{
       const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota':'';
       const isOpen = openDay===dia;
-      const key = 'semana_'+DIA_SLUGS[dia];
-      migrateDayTextToRich(key, d.dias[dia]);
-      const label = dayLabel(dia);
+      const boardKey = 'semana';
+      const slotKey = 'semana::'+dia;
+      const boardOpen = expandedSlot===slotKey;
+      const dayBoard = getBoard(boardKey);
+      const reallyHasContent = dayBoard.elementos.length > 0 || dayBoard.drawing;
+      const hasBoardContent = dIdx===0 && reallyHasContent;
       return `
       <div class="card ${tint}">
-        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
-          <span>${esc(label.toUpperCase())}</span>
-          <span style="display:flex;align-items:center;gap:6px;">
-            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${DIA_SLUGS[dia]}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
-            <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
-          </span>
-        </div>
-        ${isOpen ? richBoxOnly(key, label, t('ph_dia_notas')) : ''}
+        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')"><span>${dia.toUpperCase()}</span><button class="card-h-btn" onclick="event.stopPropagation();toggleBoard('${boardKey}','${slotKey}')">${boardOpen?ICONS.x:ICONS.pencil}</button></div>
+        ${(!boardOpen && hasBoardContent) ? `
+          <div class="pzpreview" onclick="toggleBoard('${boardKey}','${slotKey}')">
+            <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
+            <div class="pzpreview-canvas">
+              ${dayBoard.drawing ? `<img src="${dayBoard.drawing}"/>` : ''}
+              ${dayBoard.elementos.map(el=>renderPzPreviewEl(el)).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${boardOpen ? `<div class="card-b" style="padding-top:12px;">${renderBoard(boardKey,{height:'280px'})}</div>` : (isOpen && !reallyHasContent ?`<div class="card-b"><textarea rows="3" placeholder="Tareas, notas..." oninput="App.setDayField('${dia}',this.value)">${esc(d.dias[dia]||'')}</textarea></div>`:'')}
       </div>`;
     }).join('')}
   `;
@@ -648,7 +435,7 @@ function renderHabitos(){
       <div class="card">
         <div class="card-b" style="padding-bottom:8px;">
           <div class="row">
-            <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="${esc(t('ph_nombre_habito'))}" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
+            <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="Nombre del hábito" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
             <button class="xbtn" onclick="App.removeItem('habitos','lista','${h.id}')">${ICONS.x}</button>
           </div>
         </div>
@@ -659,26 +446,25 @@ function renderHabitos(){
         </div>
       </div>
     `).join('')}
-    <button class="dashedbtn" onclick="App.addItem('habitos','lista',{nombre:'',marcas:{}})">${ICONS.plus} ${esc(t('btn_agregar_habito'))}</button>
+    <button class="dashedbtn" onclick="App.addItem('habitos','lista',{nombre:'',marcas:{}})">${ICONS.plus} Agregar hábito</button>
   `;
 }
 
 /* ---------- MÁS (menú secundario) ---------- */
 function renderMas(){
   const items = [
-    ['finanzas','menu_finanzas','menu_finanzas_sub'],
-    ['proyectos','menu_proyectos','menu_proyectos_sub'],
-    ['objetivos','menu_objetivos','menu_objetivos_sub'],
-    ['notas','menu_notas','menu_notas_sub'],
-    ['compras','menu_compras','menu_compras_sub'],
-    ['turnos','menu_turnos','menu_turnos_sub'],
-    ['comidas','menu_comidas','menu_comidas_sub'],
-    ['sync','menu_sync','menu_sync_sub'],
+    ['finanzas','Finanzas','Ingresos, gastos y ahorro'],
+    ['proyectos','Proyectos','Uno por cada idea'],
+    ['objetivos','Objetivos','Metas del año'],
+    ['notas','Notas','Espacio libre'],
+    ['compras','Compras','Lista para el mercado'],
+    ['turnos','Turnos','Citas y encuentros'],
+    ['comidas','Comidas','Menú de la semana'],
+    ['sync','Sincronizar','Entre tus dispositivos'],
   ];
-  return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
-    <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
-  `).join('')}</div>
-  <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>`;
+  return `<div class="grid4menu">${items.map(([id,label,sub])=>`
+    <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${label}</b><span>${sub}</span></button>
+  `).join('')}</div>`;
 }
 
 /* ---------- FINANZAS ---------- */
@@ -686,33 +472,33 @@ function renderFinanzas(){
   const f = state.finanzas;
   return `
     <div class="grid2">
-      ${cardBox(t('card_ingresos'), `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
-      ${cardBox(t('card_gastos'), `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row')}
+      ${cardBox('INGRESOS','finanzas', `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
+      ${cardBox('GASTOS','finanzas', `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row', false)}
     </div>
-    ${cardBox(t('card_ahorro'), `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row')}
+    ${cardBox('AHORRO / META','finanzas', `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row', false)}
 
-    ${cardBox(t('card_movimientos'), `
+    ${cardBox('MOVIMIENTOS','finanzas', `
       ${f.movimientos.map(m=>`
         <div class="mov-row">
-          <input type="text" placeholder="${esc(t('ph_fecha'))}" value="${esc(m.fecha)}" oninput="App.setListField('finanzas','movimientos','${m.id}','fecha',this.value)"/>
-          <input type="text" placeholder="${esc(t('ph_detalle'))}" value="${esc(m.detalle)}" oninput="App.setListField('finanzas','movimientos','${m.id}','detalle',this.value)"/>
-          <input type="text" placeholder="${esc(t('ph_monto'))}" value="${esc(m.monto)}" oninput="App.setListField('finanzas','movimientos','${m.id}','monto',this.value)"/>
+          <input type="text" placeholder="Fecha" value="${esc(m.fecha)}" oninput="App.setListField('finanzas','movimientos','${m.id}','fecha',this.value)"/>
+          <input type="text" placeholder="Detalle" value="${esc(m.detalle)}" oninput="App.setListField('finanzas','movimientos','${m.id}','detalle',this.value)"/>
+          <input type="text" placeholder="Monto" value="${esc(m.monto)}" oninput="App.setListField('finanzas','movimientos','${m.id}','monto',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('finanzas','movimientos','${m.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
-      <button class="addlink" onclick="App.addItem('finanzas','movimientos',{fecha:'',detalle:'',monto:''})">${ICONS.plus} ${esc(t('btn_agregar_mov'))}</button>
-    `, 'terracota')}
+      <button class="addlink" onclick="App.addItem('finanzas','movimientos',{fecha:'',detalle:'',monto:''})">${ICONS.plus} Agregar movimiento</button>
+    `, 'terracota', null, false)}
 
-    ${cardBox(t('card_para_recordar'), `
+    ${cardBox('PARA RECORDAR','finanzas', `
       ${f.recordar.map(r=>`
         <div class="row">
           <button class="chk ${r.done?'done':''}" onclick="App.toggle('finanzas','recordar','${r.id}')">${r.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-          <input type="text" value="${esc(r.text)}" placeholder="${esc(t('ph_algo_recordar'))}" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
+          <input type="text" value="${esc(r.text)}" placeholder="Algo para recordar" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('finanzas','recordar','${r.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
-      <button class="addlink" onclick="App.addItem('finanzas','recordar',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar'))}</button>
-    `)}
+      <button class="addlink" onclick="App.addItem('finanzas','recordar',{text:'',done:false})">${ICONS.plus} Agregar</button>
+    `, '', null, false)}
   `;
 }
 
@@ -720,36 +506,31 @@ function renderFinanzas(){
 function renderProyectos(){
   const lista = state.proyectos.lista;
   return `
-    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${lista.map((p)=>`
+    ${lista.map((p,pIdx)=>`
       <div class="card">
         <div class="card-b">
           <div class="row">
-            <input type="text" style="font-weight:700;font-size:15px;" placeholder="${esc(t('ph_nombre_proyecto'))}" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
+            <input type="text" style="font-weight:700;font-size:15px;" placeholder="Nombre del proyecto" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
             <button class="xbtn" onclick="App.removeItem('proyectos','lista','${p.id}')">${ICONS.x}</button>
           </div>
-          <input type="text" placeholder="${esc(t('ph_fecha_objetivo'))}" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
+          <input type="text" placeholder="Fecha objetivo" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
         </div>
       </div>
-      <div class="card terracota">
-        <div class="card-h"><span>${esc(t('card_objetivo'))}</span></div>
-        ${migrateDayTextToRich('proy_'+p.id+'_obj', p.objetivo) || richBoxOnly('proy_'+p.id+'_obj', p.nombre||t('ph_objetivo_generico'), t('ph_objetivo'))}
+      <div class="grid2">
+        ${cardBox('OBJETIVO / RESULTADO','proyectos', `<textarea rows="3" placeholder="¿Cómo se ve el éxito?" oninput="App.setListField('proyectos','lista','${p.id}','objetivo',this.value)">${esc(p.objetivo||'')}</textarea>`, 'terracota', null, pIdx===0)}
+        ${cardBox('PRÓXIMOS PASOS','proyectos', `
+          ${(p.pasos||[]).map(ps=>`
+            <div class="row">
+              <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
+              <input type="text" value="${esc(ps.text)}" placeholder="Paso siguiente" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
+            </div>
+          `).join('')}
+          <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} Agregar paso</button>
+        `, '', null, false)}
       </div>
-      ${cardBox(t('card_pasos'), `
-        ${(p.pasos||[]).map(ps=>`
-          <div class="row">
-            <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-            <input type="text" value="${esc(ps.text)}" placeholder="${esc(t('ph_paso'))}" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
-          </div>
-        `).join('')}
-        <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_paso'))}</button>
-      `)}
-      <div class="card">
-        <div class="card-h"><span>${esc(t('card_ideas'))}</span></div>
-        ${migrateDayTextToRich('proy_'+p.id+'_notas', p.notas) || richBoxOnly('proy_'+p.id+'_notas', p.nombre||t('ph_ideas_generico'), t('ph_ideas'))}
-      </div>
+      ${cardBox('IDEAS, RECURSOS Y NOTAS','proyectos', `<textarea rows="3" placeholder="Anotá lo que sirva" oninput="App.setListField('proyectos','lista','${p.id}','notas',this.value)">${esc(p.notas||'')}</textarea>`, '', null, false)}
     `).join('<div style="height:4px"></div>')}
-    <button class="dashedbtn" onclick="App.addItem('proyectos','lista',{nombre:'',fecha:'',objetivo:'',notas:'',pasos:[]})">${ICONS.plus} ${esc(t('btn_nuevo_proyecto'))}</button>
+    <button class="dashedbtn" onclick="App.addItem('proyectos','lista',{nombre:'',fecha:'',objetivo:'',notas:'',pasos:[]})">${ICONS.plus} Nuevo proyecto</button>
   `;
 }
 
@@ -757,89 +538,95 @@ function renderProyectos(){
 function renderNotasRich(){
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard(t('title_notas'),'r_notas', state.lang==='en' ? 'Text, images, stickers, hand-drawing...' : 'Texto, imágenes, stickers, dibujo a mano...', '', 'notas')}
+    ${richCard('NOTAS','r_notas','Texto, imágenes, stickers, dibujo a mano...')}
   `;
 }
 
 /* ---------- OBJETIVOS ---------- */
 function renderObjetivos(){
-  const cats = [['personal','cat_personal',''],['trabajo','cat_trabajo','terracota'],['bienestar','cat_bienestar','terracota'],['dinero','cat_dinero','']];
+  const cats = [['personal','PERSONAL',''],['trabajo','TRABAJO / PROYECTOS','terracota'],['bienestar','BIENESTAR','terracota'],['dinero','DINERO','']];
   const o = state.objetivos;
-  return cats.map(([key,labelKey,tint])=>
-    cardBox(t(labelKey), `
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_meta'))}</label><input type="text" placeholder="${esc(t('ph_meta'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_primer_paso'))}</label><input type="text" placeholder="${esc(t('ph_primer_paso'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_senal'))}</label><input type="text" value="${esc(o[key].fecha)}" placeholder="${esc(t('ph_senal'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
-    `, tint)
+  return cats.map(([key,label,tint],idx)=>
+    cardBox(label, 'objetivos', `
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Meta</label><input type="text" placeholder="¿Qué querés lograr?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">1er paso</label><input type="text" placeholder="¿Cuál es el primer paso?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Señal</label><input type="text" value="${esc(o[key].fecha)}" placeholder="fecha / señal de avance" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
+    `, tint, null, idx===0)
   ).join('');
 }
 
 /* ---------- COMPRAS ---------- */
 function renderCompras(){
   const c = state.compras;
-  return cardBox(t('card_lista_compras'), `
+  return cardBox('LISTA DE COMPRAS','compras', `
     ${c.lista.map(item=>`
       <div class="row">
         <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-        <input type="text" value="${esc(item.text)}" placeholder="${esc(t('ph_compra'))}" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
+        <input type="text" value="${esc(item.text)}" placeholder="¿Qué falta comprar?" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
         <button class="xbtn" onclick="App.removeItem('compras','lista','${item.id}')">${ICONS.x}</button>
       </div>
     `).join('')}
-    <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar'))}</button>
+    <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} Agregar</button>
   `, 'terracota');
 }
 
 /* ---------- TURNOS ---------- */
 function renderTurnos(){
-  const turnosList = state.turnos.lista;
+  const t = state.turnos.lista;
   const notifOn = ('Notification' in window) && Notification.permission === 'granted';
   return `
-    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     ${!notifOn ? `
       <button class="notifbanner" onclick="App.enableNotifications()">
-        ${ICONS.bell} ${esc(t('btn_activar_recordatorios'))}
+        ${ICONS.bell} Activar recordatorios en este dispositivo
       </button>
     ` : ''}
-    ${turnosList.map((item)=>{
-      const key = 'turno_'+item.id;
-      migrateDayTextToRich(key, item.notas);
+    ${t.map((item,tIdx)=>{
+      const bKey = 'turnos';
+      const slotKey = 'turnos::'+item.id;
+      const boardOpen = expandedSlot===slotKey;
+      const tBoard = getBoard(bKey);
+      const reallyHasContent = tBoard.elementos.length > 0 || tBoard.drawing;
+      const hasBoardContent = tIdx===0 && reallyHasContent;
       return `
       <div class="card">
         <div class="card-b">
           <div class="row">
-            <input type="text" style="font-weight:700;font-size:14px;" placeholder="${esc(t('ph_turno_titulo'))}" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
+            <input type="text" style="font-weight:700;font-size:14px;" placeholder="¿Con quién / qué es?" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
+            <button class="card-h-btn" onclick="toggleBoard('${bKey}','${slotKey}')">${boardOpen?ICONS.x:ICONS.pencil}</button>
             <button class="xbtn" onclick="App.removeItem('turnos','lista','${item.id}')">${ICONS.x}</button>
           </div>
           <div class="row" style="margin-top:6px;">
             <input type="date" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
             <input type="time" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
           </div>
-          <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${esc(item.recordar?t('btn_te_avisare'):t('btn_avisarme'))}</button>
+          ${(!boardOpen && hasBoardContent) ? `
+            <div class="pzpreview" style="padding:10px 0 0;" onclick="toggleBoard('${bKey}','${slotKey}')">
+              <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
+              <div class="pzpreview-canvas">
+                ${tBoard.drawing ? `<img src="${tBoard.drawing}"/>` : ''}
+                ${tBoard.elementos.map(el=>renderPzPreviewEl(el)).join('')}
+              </div>
+            </div>
+          ` : ''}
+          ${boardOpen ? `<div style="margin-top:8px;">${renderBoard(bKey,{height:'260px'})}</div>` : (!reallyHasContent ? `<textarea rows="2" placeholder="Notas" style="margin-top:8px;" oninput="App.setListField('turnos','lista','${item.id}','notas',this.value)">${esc(item.notas||'')}</textarea>` : '')}
+          <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${item.recordar?'Te voy a avisar':'Avisarme'}</button>
         </div>
-        ${richBoxOnly(key, item.titulo||t('ph_notas_turno_generico'), t('ph_notas_turno'))}
       </div>
     `;}).join('')}
-    <button class="dashedbtn" onclick="App.addItem('turnos','lista',{titulo:'',fecha:'',hora:'',notas:'',recordar:false,notified:false})">${ICONS.plus} ${esc(t('btn_nuevo_turno'))}</button>
+    <button class="dashedbtn" onclick="App.addItem('turnos','lista',{titulo:'',fecha:'',hora:'',notas:'',recordar:false,notified:false})">${ICONS.plus} Nuevo turno</button>
   `;
 }
 
 /* ---------- COMIDAS ---------- */
 function renderComidas(){
   const d = state.comidas.dias;
-  return `
-    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${DIAS.map((dia)=>{
-      const key = 'comida_'+DIA_SLUGS[dia];
-      migrateDayTextToRich(key, d[dia]);
-      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota' : '';
-      const label = dayLabel(dia);
-      return `
-      <div class="card ${tint}">
-        <div class="card-h"><span>${esc(label.toUpperCase())}</span></div>
-        ${richBoxOnly(key, label, t('ph_comida'))}
-      </div>`;
-    }).join('')}
-  `;
+  return DIAS.map((dia,idx)=>
+    cardBox(dia.toUpperCase(), 'comidas',
+      `<input type="text" placeholder="¿Qué vas a comer?" value="${esc(d[dia]||'')}" oninput="App.setComidaField('${dia}',this.value)"/>`,
+      ['Sábado','Domingo'].includes(dia)?'terracota':'',
+      null, idx===0
+    )
+  ).join('');
 }
 
 /* ---------- SINCRONIZAR ---------- */
@@ -848,39 +635,39 @@ function renderSync(){
   if (cfg && cfg.code){
     return `
       <div class="card">
-        <div class="card-h">${esc(t('card_conectado'))}</div>
+        <div class="card-h">CONECTADO</div>
         <div class="card-b">
           <p style="font-size:13px;color:var(--sub);line-height:1.5;">
-            ${esc(t('txt_sync_con'))}
+            Este dispositivo está sincronizando con el código:
           </p>
           <p style="font-size:20px;font-weight:700;color:var(--ink);margin:8px 0;">${esc(cfg.code)}</p>
           <p style="font-size:12.5px;color:var(--sub);line-height:1.5;">
-            ${esc(t('txt_sync_instrucciones'))} ${esc(state.syncStatus||'')}
+            Ingresá el mismo código y la misma configuración en tu otro dispositivo para que compartan los datos. ${state.syncStatus||''}
           </p>
         </div>
       </div>
-      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} ${esc(t('btn_desconectar'))}</button>
+      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} Desconectar este dispositivo</button>
     `;
   }
   return `
     <div class="card">
-      <div class="card-h">${esc(t('card_config_firebase'))}</div>
+      <div class="card-h">CONFIGURACIÓN DE FIREBASE</div>
       <div class="card-b">
         <p style="font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:10px;">
-          ${t('txt_firebase_instrucciones')}
+          Creá un proyecto gratis en <b>console.firebase.google.com</b> → Firestore Database → y pegá acá la config web (Configuración del proyecto → tus apps → SDK setup and configuration).
         </p>
         <textarea id="fbConfigInput" rows="6" placeholder='{"apiKey":"...", "authDomain":"...", "projectId":"...", ...}' style="border:1px solid var(--mintLine);border-radius:10px;padding:10px;">${esc(state.syncConfig?.rawConfig||'')}</textarea>
       </div>
     </div>
     <div class="card">
-      <div class="card-h">${esc(t('card_codigo_sync'))}</div>
+      <div class="card-h">CÓDIGO DE SINCRONIZACIÓN</div>
       <div class="card-b">
-        <p style="font-size:12.5px;color:var(--sub);margin-bottom:8px;">${esc(t('txt_codigo_instrucciones'))}</p>
-        <input type="text" id="syncCodeInput" placeholder="${esc(t('ph_codigo_sync'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;"/>
+        <p style="font-size:12.5px;color:var(--sub);margin-bottom:8px;">Inventá una palabra o frase. Usá la misma en todos tus dispositivos.</p>
+        <input type="text" id="syncCodeInput" placeholder="ej: planner-familia-2026" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;"/>
       </div>
     </div>
-    <button class="dashedbtn" onclick="App.connectSync()">${ICONS.cloud} ${esc(t('btn_conectar'))}</button>
-    <p style="font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.5;">${esc(t('txt_sync_privacidad'))}</p>
+    <button class="dashedbtn" onclick="App.connectSync()">${ICONS.cloud} Conectar</button>
+    <p style="font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.5;">Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.</p>
   `;
 }
 
@@ -903,14 +690,28 @@ function toggleBoard(boardKey, slotKey){
   pzSelected = null; pzDrawMode = false; pzStickerOpen = false; pzEditingTextId = null;
   render();
 }
-/* Caja de tarjeta simple (sin lienzo/pizarra — ese sistema fue reemplazado por el de texto enriquecido) */
-function cardBox(title, content, tint, bodyClass, printKey){
-  const cls = 'card-b' + (bodyClass ? ' '+bodyClass : '');
-  const printBtn = printKey ? `<button class="card-h-printbtn" onclick="App.printCard('${printKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
+/* Caja de tarjeta con lápiz: muestra el contenido normal, o el lienzo en el mismo lugar si está expandida */
+function cardBox(title, boardKey, normalHtml, tint, bodyClass, showPreview){
+  if (showPreview === undefined) showPreview = true;
+  const slotKey = boardKey + '::' + title;
+  const isOpen = expandedSlot === slotKey;
+  const cls = 'card-b' + (bodyClass && !isOpen ? ' '+bodyClass : '');
+  const board = getBoard(boardKey);
+  const hasBoardContent = board.elementos.length > 0 || board.drawing;
   return `
-    <div class="card${tint?' '+tint:''}">
-      <div class="card-h"><span>${esc(title)}</span>${printBtn}</div>
-      <div class="${cls}">${content}</div>
+    <div class="card${tint?' '+tint:''}${isOpen?' card-expanded':''}">
+      <div class="card-h"><span>${esc(title)}</span><button class="card-h-btn" onclick="event.stopPropagation();toggleBoard('${boardKey}','${slotKey}')">${isOpen?ICONS.x:ICONS.pencil}</button></div>
+      ${(!isOpen && hasBoardContent && showPreview) ? `
+        <div class="pzpreview" onclick="toggleBoard('${boardKey}','${slotKey}')">
+          <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
+          <div class="pzpreview-canvas">
+            ${board.drawing ? `<img src="${board.drawing}"/>` : ''}
+            ${board.elementos.map(el=>renderPzPreviewEl(el)).join('')}
+          </div>
+        </div>
+      ` : ''}
+      ${(!isOpen && !hasBoardContent) ? `<div class="${cls}">${normalHtml}</div>` : ''}
+      ${isOpen ? `<div class="${cls}" style="padding-top:12px;">${renderBoard(boardKey,{height:'300px'})}</div>` : ''}
     </div>
   `;
 }
@@ -1417,66 +1218,8 @@ function attachPizarraEvents(){
 
 
 /* ---------- SISTEMA DE TEXTO ENRIQUECIDO (una sola caja, tocar y escribir) ---------- */
-const RICH_STICKERS_KW = [
-  /* naturaleza y huerta */
-  ['🌿','hoja planta verde'],['🌱','brote planta semilla huerta'],['🍅','tomate verdura comida'],['🌻','girasol flor'],
-  ['☀️','sol calor dia'],['🧺','canasto canasta huerta cosecha'],['💚','corazon verde'],['🍋','limon fruta citrico'],
-  ['🪴','maceta planta'],['🌼','flor margarita'],['🌸','flor cerezo'],['🌷','tulipan flor'],['🥀','flor marchita'],
-  ['🍄','hongo seta'],['💧','agua gota lluvia riego'],['🐝','abeja'],['🥕','zanahoria verdura'],
-  ['🥬','lechuga verdura'],['🐞','vaquita insecto'],['🦋','mariposa'],['🌈','arcoiris'],
-  ['🌾','trigo campo'],['🚜','tractor campo'],['🏡','casa hogar'],['🪣','balde'],
-  ['🌤️','sol nube clima'],['⛅','nublado clima'],['🌧️','lluvia clima'],['⛈️','tormenta clima'],['❄️','nieve frio'],
-  ['🌙','luna noche'],['🌳','arbol'],['🌲','pino arbol'],['🍀','trebol suerte'],['🌵','cactus planta'],
-  ['🍂','hoja otoño'],['🐛','oruga bicho'],['🐌','caracol'],['🐦','pajaro ave'],['🦜','loro ave'],
-  /* animales */
-  ['🐐','cabra animal'],['🐓','gallo animal'],['🐄','vaca animal'],['🐖','chancho cerdo animal'],['🐕','perro'],
-  ['🐈','gato'],['🐰','conejo'],['🐴','caballo'],['🦆','pato'],['🐢','tortuga'],
-  ['🐠','pez'],['🐬','delfin'],['🦁','leon'],['🐘','elefante'],['🐼','panda'],['🦉','buho'],
-  /* caritas y emociones */
-  ['😀','feliz sonrisa'],['😊','contento sonrisa'],['😂','risa gracioso'],['🥰','amor cariño'],['😍','enamorado'],
-  ['😉','guiño'],['😴','sueño cansado dormir'],['🥱','bostezo cansado'],['😅','alivio nervioso'],['😎','copado lentes'],
-  ['🤔','pensando duda'],['😢','triste llorar'],['😭','llanto triste'],['😡','enojado bronca'],['😱','sorpresa susto'],
-  ['🥳','fiesta festejo'],['😇','angel bueno'],['🤗','abrazo'],['😋','rico sabroso'],['🤤','antojo'],
-  ['🙃','al reves'],['😐','neutral'],['😬','incomodo'],['🤯','explota cabeza sorpresa'],['🥵','calor'],
-  ['🥶','frio'],['🤒','enfermo termometro'],['🤧','estornudo resfrio'],['😷','barbijo enfermo'],['🤢','asco'],
-  /* comida */
-  ['📝','nota escribir lapiz'],['✅','listo hecho tilde check'],['⭐','estrella favorito'],['❤️','corazon amor'],
-  ['🔥','fuego caliente'],['☕','cafe taza'],['🧡','corazon naranja'],['💛','corazon amarillo'],
-  ['💙','corazon azul'],['💜','corazon violeta'],['🖤','corazon negro'],['🤍','corazon blanco'],['💕','corazones amor'],
-  ['🎁','regalo'],['💰','dinero plata'],['📚','libros lectura'],['🧸','oso peluche'],['🍯','miel'],
-  ['✏️','lapiz escribir'],['🛒','carrito compras'],['🧾','ticket recibo cuenta'],['💻','computadora laptop'],
-  ['📱','celular telefono'],['🎨','arte pintura paleta'],['🧵','hilo costura'],['🥗','ensalada comida sana'],
-  ['🍕','pizza comida'],['🍔','hamburguesa comida'],['🥐','medialuna desayuno'],['🍎','manzana fruta'],
-  ['🍌','banana fruta'],['🍇','uvas fruta'],['🍉','sandia fruta'],['🍓','frutilla fruta'],['🥑','palta fruta'],
-  ['🍞','pan'],['🧀','queso'],['🥩','carne'],['🍗','pollo comida'],['🍟','papas fritas'],
-  ['🌮','taco comida'],['🍝','fideos pasta comida'],['🍲','guiso comida'],['🍿','pochoclo pop corn'],
-  ['🍩','dona postre'],['🍪','galletita postre'],['🎂','torta cumpleaños'],['🧁','cupcake postre'],
-  ['🍫','chocolate'],['🍺','cerveza'],['🍷','vino'],['🥤','bebida gaseosa'],['🧃','jugo caja'],
-  ['🍵','te infusion'],['🥛','leche'],
-  /* trabajo, casa, objetos */
-  ['🎵','musica nota'],['📖','libro abierto lectura'],['🖊️','lapicera escribir'],['🙌','manos festejo'],
-  ['💪','fuerza esfuerzo'],['🧘','yoga meditacion calma'],['🛏️','cama dormir descanso'],['🧹','escoba limpieza'],
-  ['🎯','objetivo meta'],['📅','calendario fecha'],['⏰','reloj alarma hora'],['⏳','tiempo espera'],
-  ['🔑','llave'],['🔒','candado seguro'],['💡','idea foco lampara'],['🔋','bateria energia'],
-  ['🧴','crema cosmetico'],['🧼','jabon limpieza'],['🪥','cepillo dientes'],['🧻','papel higienico'],
-  ['🛁','bañera baño'],['🚿','ducha baño'],['🧦','medias ropa'],['👕','remera ropa'],['👖','pantalon ropa'],
-  ['👗','vestido ropa'],['👟','zapatillas ropa'],['🧢','gorra ropa'],['👜','cartera bolso'],
-  ['💊','pastilla remedio'],['🩹','curita herida'],['🌡️','termometro fiebre'],['🩺','estetoscopio doctor'],
-  /* viajes y salidas */
-  ['🚗','auto viaje'],['✈️','avion viaje'],['🏖️','playa vacaciones'],['🚌','colectivo bondi viaje'],
-  ['🚲','bici bicicleta'],['⛽','nafta combustible'],['🗺️','mapa viaje'],['🧳','valija viaje'],
-  ['🏔️','montaña'],['🏕️','camping'],['⛺','carpa camping'],['🎡','feria parque'],['🎉','fiesta celebracion'],
-  ['🎈','globo fiesta'],['🎊','confeti fiesta'],['🎄','navidad arbol'],['🎃','halloween calabaza'],
-  /* símbolos y agenda */
-  ['📌','pin marcar chinche'],['✨','brillo destello magia'],['❗','importante atencion'],['❓','duda pregunta'],
-  ['➕','mas sumar agregar'],['➖','menos restar'],['💯','cien por ciento'],['🔄','repetir actualizar'],
-  ['📍','ubicacion lugar'],['📎','clip sujetador'],['🗑️','basura borrar'],['📤','enviar salida'],['📥','recibir entrada'],
-  ['🧠','cerebro pensar mente'],['👀','ojos mirar'],['👍','bien pulgar arriba'],['👎','mal pulgar abajo'],
-  ['👏','aplauso felicitaciones'],['🙏','gracias por favor'],['🤝','acuerdo trato saludo'],['✌️','paz victoria'],
-];
-const RICH_STICKERS = RICH_STICKERS_KW.map(x=>x[0]);
-const STICKER_KEYWORDS = Object.fromEntries(RICH_STICKERS_KW);
-const RICH_TEXT_COLORS = ['#65475F','#7A3B3B','#B23B3B','#D9782E','#B8860B','#5C3B2E','#5B3FA0','#2E6BB2','#B23070','#8B5A3C','#C96A75','#1E7A4A','#0F5C3A','#2E9E52','#1B6FC9','#5C5C5C'];
+const RICH_STICKERS = ['🌿','🌱','🍅','🌻','☀️','🧺','📌','✨','💚','🍋','🪴','📷','🌼','🍄','💧','🐝','📝','✅','⭐','❤️','🔥','☕','🍞','🥕','🥬','🐞','🦋','🌈','🎯','📅','⏰','🎁','💰','📚','🧡','💛','💙','🧸','🐐','🐓','🍯','🌾','🚜','🏡','🪣','🌤️','🌙','✏️'];
+const RICH_TEXT_COLORS = ['#2F5D50','#7A3B3B','#B23B3B','#D9782E','#B8860B','#5C3B2E','#5B3FA0','#2E6BB2','#B23070','#8B5A3C','#C96A75','#1E7A4A','#0F5C3A','#2E9E52','#1B6FC9','#5C5C5C'];
 const RICH_HIGHLIGHT_COLORS = ['#FFF59D','#FFE0B2','#F8BBD0','#E1BEE7','#C5CAE9','#B3E5FC','#B2DFDB','#C8E6C9','#DCEDC8','#FFCCBC','#F5F5F5'];
 const RICH_FONTS = ["Georgia","Verdana","Trebuchet MS","'Comic Sans MS'","'Courier New'","'Times New Roman'","'Segoe UI'","Tahoma"];
 const RICH_SIZES = [12,14,16,18,20,24,28,32];
@@ -1487,38 +1230,19 @@ function getRich(key){
   return state.richContent[key];
 }
 function saveRich(key){ DB.set('rich_'+key, state.richContent[key]); }
-/* Trae al lienzo nuevo el texto viejo escrito en un día de Semana antes de esta actualización, para no perderlo */
-function migrateDayTextToRich(key, oldText){
-  if (!oldText) return;
-  const data = getRich(key);
-  if (data.html) return;
-  data.html = esc(oldText);
-  saveRich(key);
-}
 
 let richActive = null, richActiveTitle = '', richPanel = null;
-let richEraser = false, richPenColor = '#65475F', richPenWidth = 3;
+let richEraser = false, richPenColor = '#2F5D50', richPenWidth = 3;
 let richStickerSearch = '';
 let richDrawHistory = {}, richDrawFuture = {};
 let richCopied = '';
 let richCustomTextColor = '#7A3B3B', richCustomHighlightColor = '#FFF59D';
 
-function richCard(title, key, placeholder, tint, printKey){
+function richCard(title, key, placeholder, tint){
   const data = getRich(key);
-  const printBtn = printKey ? `<button class="card-h-printbtn" onclick="App.printCard('${printKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
   return `
     <div class="card${tint?' '+tint:''}">
-      <div class="card-h"><span>${esc(title)}</span>${printBtn}</div>
-      ${richBoxOnly(key, title, placeholder)}
-    </div>
-  `;
-}
-
-/* Igual que richCard pero sin el header propio — para usarla dentro de una tarjeta que ya tiene su propio título (ej. cada día en Semana) */
-function richBoxOnly(key, title, placeholder){
-  const data = getRich(key);
-  return `
-    <div class="card-b" style="padding-top:12px;">
+      <div class="card-h"><span>${esc(title)}</span></div>
       <div class="richbox">
         <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
              onfocus="RichText.setActive('${key}','${esc(title)}')"
@@ -1527,20 +1251,6 @@ function richBoxOnly(key, title, placeholder){
       </div>
     </div>
   `;
-}
-
-function renderStickerGridItems(){
-  const q = richStickerSearch.trim().toLowerCase();
-  const filtered = !q ? RICH_STICKERS : RICH_STICKERS.filter(s => (STICKER_KEYWORDS[s]||'').includes(q));
-  if (!filtered.length){
-    return `<p style="grid-column:1/-1;font-size:12.5px;color:var(--sub);text-align:center;padding:10px 0;">${state.lang==='en'?'No matches — paste any emoji above and tap Insert.':'Sin resultados — pegá cualquier emoji arriba y tocá Insertar.'}</p>`;
-  }
-  return filtered.map(s=>`<button onmousedown="event.preventDefault()" onclick="RichText.insertSticker('${s}')">${s}</button>`).join('');
-}
-function renderStickerInsertBtn(){
-  const emojiMatch = richStickerSearch.match(/\p{Extended_Pictographic}/u);
-  if (!emojiMatch) return '';
-  return `<button class="dashedbtn" style="margin-top:0;margin-bottom:10px;font-size:15px;" onmousedown="event.preventDefault()" onclick="RichText.insertPastedSticker()">${state.lang==='en'?'Insert':'Insertar'} ${emojiMatch[0]}</button>`;
 }
 
 function renderRichToolbar(){
@@ -1556,7 +1266,6 @@ function renderRichToolbar(){
         <button class="richbtn ${richPanel==='fonts'?'active':''}" onclick="RichText.togglePanel('fonts')">Aa</button>
         <button class="richbtn" onclick="document.getElementById('richFileInput').click()">${ICONS.image}</button>
         <button class="richbtn ${richPanel==='stickers'?'active':''}" onclick="RichText.togglePanel('stickers')">${ICONS.sticker}</button>
-        <button class="richbtn ${richPanel==='gif'?'active':''}" onclick="RichText.togglePanel('gif')">${ICONS.gif}</button>
         <button class="richbtn ${richPanel==='colors'?'active':''}" onclick="RichText.togglePanel('colors')">${ICONS.palette}</button>
         <button class="richbtn ${richPanel==='pen'?'active':''}" onclick="RichText.togglePanel('pen')">${ICONS.pencil}</button>
         <button class="richbtn ${richPanel==='more'?'active':''}" onclick="RichText.togglePanel('more')">${ICONS.more}</button>
@@ -1567,7 +1276,7 @@ function renderRichToolbar(){
       <div class="richpanel">
         <div class="richpanel-row">
           <select onmousedown="event.stopPropagation()" onchange="RichText.applyFont(this.value)">
-            <option value="" disabled selected>${esc(t('rich_choose_font'))}</option>
+            <option value="" disabled selected>Elegir fuente</option>
             ${RICH_FONTS.map(f=>`<option value="${f}" style="font-family:${f}">${f.replace(/'/g,'')}</option>`).join('')}
           </select>
           <select onmousedown="event.stopPropagation()" onchange="RichText.applySize(this.value)">
@@ -1579,55 +1288,28 @@ function renderRichToolbar(){
 
     ${richPanel==='stickers' ? `
       <div class="richpanel">
-        <input type="text" id="stickerSearchInput" placeholder="${esc(t('rich_search_sticker'))}" value="${esc(richStickerSearch)}"
-               oninput="RichText.setStickerSearch(this.value)"
-               onkeydown="if(event.key==='Enter'){event.preventDefault();RichText.insertPastedSticker();}"
-               style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
-        <div id="stickerInsertArea">${renderStickerInsertBtn()}</div>
-        <div class="richstickergrid" id="stickerGrid">${renderStickerGridItems()}</div>
+        <input type="text" placeholder="Buscar o pegar cualquier emoji..." value="${esc(richStickerSearch)}" oninput="RichText.setStickerSearch(this.value)" style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
+        <div class="richstickergrid">
+          ${RICH_STICKERS.map(s=>`<button onmousedown="event.preventDefault()" onclick="RichText.insertSticker('${s}')">${s}</button>`).join('')}
+        </div>
       </div>
     ` : ''}
-
-    ${richPanel==='gif' ? `
-      <div class="richpanel">
-        <p style="font-size:11.5px;color:var(--sub);margin-bottom:10px;line-height:1.6;">
-          <b>1.</b> ${state.lang==='en'?'Type a word and open Giphy to search.':'Escribí una palabra y abrí Giphy para buscar.'}<br/>
-          <b>2.</b> ${state.lang==='en'?'On Giphy, long-press the GIF you like → Copy link.':'En Giphy, mantené presionado el GIF que te guste → Copiar link.'}<br/>
-          <b>3.</b> ${state.lang==='en'?'Come back here, paste the link below and tap Insert.':'Volvé acá, pegá el link abajo y tocá Insertar.'}
-        </p>
-        <div class="richpanel-row">
-          <input type="text" id="gifSearchInput" placeholder="${state.lang==='en'?'e.g: cat, coffee, garden':'ej: gato, café, huerta'}" style="flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;"
-                 oninput="RichText.updateGifLink(this.value)"/>
-          <a id="gifOpenLink" href="https://giphy.com/trending-gifs" target="_blank" rel="noopener" class="dashedbtn" style="margin-top:0;text-decoration:none;display:flex;align-items:center;justify-content:center;">🔍 ${state.lang==='en'?'Open Giphy':'Abrir Giphy'}</a>
-        </div>
-        <div class="richpanel-row" style="margin-top:14px;">
-          <input type="text" id="gifUrlInput" placeholder="https://media.giphy.com/..." style="flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;"
-                 onkeydown="if(event.key==='Enter'){event.preventDefault();RichText.insertGif();}"/>
-          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.insertGif()">${state.lang==='en'?'Insert':'Insertar'}</button>
-        </div>
-        <p id="gifError" style="font-size:11.5px;color:#B23B3B;margin-top:6px;"></p>
-        <p style="font-size:10px;color:var(--sub);margin-top:10px;">${state.lang==='en'
-          ? '🎉 Just for fun — GIFs will not animate when printed or exported to PDF.'
-          : '🎉 Solo por diversión — los GIF no se van a mover al imprimir o exportar a PDF.'}</p>
-      </div>
-    ` : ''}
-
 
     ${richPanel==='colors' ? `
       <div class="richpanel">
-        <div class="richlabel">${ICONS.palette} ${esc(t('rich_color_texto'))}</div>
+        <div class="richlabel">${ICONS.palette} Color del texto</div>
         <div class="richpanel-row">
           ${RICH_TEXT_COLORS.map(c=>`<button class="richswatch" style="background:${c}" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','${c}')"></button>`).join('')}
           <input type="color" value="${richCustomTextColor}" onmousedown="event.preventDefault()" onchange="RichText.customTextColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
-        <div class="richlabel" style="margin-top:6px;">${esc(t('rich_resaltador'))}</div>
+        <div class="richlabel" style="margin-top:6px;">Resaltador</div>
         <div class="richpanel-row">
           ${RICH_HIGHLIGHT_COLORS.map(c=>`<button class="richswatch square" style="background:${c}" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','${c}')"></button>`).join('')}
           <input type="color" value="${richCustomHighlightColor}" onmousedown="event.preventDefault()" onchange="RichText.customHighlightColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
         <div class="richpanel-row" style="margin-top:6px;">
-          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#65475F')">${esc(t('rich_texto_normal'))}</button>
-          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','transparent')">${esc(t('rich_quitar_resaltado'))}</button>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#2F5D50')">Texto normal</button>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','transparent')">Quitar resaltado</button>
         </div>
       </div>
     ` : ''}
@@ -1640,29 +1322,30 @@ function renderRichToolbar(){
           <button class="richbtn" onclick="RichText.undoDraw()">${ICONS.undo}</button>
           <button class="richbtn" onclick="RichText.redoDraw()">${ICONS.redo}</button>
           <select onmousedown="event.stopPropagation()" onchange="richPenWidth=Number(this.value)">
-            <option value="2">${esc(t('rich_fino'))}</option><option value="3" selected>${esc(t('rich_medio'))}</option><option value="5">${esc(t('rich_grueso'))}</option><option value="8">${esc(t('rich_muy_grueso'))}</option>
+            <option value="2">Fino</option><option value="3" selected>Medio</option><option value="5">Grueso</option><option value="8">Muy grueso</option>
           </select>
           <input type="color" value="${richPenColor}" onmousedown="event.preventDefault()" onchange="richPenColor=this.value" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
-        <button class="dashedbtn" onclick="RichText.clearDrawing()">${esc(t('rich_borrar_dibujo'))}</button>
-        <button class="dashedbtn" id="richOcrBtn" onclick="RichText.recognizeHandwriting()">${ICONS.sparkle} ${esc(t('rich_convertir_texto'))}</button>
+        <button class="dashedbtn" onclick="RichText.clearDrawing()">Borrar dibujo</button>
+        <button class="dashedbtn" id="richOcrBtn" onclick="RichText.recognizeHandwriting()">${ICONS.sparkle} Convertir lo escrito a texto</button>
+        <p style="font-size:11px;color:var(--sub);margin-top:6px;">Tocá "${richPanel==='pen'?'lápiz':''}" y escribí directo sobre la hoja de abajo. La primera vez que convertís a texto puede tardar unos segundos en cargar el lector.</p>
       </div>
     ` : ''}
 
     ${richPanel==='more' ? `
       <div class="richpanel">
         <div class="richpanel-row">
-          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.cutBox()">${ICONS.scissors} ${esc(t('rich_cortar'))}</button>
-          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.copyBox()">${ICONS.copy} ${esc(t('rich_copiar'))}</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.cutBox()">${ICONS.scissors} Cortar caja</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.copyBox()">${ICONS.copy} Copiar caja</button>
         </div>
         <div class="richpanel-row">
-          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.pasteBox()">${ICONS.clipboard} ${esc(t('rich_pegar'))}</button>
-          <button class="dashedbtn" style="margin-top:0;flex:1;color:#B23B3B;" onclick="RichText.clearBox()">${ICONS.trash} ${esc(t('rich_vaciar'))}</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.pasteBox()">${ICONS.clipboard} Pegar</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;color:#B23B3B;" onclick="RichText.clearBox()">${ICONS.trash} Vaciar</button>
         </div>
       </div>
     ` : ''}
 
-    <div class="richediting">${esc(t('rich_editing'))} <b>${esc(richActiveTitle||'—')}</b></div>
+    <div class="richediting">Editando: <b>${esc(richActiveTitle||'—')}</b></div>
     <input type="file" id="richFileInput" accept="image/*" style="display:none" onchange="RichText.insertImage(event)"/>
   `;
 }
@@ -1702,48 +1385,7 @@ const RichText = {
     document.execCommand('insertText', false, s);
     this.persist(richActive);
   },
-  updateGifLink(q){
-    const a = document.getElementById('gifOpenLink');
-    if (!a) return;
-    a.href = q.trim() ? `https://giphy.com/search/${encodeURIComponent(q.trim())}` : 'https://giphy.com/trending-gifs';
-  },
-  insertGif(){
-    const input = document.getElementById('gifUrlInput');
-    const errEl = document.getElementById('gifError');
-    const url = input ? input.value.trim() : '';
-    if (errEl) errEl.textContent = '';
-    if (!url){
-      if (errEl) errEl.textContent = state.lang==='en' ? 'Paste a link first.' : 'Pegá un link primero.';
-      return;
-    }
-    if (!/^https?:\/\//i.test(url)){
-      if (errEl) errEl.textContent = state.lang==='en' ? 'That doesn\'t look like a valid link.' : 'Eso no parece un link válido.';
-      return;
-    }
-    this.focusActive();
-    document.execCommand('insertHTML', false, `<img src="${esc(url)}" alt="GIF" style="max-width:100%;"/>`);
-    this.persist(richActive);
-    if (input) input.value = '';
-  },
-  setStickerSearch(v){
-    richStickerSearch = v;
-    const grid = document.getElementById('stickerGrid');
-    const insertArea = document.getElementById('stickerInsertArea');
-    if (grid) grid.innerHTML = renderStickerGridItems();
-    if (insertArea) insertArea.innerHTML = renderStickerInsertBtn();
-  },
-  insertPastedSticker(){
-    const match = richStickerSearch.match(/\p{Extended_Pictographic}/u);
-    if (!match) return;
-    this.insertSticker(match[0]);
-    richStickerSearch = '';
-    const input = document.getElementById('stickerSearchInput');
-    if (input) input.value = '';
-    const grid = document.getElementById('stickerGrid');
-    const insertArea = document.getElementById('stickerInsertArea');
-    if (grid) grid.innerHTML = renderStickerGridItems();
-    if (insertArea) insertArea.innerHTML = '';
-  },
+  setStickerSearch(v){ richStickerSearch = v; },
   applyFont(family){ this.command('fontName', family); },
   applySize(px){
     this.focusActive();
@@ -1760,23 +1402,6 @@ const RichText = {
   insertImage(evt){
     const file = evt.target.files[0];
     if (!file) return;
-    if (file.type === 'image/gif'){
-      /* los GIF se insertan tal cual, sin recomprimir, para no perder la animación */
-      if (file.size > 3*1024*1024){
-        const ok = confirm(state.lang==='en'
-          ? 'This GIF is quite heavy and could fill up storage quickly. Insert it anyway?'
-          : 'Este GIF pesa bastante y puede llenar rápido el espacio guardado en el navegador. ¿Lo insertás igual?');
-        if (!ok) return;
-      }
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF"/>`);
-        RichText.persist(richActive);
-      };
-      reader.readAsDataURL(file);
-      return;
-    }
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
@@ -1972,19 +1597,19 @@ function renderAsistente(){
   return `
     <div class="chat-wrap">
       <div class="asis-top">
-        <div><h1 style="font-size:24px;">${esc(t('title_asistente'))}</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">${esc(t('sub_asistente'))}</p></div>
+        <div><h1 style="font-size:24px;">Asistente</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">Pedile una mano para organizarte</p></div>
         <button class="gearbtn" onclick="App.openSettings()">${ICONS.gear}</button>
       </div>
       <div class="asistabs">
-        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">${esc(t('tab_chat'))}</button>
-        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">${esc(t('tab_dump'))}</button>
+        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">Chat</button>
+        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">Volcar pendientes</button>
       </div>
       ${asisTab==='chat' ? `
         <div class="chat-msgs" id="chatMsgs">
-          ${(state.chat.length?state.chat:[{role:'bot', text:t('chat_welcome')}]).map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
+          ${state.chat.map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
         </div>
         <div class="chat-input">
-          <input type="text" id="chatInput" placeholder="${state.apiKey?esc(t('ph_chat_msg')):esc(t('ph_chat_apikey'))}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
+          <input type="text" id="chatInput" placeholder="${state.apiKey?'Escribí tu mensaje...':'Configurá tu API key primero (⚙)'}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
           <button class="sendbtn" onclick="App.sendChat()">${ICONS.send}</button>
         </div>
       ` : renderBrainDump()}
@@ -1998,27 +1623,27 @@ function renderBrainDump(){
       <div class="card">
         <div class="card-b" style="display:flex;gap:10px;align-items:flex-start;">
           <span class="notascard-icon" style="margin:0;flex-shrink:0;">${ICONS.sparkle}</span>
-          <p style="font-size:13px;color:var(--sub);margin:0;">${esc(t('dump_intro'))}</p>
+          <p style="font-size:13px;color:var(--sub);margin:0;">Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.</p>
         </div>
       </div>
-      <textarea id="dumpInput" rows="6" placeholder="${esc(t('ph_dump'))}" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
-      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${esc(dumpLoading?t('btn_organizando'):t('btn_organizar'))}</button>
+      <textarea id="dumpInput" rows="6" placeholder="Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
+      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${dumpLoading?'Organizando…':'Organizar mis pendientes'}</button>
 
       ${dumpResult ? `
-        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">${esc(t('txt_propuesta'))} (${dumpResult.length})</p>
+        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">Propuesta (${dumpResult.length})</p>
         ${dumpResult.map((item,i)=>`
           <div class="card">
             <div class="card-b">
               <input type="text" value="${esc(item.text)}" oninput="App.updateDumpItem(${i},this.value)" style="font-weight:600;font-size:14px;"/>
               <div class="dumpchoices">
-                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">${esc(t('btn_a_prioridades'))}</button>
-                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">${esc(t('btn_a_compras'))}</button>
+                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">A Prioridades</button>
+                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">A Compras</button>
                 <button class="xbtn" onclick="App.removeDumpItem(${i})">${ICONS.x}</button>
               </div>
             </div>
           </div>
         `).join('')}
-        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} ${esc(t('btn_agregar_todo'))}</button>
+        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} Agregar todo a mi planner</button>
       ` : ''}
     </div>
   `;
@@ -2031,12 +1656,6 @@ function scrollChatToBottom(){
 
 /* ---------- lógica ---------- */
 const App = {
-  setLang(lang){
-    state.lang = lang;
-    DB.set('lang', lang);
-    document.documentElement.lang = lang;
-    render();
-  },
   goto(tab, masScreen){
     state.tab = tab;
     state.masScreen = (tab==='mas' && masScreen) ? masScreen : null;
@@ -2254,183 +1873,8 @@ const App = {
     state.syncConfig = null;
     DB.set('syncConfig', null);
     render();
-  },
-
-  /* --- exportar / imprimir todo el planner --- */
-  printPlanner(){
-    const old = document.getElementById('printArea');
-    if (old) old.remove();
-    const div = document.createElement('div');
-    div.id = 'printArea';
-    div.innerHTML = buildPrintHTML();
-    document.body.appendChild(div);
-    setTimeout(() => window.print(), 50);
-  },
-
-  /* --- imprimir solo la sección/pantalla actual --- */
-  printSection(screenKey){
-    const old = document.getElementById('printArea');
-    if (old) old.remove();
-    const div = document.createElement('div');
-    div.id = 'printArea';
-    div.innerHTML = buildPrintSectionHTML(screenKey);
-    document.body.appendChild(div);
-    setTimeout(() => window.print(), 50);
-  },
-
-  /* --- imprimir solo una caja puntual (ej: HOY, PRIORIDADES) --- */
-  printCard(cardKey){
-    const old = document.getElementById('printArea');
-    if (old) old.remove();
-    const div = document.createElement('div');
-    div.id = 'printArea';
-    div.innerHTML = buildPrintSectionHTML(cardKey);
-    document.body.appendChild(div);
-    setTimeout(() => window.print(), 50);
   }
 };
-
-function pText(html){
-  if (!html) return '';
-  const tmp = document.createElement('div');
-  tmp.innerHTML = html;
-  return tmp.innerHTML;
-}
-function pEmpty(){ return `<p class="p-empty">—</p>`; }
-function pRichBlock(key){
-  const data = getRich(key);
-  const hasText = data.html && data.html.trim() && data.html.trim() !== '<br>';
-  const hasDrawing = !!data.drawing;
-  if (!hasText && !hasDrawing) return pEmpty();
-  return `${hasText?`<div class="p-rich">${pText(data.html)}</div>`:''}${hasDrawing?`<img class="p-drawing" src="${data.drawing}"/>`:''}`;
-}
-
-/* Arma el documento HTML completo para impresión/exportación a PDF (usa window.print) */
-/* Cada función arma el HTML de UNA sección (con su <section> propia), para poder imprimir solo esa pantalla o todas juntas */
-const PRINT_BUILDERS = {
-  inicio(){
-    let html = `<section class="p-section"><h2>${esc(t('title_inicio'))}</h2>`;
-    html += `<h3>${esc(t('card_hoy'))}</h3>${pRichBlock('r_inicio_hoy')}`;
-    html += `<h3>${esc(t('card_prioridades'))}</h3>`;
-    const prioridades = state.inicio.prioridades.filter(p=>p.text);
-    html += prioridades.length ? `<ul class="p-checklist">${prioridades.map(p=>`<li class="${p.done?'p-done':''}">${p.done?'☑':'☐'} ${esc(p.text)}</li>`).join('')}</ul>` : pEmpty();
-    html += `<h3>${esc(t('card_recordatorios'))}</h3>${pRichBlock('r_inicio_recordatorios')}`;
-    return html + `</section>`;
-  },
-  inicio_hoy(){
-    return `<section class="p-section"><h2>${esc(t('card_hoy'))}</h2>${pRichBlock('r_inicio_hoy')}</section>`;
-  },
-  inicio_prioridades(){
-    const prioridades = state.inicio.prioridades.filter(p=>p.text);
-    const body = prioridades.length ? `<ul class="p-checklist">${prioridades.map(p=>`<li class="${p.done?'p-done':''}">${p.done?'☑':'☐'} ${esc(p.text)}</li>`).join('')}</ul>` : pEmpty();
-    return `<section class="p-section"><h2>${esc(t('card_prioridades'))}</h2>${body}</section>`;
-  },
-  inicio_recordatorios(){
-    return `<section class="p-section"><h2>${esc(t('card_recordatorios'))}</h2>${pRichBlock('r_inicio_recordatorios')}</section>`;
-  },
-  semana(){
-    let html = `<section class="p-section"><h2>${esc(t('title_semana'))}</h2>`;
-    html += `<p class="p-sub"><b>${esc(t('card_enfoque'))}:</b> ${esc(state.semana.enfoque||'—')}</p>`;
-    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('semana_'+DIA_SLUGS[dia])}`; });
-    return html + `</section>`;
-  },
-  habitos(){
-    let html = `<section class="p-section"><h2>${esc(t('title_habitos'))}</h2>`;
-    const habitos = state.habitos.lista.filter(h=>h.nombre);
-    if (habitos.length){
-      html += `<ul>${habitos.map(h=>{
-        const marcados = Object.keys(h.marcas||{}).filter(k=>h.marcas[k]).length;
-        return `<li>${esc(h.nombre)} — ${marcados} ${state.lang==='en'?'days checked':'días marcados'}</li>`;
-      }).join('')}</ul>`;
-    } else html += pEmpty();
-    return html + `</section>`;
-  },
-  finanzas(){
-    const f = state.finanzas;
-    let html = `<section class="p-section"><h2>${esc(t('title_finanzas'))}</h2>`;
-    html += `<p class="p-sub"><b>${esc(t('card_ingresos'))}:</b> $${esc(f.ingresos||'0')} &nbsp; <b>${esc(t('card_gastos'))}:</b> $${esc(f.gastos||'0')} &nbsp; <b>${esc(t('card_ahorro'))}:</b> $${esc(f.ahorro||'0')}</p>`;
-    html += `<h3>${esc(t('card_movimientos'))}</h3>`;
-    const movs = f.movimientos.filter(m=>m.fecha||m.detalle||m.monto);
-    html += movs.length ? `<table class="p-table"><tr><th>${esc(t('ph_fecha'))}</th><th>${esc(t('ph_detalle'))}</th><th>${esc(t('ph_monto'))}</th></tr>${movs.map(m=>`<tr><td>${esc(m.fecha)}</td><td>${esc(m.detalle)}</td><td>${esc(m.monto)}</td></tr>`).join('')}</table>` : pEmpty();
-    html += `<h3>${esc(t('card_para_recordar'))}</h3>`;
-    const recordar = f.recordar.filter(r=>r.text);
-    html += recordar.length ? `<ul class="p-checklist">${recordar.map(r=>`<li class="${r.done?'p-done':''}">${r.done?'☑':'☐'} ${esc(r.text)}</li>`).join('')}</ul>` : pEmpty();
-    return html + `</section>`;
-  },
-  proyectos(){
-    let html = `<section class="p-section"><h2>${esc(t('title_proyectos'))}</h2>`;
-    const proyectos = state.proyectos.lista.filter(p=>p.nombre);
-    if (proyectos.length){
-      proyectos.forEach(p=>{
-        html += `<div class="p-subcard"><h3>${esc(p.nombre)}${p.fecha?` — ${esc(p.fecha)}`:''}</h3>`;
-        html += `<p class="p-sub"><b>${esc(t('card_objetivo'))}:</b></p>${pRichBlock('proy_'+p.id+'_obj')}`;
-        const pasos = (p.pasos||[]).filter(ps=>ps.text);
-        html += `<p class="p-sub"><b>${esc(t('card_pasos'))}:</b></p>`;
-        html += pasos.length ? `<ul class="p-checklist">${pasos.map(ps=>`<li class="${ps.done?'p-done':''}">${ps.done?'☑':'☐'} ${esc(ps.text)}</li>`).join('')}</ul>` : pEmpty();
-        html += `<p class="p-sub"><b>${esc(t('card_ideas'))}:</b></p>${pRichBlock('proy_'+p.id+'_notas')}`;
-        html += `</div>`;
-      });
-    } else html += pEmpty();
-    return html + `</section>`;
-  },
-  objetivos(){
-    let html = `<section class="p-section"><h2>${esc(t('title_objetivos'))}</h2>`;
-    [['personal','cat_personal'],['trabajo','cat_trabajo'],['bienestar','cat_bienestar'],['dinero','cat_dinero']].forEach(([key,labelKey])=>{
-      const o = state.objetivos[key];
-      html += `<h3>${esc(t(labelKey))}</h3><p class="p-sub"><b>${esc(t('lbl_meta'))}:</b> ${esc(o.meta||'—')} &nbsp; <b>${esc(t('lbl_primer_paso'))}:</b> ${esc(o.paso||'—')} &nbsp; <b>${esc(t('lbl_senal'))}:</b> ${esc(o.fecha||'—')}</p>`;
-    });
-    return html + `</section>`;
-  },
-  compras(){
-    let html = `<section class="p-section"><h2>${esc(t('title_compras'))}</h2>`;
-    const compras = state.compras.lista.filter(i=>i.text);
-    html += compras.length ? `<ul class="p-checklist">${compras.map(i=>`<li class="${i.done?'p-done':''}">${i.done?'☑':'☐'} ${esc(i.text)}</li>`).join('')}</ul>` : pEmpty();
-    return html + `</section>`;
-  },
-  turnos(){
-    let html = `<section class="p-section"><h2>${esc(t('title_turnos'))}</h2>`;
-    const turnos = state.turnos.lista.filter(x=>x.titulo||x.fecha);
-    if (turnos.length){
-      turnos.forEach(item=>{
-        html += `<div class="p-subcard"><h3>${esc(item.titulo||'—')}</h3><p class="p-sub">${esc(item.fecha||'')} ${esc(item.hora||'')}</p>${pRichBlock('turno_'+item.id)}</div>`;
-      });
-    } else html += pEmpty();
-    return html + `</section>`;
-  },
-  comidas(){
-    let html = `<section class="p-section"><h2>${esc(t('title_comidas'))}</h2>`;
-    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('comida_'+DIA_SLUGS[dia])}`; });
-    return html + `</section>`;
-  },
-  notas(){
-    return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pRichBlock('r_notas')}</section>`;
-  }
-};
-/* Constructores de impresión para cada día individual de Semana */
-DIAS.forEach(dia=>{
-  PRINT_BUILDERS['semana_dia_'+DIA_SLUGS[dia]] = function(){
-    return `<section class="p-section"><h2>${esc(dayLabel(dia).toUpperCase())}</h2>${pRichBlock('semana_'+DIA_SLUGS[dia])}</section>`;
-  };
-});
-const PRINT_ORDER = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
-
-function printCover(){
-  const today = new Date().toLocaleDateString(state.lang==='en'?'en-US':'es-AR', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-  return `<div class="p-cover"><h1>${esc(t('portada_title1'))} ${esc(t('portada_title2'))}</h1><p>${esc(today)}</p></div>`;
-}
-
-/* Arma el documento completo (todas las secciones) para el botón de Más */
-function buildPrintHTML(){
-  const sections = PRINT_ORDER.map(key => PRINT_BUILDERS[key]()).join('');
-  return `<div class="p-doc">${printCover()}${sections}</div>`;
-}
-
-/* Arma el documento de UNA sola sección, para el botón de imprimir de cada pantalla */
-function buildPrintSectionHTML(screenKey){
-  const builder = PRINT_BUILDERS[screenKey];
-  if (!builder) return buildPrintHTML();
-  return `<div class="p-doc">${printCover()}${builder()}</div>`;
-}
 
 /* ---------- módulo de sincronización ---------- */
 const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
@@ -2460,6 +1904,14 @@ const Sync = {
         const remote = doc.data();
         this.applyingRemote = true;
         SYNC_KEYS.forEach(k => { if (remote[k] !== undefined){ state[k] = remote[k]; DB.set(k, state[k]); } });
+        if (remote.rich){
+          if (!state.richContent) state.richContent = {};
+          Object.keys(remote.rich).forEach(rk => {
+            const existing = getRich(rk);
+            existing.html = remote.rich[rk].html || '';
+            saveRich(rk);
+          });
+        }
         this.applyingRemote = false;
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
         render();
@@ -2482,6 +1934,10 @@ const Sync = {
     this.pushTimer = setTimeout(() => {
       const payload = {};
       SYNC_KEYS.forEach(k => payload[k] = state[k]);
+      payload.rich = {};
+      Object.keys(state.richContent || {}).forEach(rk => {
+        payload.rich[rk] = { html: state.richContent[rk].html || '' };
+      });
       this.db.collection('planners').doc(state.syncConfig.code).set(payload, {merge:true}).catch(()=>{});
     }, 500);
   }
@@ -2489,7 +1945,7 @@ const Sync = {
 
 /* engancha cada guardado local con un push a Firebase, si está conectado */
 const _dbSet = DB.set.bind(DB);
-DB.set = (key, value) => { _dbSet(key, value); if (SYNC_KEYS.includes(key)) Sync.push(); };
+DB.set = (key, value) => { _dbSet(key, value); if (SYNC_KEYS.includes(key) || key.startsWith('rich_')) Sync.push(); };
 
 /* revisa recordatorios de turnos cada 30s (mientras la app está abierta) */
 function checkReminders(){
@@ -2507,11 +1963,6 @@ function checkReminders(){
 }
 setInterval(checkReminders, 30000);
 
-document.documentElement.lang = state.lang;
-window.addEventListener('afterprint', () => {
-  const el = document.getElementById('printArea');
-  if (el) el.remove();
-});
 render();
 if (state.syncConfig) Sync.start();
 
