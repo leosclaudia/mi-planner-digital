@@ -199,3 +199,8 @@ Lo reconstruí así para **Inicio (Hoy y Recordatorios) y Notas**:
 Probé cada pieza a mano: escribir directo, negrita+selección, color aplicado a texto seleccionado (confirmé que no se pierde la selección al tocar los botones), cambio de fuente, dibujar con el lápiz sobre la caja, insertar sticker, y el panel de Cortar/Copiar/Pegar/Vaciar. Todo guarda y persiste después de recargar.
 
 **Qué quedó afuera por ahora**: "Prioridades" (en Inicio) sigue siendo una lista de tareas con casilleros — no la convertí porque tildar cosas es genuinamente útil ahí y se pierde si la paso a texto libre. El resto de las pantallas (Semana, Finanzas, Proyectos, Objetivos, Compras, Comidas, Turnos) **todavía usan el sistema anterior** (el de elementos sueltos que se arrastran) — no las toqué en esta vuelta para no arriesgar romper algo que ya andaba bien, dado lo grande que fue este cambio. Si te gusta cómo quedó Inicio/Notas, decime y sigo convirtiendo el resto una por una con el mismo patrón.
+
+## Bug corregido: Hoy/Recordatorios/Notas no sincronizaban
+Cuando armé el sistema nuevo de texto enriquecido (Hoy, Recordatorios, Notas), ese contenido quedó guardado en un lugar separado que la sincronización con Firebase no revisaba — por eso "Prioridades" sincronizaba bien pero lo que escribías en las otras tres cajas no viajaba entre dispositivos. Ya está corregido: ahora todo el contenido de texto (sin las imágenes/dibujos, que siguen igual que antes, solo en el dispositivo) se sincroniza correctamente.
+
+Si ya habías conectado varios dispositivos antes de este arreglo, no hace falta reconectar nada — simplemente la próxima vez que escribas algo en Hoy/Recordatorios/Notas, ya va a viajar solo.
