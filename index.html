@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>Mi Planner Digital</title>
+<meta name="theme-color" content="#2F5D50" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Planner" />
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBF8F1; --card:#FFFDFC; --ink:#2F5D50; --sub:#6E7772;
+    --mint:#DDE9DF; --mintLine:#AFC8B7; --terracota:#F2DFD6; --terracotaLine:#D9B3A3;
+    --accent:#79B553;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  svg{width:16px;height:16px;display:block;flex-shrink:0;}
+  html,body{margin:0;padding:0;height:100%;background:var(--bg);font-family:'Inter',system-ui,sans-serif;color:var(--ink);overscroll-behavior:none;}
+  h1,h2,h3{font-family:'Lora',serif;margin:0;font-weight:700;}
+  #app{max-width:480px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--bg);}
+  header.top{padding:18px 20px 10px;flex-shrink:0;}
+  header.top h1{font-size:24px;font-weight:700;}
+  header.top p{font-size:13px;color:var(--sub);margin-top:4px;}
+  header.top .rule{height:1px;background:var(--mintLine);opacity:.6;margin-top:12px;}
+  .backrow{display:flex;align-items:center;gap:2px;color:var(--ink);font-size:13px;font-weight:600;cursor:pointer;margin-bottom:2px;}
+  .backrow svg{width:14px;height:14px;}
+  main{flex:1;overflow-y:auto;padding:0 20px 20px;}
+  .card{background:var(--card);border:1px solid var(--mintLine);border-radius:16px;margin-bottom:14px;overflow:hidden;box-shadow:0 2px 6px rgba(85,72,65,.05), 0 8px 20px rgba(85,72,65,.06);}
+  .card.terracota{border-color:var(--terracotaLine);}
+  .card-h{padding:10px 16px;background:var(--mint);font-size:11px;font-weight:700;letter-spacing:.02em;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .card.terracota .card-h{background:var(--terracota);}
+  .card-b{padding:14px 16px;}
+  textarea,input[type=text],input[type=number]{
+    width:100%;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;color:var(--ink);
+  }
+  textarea{resize:none;line-height:1.5;}
+  input::placeholder,textarea::placeholder{color:#C9C2B4;}
+  .row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .row:last-child{margin-bottom:0;}
+  .chk{width:20px;height:20px;flex-shrink:0;border-radius:6px;border:1px solid var(--terracotaLine);display:flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;}
+  .chk.done{background:var(--accent);border-color:var(--accent);}
+  .chk svg{width:12px;height:12px;}
+  .xbtn{background:none;border:none;color:var(--sub);cursor:pointer;padding:4px;flex-shrink:0;}
+  .addlink{background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 0;white-space:nowrap;}
+  .addlink svg{flex-shrink:0;width:14px;height:14px;}
+  .dashedbtn{width:100%;padding:12px;border-radius:16px;border:1px dashed var(--mintLine);background:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-top:2px;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid2 .card-expanded{grid-column:1 / -1;}
+  .grid4menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
+  .menuitem{background:var(--card);border:1px solid var(--mintLine);border-radius:16px;padding:18px 14px;text-align:left;cursor:pointer;}
+  .menuitem b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px;}
+  .menuitem span{font-size:11.5px;color:var(--sub);}
+  .dollar-row{display:flex;align-items:baseline;gap:8px;}
+  .dollar-row span{font-size:20px;font-weight:700;color:var(--ink);}
+  .dollar-row input{border-bottom:1px solid var(--mintLine);padding-bottom:4px;font-size:16px;}
+  .mov-row{display:grid;grid-template-columns:1fr 1.4fr 0.8fr auto;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid #F1EEE6;font-size:12.5px;}
+  .mov-row input{font-size:12.5px;}
+  .tabbar{flex-shrink:0;display:flex;justify-content:space-around;align-items:center;padding:8px 4px calc(8px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--mintLine);}
+  .tab{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--sub);cursor:pointer;padding:4px 8px;}
+  .tab.active{color:var(--ink);font-weight:600;}
+  .tab svg{width:20px;height:20px;}
+  .tab span{font-size:10px;}
+  .day-card summary{list-style:none;cursor:pointer;}
+  .day-card summary::-webkit-details-marker{display:none;}
+  .habit-days{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;}
+  .habit-day{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid var(--mintLine);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--sub);background:none;cursor:pointer;}
+  .habit-day.on{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .habit-name{width:100%;font-weight:600;font-size:14px;border:none;background:transparent;outline:none;color:var(--ink);}
+  .chat-wrap{flex:1;display:flex;flex-direction:column;height:100%;}
+  .chat-msgs{flex:1;overflow-y:auto;padding:8px 20px 12px;display:flex;flex-direction:column;gap:10px;}
+  .msg{max-width:80%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.5;}
+  .msg.user{align-self:flex-end;background:var(--ink);color:#fff;}
+  .msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--mintLine);}
+  .chat-input{display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--mintLine);background:var(--bg);}
+  .chat-input input{flex:1;background:var(--card);border:1px solid var(--mintLine);border-radius:24px;padding:10px 16px;font-size:13.5px;}
+  .sendbtn,.gearbtn{background:var(--accent);border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .gearbtn{background:none;border:1px solid var(--mintLine);color:var(--ink);}
+  .sendbtn svg,.gearbtn svg{width:16px;height:16px;}
+  .menuitem{}
+  .asis-top{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px 6px;}
+  .asistabs{display:flex;gap:8px;padding:8px 20px 4px;}
+  .asistab{background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;}
+  .asistab.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+  .dump-scroll{flex:1;overflow-y:auto;padding:12px 20px 20px;}
+  .dumpchoices{display:flex;align-items:center;gap:6px;margin-top:8px;}
+  .dumpchoice{background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:16px;cursor:pointer;}
+  .dumpchoice.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .modal-bg{position:fixed;inset:0;background:rgba(30,33,29,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;}
+  .modal{background:var(--card);border-radius:18px;padding:20px;max-width:340px;width:100%;}
+  .modal h3{font-size:16px;margin-bottom:8px;}
+  .modal p{font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:12px;}
+  .modal input{border:1px solid var(--mintLine);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px;}
+  .modal .actions{display:flex;gap:8px;justify-content:flex-end;}
+  .btn{border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;}
+  .btn.primary{background:var(--ink);color:#fff;}
+  .btn.ghost{background:none;color:var(--sub);}
+  ::-webkit-scrollbar{display:none;}
+
+  .portada{position:relative;height:100dvh;display:flex;align-items:center;justify-content:center;padding:28px;overflow:hidden;}
+  .blob{position:absolute;border-radius:50%;background:var(--mint);}
+  .blob-a{width:150px;height:150px;top:-40px;left:-50px;}
+  .blob-b{width:60px;height:60px;top:95px;left:65px;opacity:.8;}
+  .blob-c{width:130px;height:130px;bottom:-30px;right:-40px;background:var(--terracota);}
+  .portada-card{position:relative;z-index:1;background:var(--card);border:1px solid var(--mintLine);border-radius:28px;padding:44px 30px;text-align:center;}
+  .portada-card h1{font-size:28px;line-height:1.15;color:var(--ink);}
+  .portada-card .tagline{font-family:'Lora',serif;font-style:italic;font-weight:600;color:#D98F75;font-size:17px;margin-top:8px;}
+  .rule2{height:1px;background:var(--mintLine);opacity:.7;margin:18px auto;width:70%;}
+  .portada-card .desc{font-size:13px;color:var(--sub);line-height:1.5;margin-bottom:22px;}
+  .startbtn{background:var(--mint);border:none;color:var(--ink);font-weight:700;font-size:12.5px;letter-spacing:.03em;padding:14px 22px;border-radius:14px;cursor:pointer;}
+  .notifbanner{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--terracota);border:1px solid var(--terracotaLine);color:var(--ink);font-size:12.5px;font-weight:600;padding:10px;border-radius:14px;margin-bottom:12px;cursor:pointer;}
+  .bellbtn{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;margin-top:10px;cursor:pointer;}
+  .bellbtn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  .pztools{display:flex;gap:8px;padding:0 20px 12px;flex-wrap:wrap;}
+  .pztool{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--mintLine);color:var(--ink);font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:20px;cursor:pointer;}
+  .pzcanvas-wrap{padding:0 20px 12px;}
+  .pzcanvas{position:relative;width:100%;height:56vh;background:var(--card);border:1px solid var(--mintLine);border-radius:16px;overflow:hidden;touch-action:none;}
+  .pzel{position:absolute;box-sizing:border-box;cursor:grab;user-select:none;-webkit-user-select:none;}
+  .pzpreview{padding:10px 16px 0;cursor:pointer;}
+  .pzpreview-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.03em;}
+  .pzpreview-tag svg{width:11px;height:11px;}
+  .pzpreview-canvas{position:relative;width:100%;height:90px;background:#FAF8F3;border:1px dashed var(--mintLine);border-radius:12px;margin-top:6px;overflow:hidden;}
+  .pzpreview-canvas .pzel{pointer-events:none;}
+  .pzpreview-canvas .pzel img{width:100%;height:100%;object-fit:contain;}
+  .pzpreview-canvas .pztext{display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;}
+
+  /* ---------- sistema de texto enriquecido (Notas, Inicio) ---------- */
+  .richtoolbar{position:sticky;top:0;z-index:40;background:var(--bg);padding:10px 20px 8px;margin:0 -20px 6px;border-bottom:1px solid var(--mintLine);}
+  .richtoolbar-row{display:flex;justify-content:space-between;align-items:center;gap:6px;overflow-x:auto;padding-bottom:2px;}
+  .richtoolbar-group{display:flex;gap:5px;flex-shrink:0;}
+  .richbtn{width:34px;height:34px;border-radius:11px;border:1px solid var(--mintLine);background:var(--card);color:var(--ink);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;flex-shrink:0;}
+  .richbtn svg{width:15px;height:15px;}
+  .richbtn.active{background:var(--terracota);border-color:var(--terracotaLine);}
+  .richpanel{margin-top:8px;background:var(--card);border:1px solid var(--mintLine);border-radius:14px;padding:12px;}
+  .richpanel-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px;}
+  .richpanel-row:last-child{margin-bottom:0;}
+  .richpanel select{height:38px;border:1px solid var(--mintLine);border-radius:10px;padding:0 8px;font-size:13px;background:var(--bg);flex:1;min-width:0;}
+  .richswatch{width:28px;height:28px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--mintLine);cursor:pointer;flex-shrink:0;}
+  .richswatch.square{border-radius:8px;}
+  .richlabel{font-size:11px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:5px;width:100%;margin-bottom:2px;}
+  .richstickergrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-height:150px;overflow-y:auto;margin-bottom:8px;}
+  .richstickergrid button{background:var(--mint);border:none;border-radius:8px;height:32px;font-size:16px;cursor:pointer;}
+  .richediting{font-size:11px;color:var(--sub);margin-top:6px;}
+  .richbox{position:relative;min-height:110px;}
+  .richtext{position:relative;z-index:10;min-height:110px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--ink);outline:none;}
+  .richtext:empty:before{content:attr(data-placeholder);color:#C9C2B4;}
+  .richink{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
+  .richink.active{z-index:20;cursor:crosshair;}
+  .richink:not(.active){pointer-events:none;z-index:0;}
+  .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);}
+  .pzel.selected{outline:1.5px dashed var(--accent);}
+  .pzel img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;}
+  .pzel .pztext{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;color:var(--ink);outline:none;padding:2px;overflow:hidden;font-family:'Poppins',sans-serif;}
+  .pzhandle{position:absolute;width:16px;height:16px;background:var(--accent);border:2px solid #fff;border-radius:50%;z-index:5;}
+  .pzhandle.nw{top:-8px;left:-8px;cursor:nwse-resize;}
+  .pzhandle.ne{top:-8px;right:-8px;cursor:nesw-resize;}
+  .pzhandle.sw{bottom:-8px;left:-8px;cursor:nesw-resize;}
+  .pzhandle.se{bottom:-8px;right:-8px;cursor:nwse-resize;}
+  .pzbar{position:sticky;bottom:0;display:flex;justify-content:center;gap:6px;padding:10px 16px;background:var(--card);border-top:1px solid var(--mintLine);margin:0 -20px;}
+  .pzbarbtn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--ink);font-size:10px;padding:4px 10px;cursor:pointer;}
+  .stickerpop{position:absolute;z-index:20;background:var(--card);border:1px solid var(--mintLine);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.12);left:20px;right:20px;top:60px;max-height:60vh;overflow-y:auto;}
+  .stickerpop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .stickerpop-grid button{background:var(--mint);border:none;border-radius:10px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
+  .stickerpop-custom{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--mintLine);}
+  .stickerpop-custom input{flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:9px 10px;font-size:15px;}
+
+  .pztools{flex-wrap:wrap;}
+  .pztool.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .pzdrawing{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
+  .pzdrawcanvas{position:absolute;inset:0;width:100%;height:100%;z-index:60;touch-action:none;}
+  .pzdrawtools{display:flex;align-items:center;gap:8px;padding:0 20px 10px;flex-wrap:wrap;}
+  .pzswatch{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
+  .pzcolorpicker{width:26px;height:26px;border-radius:50%;border:2px solid var(--mintLine);padding:0;cursor:pointer;flex-shrink:0;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);-webkit-appearance:none;appearance:none;overflow:hidden;}
+  .pzcolorpicker::-webkit-color-swatch-wrapper{padding:2px;}
+  .pzcolorpicker::-webkit-color-swatch{border:none;border-radius:50%;}
+  .pzswatch.active{border-color:var(--ink);}
+  .pzdrawtools input[type=range]{flex:1;min-width:60px;accent-color:var(--accent);}
+  .pzbar{flex-wrap:wrap;}
+  .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
+  .card-h-btn svg{width:14px;height:14px;}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ---------- almacenamiento local ---------- */
+const DB = {
+  get(key, fallback){
+    try{ const v = localStorage.getItem('planner:'+key); return v ? JSON.parse(v) : fallback; }
+    catch(e){ return fallback; }
+  },
+  set(key, value){
+    try{ localStorage.setItem('planner:'+key, JSON.stringify(value)); }catch(e){}
+  }
+};
+const uid = () => Math.random().toString(36).slice(2,9);
+
+/* ---------- estado ---------- */
+let state = {
+  tab: 'portada',            // portada | inicio | semana | habitos | asistente | mas
+  masScreen: null,          // finanzas | proyectos | notas | objetivos
+  inicio: DB.get('inicio', { hoy:'', prioridades:[{id:uid(),text:'',done:false}], recordatorios:'' }),
+  semana: DB.get('semana', { enfoque:'', dias:{} }),
+  habitos: DB.get('habitos', { lista:[{id:uid(),nombre:'',marcas:{}}] }),
+  finanzas: DB.get('finanzas', { ingresos:'', gastos:'', ahorro:'', movimientos:[], recordar:[{id:uid(),text:'',done:false}] }),
+  proyectos: DB.get('proyectos', { lista:[] }),
+  objetivos: DB.get('objetivos', {
+    personal:{meta:'',paso:'',fecha:''}, trabajo:{meta:'',paso:'',fecha:''},
+    bienestar:{meta:'',paso:'',fecha:''}, dinero:{meta:'',paso:'',fecha:''}
+  }),
+  compras: DB.get('compras', { lista:[{id:uid(),text:'',done:false}] }),
+  turnos: DB.get('turnos', { lista:[] }),
+  comidas: DB.get('comidas', { dias:{} }),
+  chat: [{role:'bot', text:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.'}],
+  apiKey: DB.get('apiKey', ''),
+  syncConfig: DB.get('syncConfig', null),
+  syncStatus: '',
+  boards: {}
+};
+
+/* tableros dinámicos: uno por cada caja, se crean solos la primera vez que se abren */
+function getBoard(key){
+  if (!state.boards[key]) state.boards[key] = DB.get('board_'+key, { elementos: [], drawing: null });
+  return state.boards[key];
+}
+
+const ICONS = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>',
+  calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 12l2 2 4-4"/></svg>',
+  sparkle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.3L19 10l-5.1 1.7L12 17l-1.9-5.3L5 10l5.1-1.7L12 3z"/></svg>',
+  grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
+  x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
+  gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  chevron:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+  plate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg>',
+  bell:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+  cloud:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>',
+  image:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>',
+  copy:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  layerUp:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+  layerDown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg>',
+  type:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>',
+  sticker:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9V4a1 1 0 0 0-1-1z"/><path d="M15 3v6a3 3 0 0 0 3 3h6"/></svg>',
+  pencil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>',
+  eraser:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H9L4.5 15.5a1 1 0 0 1 0-1.4l9-9a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L13 20"/></svg>',
+  scissors:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/></svg>',
+  clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>',
+  alignLeft:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h12M3 18h15"/></svg>',
+  alignCenter:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M4 18h16"/></svg>',
+  alignRight:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M9 12h12M6 18h15"/></svg>',
+  palette:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.2-.8-.4-1.1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-4.9-4.5-9-11-9z"/></svg>',
+  more:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
+  undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8M3 10l4-4M3 10l4 4"/></svg>',
+  redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>'
+};
+
+const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
+
+/* ---------- utilidades de render ---------- */
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function chkSvg(done){ return done ? ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>','').replace('stroke="currentColor"','stroke="white"') : ''; }
+
+/* ---------- render principal ---------- */
+function render(){
+  const app = document.getElementById('app');
+  const titles = {
+    inicio:['Inicio','Un espacio simple para ordenar lo importante'],
+    semana:['Semana','Tocá un día para abrirlo'],
+    habitos:['Hábitos','Marcá cada día sin buscar perfección'],
+    mas:['Más','El resto de tu planner'],
+    finanzas:['Finanzas','Lo que entra, lo que sale y lo que querés cuidar'],
+    proyectos:['Proyectos','Uno por cada idea que querés llevar a la práctica'],
+    notas:['Notas','Escribí, dibujá o pegá lo que quieras'],
+    objetivos:['Objetivos','Elegí pocas metas, claras y posibles'],
+    asistente:['Asistente','Pedile una mano para organizarte'],
+    compras:['Compras','Lo que tenés que comprar'],
+    turnos:['Turnos','Citas, clases y encuentros'],
+    comidas:['Comidas','Un menú simple para la semana'],
+    sync:['Sincronizar','Compartí tu planner entre dispositivos'],
+  };
+  let screenKey = state.tab === 'mas' && state.masScreen ? state.masScreen : state.tab;
+
+  if (screenKey === 'portada'){
+    app.innerHTML = renderPortada();
+    return;
+  }
+
+  let [title, subtitle] = titles[screenKey];
+  let backRow = '';
+  if (state.tab === 'mas' && state.masScreen){
+    backRow = `<div class="backrow" onclick="App.goto('mas', null)">${ICONS.chevron} Más</div>`;
+  }
+
+  let contentHtml = '';
+  let headerHtml = '';
+  if (screenKey === 'asistente'){
+    headerHtml = '';
+    contentHtml = renderAsistente();
+  } else {
+    headerHtml = `<header class="top">${backRow}<h1>${title}</h1><p>${subtitle}</p><div class="rule"></div></header>`;
+    if (screenKey==='inicio') contentHtml = renderInicio();
+    else if (screenKey==='semana') contentHtml = renderSemana();
+    else if (screenKey==='habitos') contentHtml = renderHabitos();
+    else if (screenKey==='mas') contentHtml = renderMas();
+    else if (screenKey==='finanzas') contentHtml = renderFinanzas();
+    else if (screenKey==='proyectos') contentHtml = renderProyectos();
+    else if (screenKey==='objetivos') contentHtml = renderObjetivos();
+    else if (screenKey==='compras') contentHtml = renderCompras();
+    else if (screenKey==='turnos') contentHtml = renderTurnos();
+    else if (screenKey==='comidas') contentHtml = renderComidas();
+    else if (screenKey==='sync') contentHtml = renderSync();
+    else if (screenKey==='notas') contentHtml = renderNotasRich();
+  }
+
+  app.innerHTML = `
+    ${headerHtml}
+    <main id="main">${contentHtml}</main>
+    ${renderTabBar()}
+  `;
+  if (screenKey === 'asistente') scrollChatToBottom();
+  if (expandedBoardKey) attachPizarraEvents();
+  if (expandedBoardKey && pzDrawMode) initDrawCanvas();
+  if (screenKey === 'inicio' || screenKey === 'notas'){
+    document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
+  }
+}
+
+/* ---------- PORTADA ---------- */
+function renderPortada(){
+  return `
+    <div class="portada">
+      <div class="blob blob-a"></div>
+      <div class="blob blob-b"></div>
+      <div class="blob blob-c"></div>
+      <div class="portada-card">
+        <h1>MI PLANNER<br/>DIGITAL</h1>
+        <p class="tagline">para vos</p>
+        <div class="rule2"></div>
+        <p class="desc">Organizá tu día a día, tu huerta y tus proyectos, a tu manera</p>
+        <button class="startbtn" onclick="App.goto('inicio')">TOCÁ PARA COMENZAR</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderTabBar(){
+  const tabs = [
+    ['inicio', ICONS.home, 'Inicio'],
+    ['semana', ICONS.calendar, 'Semana'],
+    ['habitos', ICONS.check, 'Hábitos'],
+    ['asistente', ICONS.sparkle, 'Asistente'],
+    ['mas', ICONS.grid, 'Más'],
+  ];
+  return `<div class="tabbar">${tabs.map(([id,icon,label])=>`
+    <button class="tab ${state.tab===id?'active':''}" onclick="App.goto('${id}')">${icon}<span>${label}</span></button>
+  `).join('')}</div>`;
+}
+
+/* ---------- INICIO ---------- */
+function renderInicio(){
+  const d = state.inicio;
+  return `
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+    ${richCard('HOY','r_inicio_hoy','¿Qué es lo más importante de hoy?...')}
+    ${cardBox('PRIORIDADES','inicio', `
+      ${d.prioridades.map(p=>`
+        <div class="row">
+          <button class="chk ${p.done?'done':''}" onclick="App.toggle('inicio','prioridades','${p.id}')">${p.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
+          <input type="text" value="${esc(p.text)}" placeholder="Escribí una prioridad" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
+          <button class="xbtn" onclick="App.removeItem('inicio','prioridades','${p.id}')">${ICONS.x}</button>
+        </div>
+      `).join('')}
+      <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} Agregar prioridad</button>
+    `, 'terracota', null, false)}
+    ${richCard('RECORDATORIOS','r_inicio_recordatorios','Cosas para no olvidar...')}
+  `;
+}
+
+/* ---------- SEMANA ---------- */
+let openDay = DIAS[0];
+function renderSemana(){
+  const d = state.semana;
+  return `
+    <div class="card">
+      <div class="card-b">
+        <label style="font-size:11px;font-weight:700;">ENFOQUE DE LA SEMANA</label>
+        <input type="text" value="${esc(d.enfoque)}" placeholder="¿En qué te querés enfocar?" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
+      </div>
+    </div>
+    ${DIAS.map((dia,dIdx)=>{
+      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota':'';
+      const isOpen = openDay===dia;
+      const boardKey = 'semana';
+      const slotKey = 'semana::'+dia;
+      const boardOpen = expandedSlot===slotKey;
+      const dayBoard = getBoard(boardKey);
+      const reallyHasContent = dayBoard.elementos.length > 0 || dayBoard.drawing;
+      const hasBoardContent = dIdx===0 && reallyHasContent;
+      return `
+      <div class="card ${tint}">
+        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')"><span>${dia.toUpperCase()}</span><button class="card-h-btn" onclick="event.stopPropagation();toggleBoard('${boardKey}','${slotKey}')">${boardOpen?ICONS.x:ICONS.pencil}</button></div>
+        ${(!boardOpen && hasBoardContent) ? `
+          <div class="pzpreview" onclick="toggleBoard('${boardKey}','${slotKey}')">
+            <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
+            <div class="pzpreview-canvas">
+              ${dayBoard.drawing ? `<img src="${dayBoard.drawing}"/>` : ''}
+              ${dayBoard.elementos.map(el=>renderPzPreviewEl(el)).join('')}
+            </div>
+          </div>
+        ` : ''}
+        ${boardOpen ? `<div class="card-b" style="padding-top:12px;">${renderBoard(boardKey,{height:'280px'})}</div>` : (isOpen && !reallyHasContent ?`<div class="card-b"><textarea rows="3" placeholder="Tareas, notas..." oninput="App.setDayField('${dia}',this.value)">${esc(d.dias[dia]||'')}</textarea></div>`:'')}
+      </div>`;
+    }).join('')}
+  `;
+}
+
+/* ---------- HÁBITOS ---------- */
+function renderHabitos(){
+  const dias31 = Array.from({length:31},(_,i)=>i+1);
+  return `
+    ${state.habitos.lista.map(h=>`
+      <div class="card">
+        <div class="card-b" style="padding-bottom:8px;">
+          <div class="row">
+            <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="Nombre del hábito" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
+            <button class="xbtn" onclick="App.removeItem('habitos','lista','${h.id}')">${ICONS.x}</button>
+          </div>
+        </div>
+        <div class="card-b" style="padding-top:0;">
+          <div class="habit-days">
+            ${dias31.map(n=>`<button class="habit-day ${h.marcas[n]?'on':''}" onclick="App.toggleHabitDay('${h.id}',${n})">${n}</button>`).join('')}
+          </div>
+        </div>
+      </div>
+    `).join('')}
+    <button class="dashedbtn" onclick="App.addItem('habitos','lista',{nombre:'',marcas:{}})">${ICONS.plus} Agregar hábito</button>
+  `;
+}
+
+/* ---------- MÁS (menú secundario) ---------- */
+function renderMas(){
+  const items = [
+    ['finanzas','Finanzas','Ingresos, gastos y ahorro'],
+    ['proyectos','Proyectos','Uno por cada idea'],
+    ['objetivos','Objetivos','Metas del año'],
+    ['notas','Notas','Espacio libre'],
+    ['compras','Compras','Lista para el mercado'],
+    ['turnos','Turnos','Citas y encuentros'],
+    ['comidas','Comidas','Menú de la semana'],
+    ['sync','Sincronizar','Entre tus dispositivos'],
+  ];
+  return `<div class="grid4menu">${items.map(([id,label,sub])=>`
+    <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${label}</b><span>${sub}</span></button>
+  `).join('')}</div>`;
+}
+
+/* ---------- FINANZAS ---------- */
+function renderFinanzas(){
+  const f = state.finanzas;
+  return `
+    <div class="grid2">
+      ${cardBox('INGRESOS','finanzas', `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
+      ${cardBox('GASTOS','finanzas', `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row', false)}
+    </div>
+    ${cardBox('AHORRO / META','finanzas', `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row', false)}
+
+    ${cardBox('MOVIMIENTOS','finanzas', `
+      ${f.movimientos.map(m=>`
+        <div class="mov-row">
+          <input type="text" placeholder="Fecha" value="${esc(m.fecha)}" oninput="App.setListField('finanzas','movimientos','${m.id}','fecha',this.value)"/>
+          <input type="text" placeholder="Detalle" value="${esc(m.detalle)}" oninput="App.setListField('finanzas','movimientos','${m.id}','detalle',this.value)"/>
+          <input type="text" placeholder="Monto" value="${esc(m.monto)}" oninput="App.setListField('finanzas','movimientos','${m.id}','monto',this.value)"/>
+          <button class="xbtn" onclick="App.removeItem('finanzas','movimientos','${m.id}')">${ICONS.x}</button>
+        </div>
+      `).join('')}
+      <button class="addlink" onclick="App.addItem('finanzas','movimientos',{fecha:'',detalle:'',monto:''})">${ICONS.plus} Agregar movimiento</button>
+    `, 'terracota', null, false)}
+
+    ${cardBox('PARA RECORDAR','finanzas', `
+      ${f.recordar.map(r=>`
+        <div class="row">
+          <button class="chk ${r.done?'done':''}" onclick="App.toggle('finanzas','recordar','${r.id}')">${r.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
+          <input type="text" value="${esc(r.text)}" placeholder="Algo para recordar" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
+          <button class="xbtn" onclick="App.removeItem('finanzas','recordar','${r.id}')">${ICONS.x}</button>
+        </div>
+      `).join('')}
+      <button class="addlink" onclick="App.addItem('finanzas','recordar',{text:'',done:false})">${ICONS.plus} Agregar</button>
+    `, '', null, false)}
+  `;
+}
+
+/* ---------- PROYECTOS ---------- */
+function renderProyectos(){
+  const lista = state.proyectos.lista;
+  return `
+    ${lista.map((p,pIdx)=>`
+      <div class="card">
+        <div class="card-b">
+          <div class="row">
+            <input type="text" style="font-weight:700;font-size:15px;" placeholder="Nombre del proyecto" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
+            <button class="xbtn" onclick="App.removeItem('proyectos','lista','${p.id}')">${ICONS.x}</button>
+          </div>
+          <input type="text" placeholder="Fecha objetivo" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
+        </div>
+      </div>
+      <div class="grid2">
+        ${cardBox('OBJETIVO / RESULTADO','proyectos', `<textarea rows="3" placeholder="¿Cómo se ve el éxito?" oninput="App.setListField('proyectos','lista','${p.id}','objetivo',this.value)">${esc(p.objetivo||'')}</textarea>`, 'terracota', null, pIdx===0)}
+        ${cardBox('PRÓXIMOS PASOS','proyectos', `
+          ${(p.pasos||[]).map(ps=>`
+            <div class="row">
+              <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
+              <input type="text" value="${esc(ps.text)}" placeholder="Paso siguiente" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
+            </div>
+          `).join('')}
+          <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} Agregar paso</button>
+        `, '', null, false)}
+      </div>
+      ${cardBox('IDEAS, RECURSOS Y NOTAS','proyectos', `<textarea rows="3" placeholder="Anotá lo que sirva" oninput="App.setListField('proyectos','lista','${p.id}','notas',this.value)">${esc(p.notas||'')}</textarea>`, '', null, false)}
+    `).join('<div style="height:4px"></div>')}
+    <button class="dashedbtn" onclick="App.addItem('proyectos','lista',{nombre:'',fecha:'',objetivo:'',notas:'',pasos:[]})">${ICONS.plus} Nuevo proyecto</button>
+  `;
+}
+
+/* Notas usa el sistema de texto enriquecido — una sola caja para escribir, dibujar, stickers e imágenes */
+function renderNotasRich(){
+  return `
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+    ${richCard('NOTAS','r_notas','Texto, imágenes, stickers, dibujo a mano...')}
+  `;
+}
+
+/* ---------- OBJETIVOS ---------- */
+function renderObjetivos(){
+  const cats = [['personal','PERSONAL',''],['trabajo','TRABAJO / PROYECTOS','terracota'],['bienestar','BIENESTAR','terracota'],['dinero','DINERO','']];
+  const o = state.objetivos;
+  return cats.map(([key,label,tint],idx)=>
+    cardBox(label, 'objetivos', `
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Meta</label><input type="text" placeholder="¿Qué querés lograr?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">1er paso</label><input type="text" placeholder="¿Cuál es el primer paso?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Señal</label><input type="text" value="${esc(o[key].fecha)}" placeholder="fecha / señal de avance" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
+    `, tint, null, idx===0)
+  ).join('');
+}
+
+/* ---------- COMPRAS ---------- */
+function renderCompras(){
+  const c = state.compras;
+  return cardBox('LISTA DE COMPRAS','compras', `
+    ${c.lista.map(item=>`
+      <div class="row">
+        <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
+        <input type="text" value="${esc(item.text)}" placeholder="¿Qué falta comprar?" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
+        <button class="xbtn" onclick="App.removeItem('compras','lista','${item.id}')">${ICONS.x}</button>
+      </div>
+    `).join('')}
+    <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} Agregar</button>
+  `, 'terracota');
+}
+
+/* ---------- TURNOS ---------- */
+function renderTurnos(){
+  const t = state.turnos.lista;
+  const notifOn = ('Notification' in window) && Notification.permission === 'granted';
+  return `
+    ${!notifOn ? `
+      <button class="notifbanner" onclick="App.enableNotifications()">
+        ${ICONS.bell} Activar recordatorios en este dispositivo
+      </button>
+    ` : ''}
+    ${t.map((item,tIdx)=>{
+      const bKey = 'turnos';
+      const slotKey = 'turnos::'+item.id;
+      const boardOpen = expandedSlot===slotKey;
+      const tBoard = getBoard(bKey);
+      const reallyHasContent = tBoard.elementos.length > 0 || tBoard.drawing;
+      const hasBoardContent = tIdx===0 && reallyHasContent;
+      return `
+      <div class="card">
+        <div class="card-b">
+          <div class="row">
+            <input type="text" style="font-weight:700;font-size:14px;" placeholder="¿Con quién / qué es?" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
+            <button class="card-h-btn" onclick="toggleBoard('${bKey}','${slotKey}')">${boardOpen?ICONS.x:ICONS.pencil}</button>
+            <button class="xbtn" onclick="App.removeItem('turnos','lista','${item.id}')">${ICONS.x}</button>
+          </div>
+          <div class="row" style="margin-top:6px;">
+            <input type="date" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
+            <input type="time" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
+          </div>
+          ${(!boardOpen && hasBoardContent) ? `
+            <div class="pzpreview" style="padding:10px 0 0;" onclick="toggleBoard('${bKey}','${slotKey}')">
+              <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
+              <div class="pzpreview-canvas">
+                ${tBoard.drawing ? `<img src="${tBoard.drawing}"/>` : ''}
+                ${tBoard.elementos.map(el=>renderPzPreviewEl(el)).join('')}
+              </div>
+            </div>
+          ` : ''}
+          ${boardOpen ? `<div style="margin-top:8px;">${renderBoard(bKey,{height:'260px'})}</div>` : (!reallyHasContent ? `<textarea rows="2" placeholder="Notas" style="margin-top:8px;" oninput="App.setListField('turnos','lista','${item.id}','notas',this.value)">${esc(item.notas||'')}</textarea>` : '')}
+          <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${item.recordar?'Te voy a avisar':'Avisarme'}</button>
+        </div>
+      </div>
+    `;}).join('')}
+    <button class="dashedbtn" onclick="App.addItem('turnos','lista',{titulo:'',fecha:'',hora:'',notas:'',recordar:false,notified:false})">${ICONS.plus} Nuevo turno</button>
+  `;
+}
+
+/* ---------- COMIDAS ---------- */
+function renderComidas(){
+  const d = state.comidas.dias;
+  return DIAS.map((dia,idx)=>
+    cardBox(dia.toUpperCase(), 'comidas',
+      `<input type="text" placeholder="¿Qué vas a comer?" value="${esc(d[dia]||'')}" oninput="App.setComidaField('${dia}',this.value)"/>`,
+      ['Sábado','Domingo'].includes(dia)?'terracota':'',
+      null, idx===0
+    )
+  ).join('');
+}
+
+/* ---------- SINCRONIZAR ---------- */
+function renderSync(){
+  const cfg = state.syncConfig;
+  if (cfg && cfg.code){
+    return `
+      <div class="card">
+        <div class="card-h">CONECTADO</div>
+        <div class="card-b">
+          <p style="font-size:13px;color:var(--sub);line-height:1.5;">
+            Este dispositivo está sincronizando con el código:
+          </p>
+          <p style="font-size:20px;font-weight:700;color:var(--ink);margin:8px 0;">${esc(cfg.code)}</p>
+          <p style="font-size:12.5px;color:var(--sub);line-height:1.5;">
+            Ingresá el mismo código y la misma configuración en tu otro dispositivo para que compartan los datos. ${state.syncStatus||''}
+          </p>
+        </div>
+      </div>
+      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} Desconectar este dispositivo</button>
+    `;
+  }
+  return `
+    <div class="card">
+      <div class="card-h">CONFIGURACIÓN DE FIREBASE</div>
+      <div class="card-b">
+        <p style="font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:10px;">
+          Creá un proyecto gratis en <b>console.firebase.google.com</b> → Firestore Database → y pegá acá la config web (Configuración del proyecto → tus apps → SDK setup and configuration).
+        </p>
+        <textarea id="fbConfigInput" rows="6" placeholder='{"apiKey":"...", "authDomain":"...", "projectId":"...", ...}' style="border:1px solid var(--mintLine);border-radius:10px;padding:10px;">${esc(state.syncConfig?.rawConfig||'')}</textarea>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-h">CÓDIGO DE SINCRONIZACIÓN</div>
+      <div class="card-b">
+        <p style="font-size:12.5px;color:var(--sub);margin-bottom:8px;">Inventá una palabra o frase. Usá la misma en todos tus dispositivos.</p>
+        <input type="text" id="syncCodeInput" placeholder="ej: planner-familia-2026" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;"/>
+      </div>
+    </div>
+    <button class="dashedbtn" onclick="App.connectSync()">${ICONS.cloud} Conectar</button>
+    <p style="font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.5;">Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.</p>
+  `;
+}
+
+/* ---------- PIZARRA / LIENZO REUTILIZABLE ---------- */
+const STICKERS = ['🌿','🌱','🍅','🌻','☀️','🧺','📌','✨','💚','🍋','🪴','📷','🌼','🍄','💧','🐝',
+  '📝','✅','⭐','❤️','🔥','☕','🍞','🥕','🥬','🐞','🦋','🌈','🎯','📅','⏰','🎁',
+  '💰','📚','🧡','💛','💙','🧸','🐐','🐓','🍯','🌾','🚜','🏡','🪣','🌤️','🌙','✏️'];
+const PZ_COLORS = ['#2F5D50','#D98F75','#79B553','#3B4A9C','#000000','#FFFFFF'];
+const FONT_FAMILIES = ["'Inter',sans-serif", "'Lora',serif", "'Georgia',serif", "'Courier New',monospace", "'Comic Sans MS',cursive", "'Trebuchet MS',sans-serif"];
+let pzDrawMode = false, pzDrawColor = '#2F5D50', pzDrawSize = 6, pzErasing = false;
+let pzSelected = null, pzStickerOpen = false, pzJustAddedText = false, pzEditingTextId = null;
+let pzCurrentBoard = 'pizarra';
+let expandedBoardKey = null;
+
+let expandedSlot = null;
+function toggleBoard(boardKey, slotKey){
+  slotKey = slotKey || boardKey;
+  if (expandedSlot === slotKey){ expandedBoardKey = null; expandedSlot = null; }
+  else { expandedBoardKey = boardKey; expandedSlot = slotKey; }
+  pzSelected = null; pzDrawMode = false; pzStickerOpen = false; pzEditingTextId = null;
+  render();
+}
+/* Caja de tarjeta con lápiz: muestra el contenido normal, o el lienzo en el mismo lugar si está expandida */
+function cardBox(title, boardKey, normalHtml, tint, bodyClass, showPreview){
+  if (showPreview === undefined) showPreview = true;
+  const slotKey = boardKey + '::' + title;
+  const isOpen = expandedSlot === slotKey;
+  const cls = 'card-b' + (bodyClass && !isOpen ? ' '+bodyClass : '');
+  const board = getBoard(boardKey);
+  const hasBoardContent = board.elementos.length > 0 || board.drawing;
+  return `
+    <div class="card${tint?' '+tint:''}${isOpen?' card-expanded':''}">
+      <div class="card-h"><span>${esc(title)}</span><button class="card-h-btn" onclick="event.stopPropagation();toggleBoard('${boardKey}','${slotKey}')">${isOpen?ICONS.x:ICONS.pencil}</button></div>
+      ${(!isOpen && hasBoardContent && showPreview) ? `
+        <div class="pzpreview" onclick="toggleBoard('${boardKey}','${slotKey}')">
+          <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
+          <div class="pzpreview-canvas">
+            ${board.drawing ? `<img src="${board.drawing}"/>` : ''}
+            ${board.elementos.map(el=>renderPzPreviewEl(el)).join('')}
+          </div>
+        </div>
+      ` : ''}
+      ${(!isOpen && !hasBoardContent) ? `<div class="${cls}">${normalHtml}</div>` : ''}
+      ${isOpen ? `<div class="${cls}" style="padding-top:12px;">${renderBoard(boardKey,{height:'300px'})}</div>` : ''}
+    </div>
+  `;
+}
+
+function renderPzPreviewEl(el){
+  const style = `left:${el.x}%;top:${el.y}%;width:${el.w}%;height:${el.h}%;z-index:${el.z};`;
+  if (el.type === 'image') return `<div class="pzel" style="${style}"><img src="${el.src}"/></div>`;
+  if (el.type === 'sticker') return `<div class="pzel" style="${style}"><div class="pztext" style="font-size:${Math.max(10,el.h*1.6)}px;">${el.text}</div></div>`;
+  return `<div class="pzel" style="${style}"><div class="pztext" style="font-size:${Math.max(8,(el.fontSize||14)*0.55)}px;color:${el.color||'#2F5D50'};font-weight:${el.bold?'700':'400'};font-style:${el.italic?'italic':'normal'};text-align:${el.align||'center'};">${esc(el.text)}</div></div>`;
+}
+
+function renderBoard(boardKey, opts){
+  opts = opts || {};
+  pzCurrentBoard = boardKey;
+  const board = getBoard(boardKey);
+  const els = [...board.elementos].sort((a,b)=>a.z-b.z);
+  const sel = pzSelected;
+  return `
+    <div class="pztools">
+      <button class="pztool" onclick="document.getElementById('pzFileInput').click()">${ICONS.image} Imagen</button>
+      <button class="pztool" onclick="Pizarra.toggleStickers()">${ICONS.sticker} Sticker</button>
+      <button class="pztool" onclick="Pizarra.addText()">${ICONS.type} Texto</button>
+      <button class="pztool ${pzDrawMode?'active':''}" onclick="Pizarra.toggleDraw()">${ICONS.pencil} Lápiz</button>
+      ${Pizarra.clipboard ? `<button class="pztool" onclick="Pizarra.paste()">${ICONS.clipboard} Pegar</button>` : ''}
+      <input type="file" id="pzFileInput" accept="image/*" style="display:none" onchange="Pizarra.handleFile(event)"/>
+    </div>
+    ${pzDrawMode ? `
+      <div class="pzdrawtools">
+        ${PZ_COLORS.map(c=>`<button class="pzswatch ${(!pzErasing && pzDrawColor===c)?'active':''}" style="background:${c};${c==='#FFFFFF'?'border-color:var(--mintLine)':''}" onclick="Pizarra.setColor('${c}')"></button>`).join('')}
+        <input type="color" class="pzcolorpicker" value="${pzDrawColor}" oninput="Pizarra.setColor(this.value)" title="Cualquier color"/>
+        <input type="range" min="2" max="26" value="${pzDrawSize}" oninput="Pizarra.setSize(this.value)"/>
+        <button class="pztool pzeraser ${pzErasing?'active':''}" onclick="Pizarra.toggleEraser()">${ICONS.eraser}</button>
+        <button class="pztool" onclick="Pizarra.clearDrawing()">Limpiar</button>
+      </div>
+      <div class="pzdrawtools" style="padding-top:0;">
+        <button class="pztool pzrecognize" onclick="Pizarra.recognizeHandwriting()">${ICONS.sparkle} Convertir a texto</button>
+        <button class="pztool" onclick="Pizarra.exitDraw()">Listo</button>
+      </div>
+    ` : ''}
+    <div class="pzcanvas-wrap" style="position:relative;">
+      ${pzStickerOpen ? `
+        <div class="stickerpop">
+          <div class="stickerpop-grid">
+            ${STICKERS.map(s=>`<button onclick="Pizarra.addSticker('${s}')">${s}</button>`).join('')}
+          </div>
+          <div class="stickerpop-custom">
+            <input type="text" id="customEmojiInput" placeholder="Pegá cualquier emoji del teclado" maxlength="8"/>
+            <button class="pztool" onclick="Pizarra.addCustomEmoji()">Agregar</button>
+          </div>
+        </div>
+      `:''}
+      <div class="pzcanvas" id="pzCanvas" style="${opts.height?`height:${opts.height};`:''}">
+        ${board.drawing ? `<img class="pzdrawing" src="${board.drawing}"/>` : ''}
+        ${!pzDrawMode ? els.map(el => renderPzEl(el, el.id===sel)).join('') : ''}
+        ${pzDrawMode ? `<canvas id="pzDrawCanvas" class="pzdrawcanvas"></canvas>` : ''}
+      </div>
+    </div>
+    ${(sel && !pzDrawMode) ? renderSelectionBar(board, sel) : (!pzDrawMode ? `<p style="padding:0 20px;font-size:11.5px;color:var(--sub);">Tocá un elemento para moverlo. Arrastrá una esquina para el tamaño. El lápiz dibuja libremente sobre la hoja.</p>` : '')}
+  `;
+}
+
+function renderSelectionBar(board, sel){
+  const el = board.elementos.find(e=>e.id===sel);
+  if (!el) return '';
+  if (el.type === 'text' && pzEditingTextId === sel){
+    return `
+      <div class="pzdrawtools">
+        <button class="pztool ${el.bold?'active':''}" onclick="Pizarra.toggleTextStyle('bold')"><b>B</b></button>
+        <button class="pztool ${el.italic?'active':''}" onclick="Pizarra.toggleTextStyle('italic')"><i>I</i></button>
+        <button class="pztool ${el.underline?'active':''}" onclick="Pizarra.toggleTextStyle('underline')"><u>S</u></button>
+        <button class="pztool" onclick="Pizarra.resizeText(-2)">A-</button>
+        <button class="pztool" onclick="Pizarra.resizeText(2)">A+</button>
+      </div>
+      <div class="pzdrawtools" style="flex-wrap:nowrap;overflow-x:auto;">
+        ${FONT_FAMILIES.map((f,fi)=>`<button class="pztool fontbtn ${(el.font||FONT_FAMILIES[0])===f?'active':''}" style="font-family:${f};flex-shrink:0;" onclick="Pizarra.setTextFont(${fi})">Aa</button>`).join('')}
+      </div>
+      <div class="pzdrawtools">
+        <button class="pztool ${(el.align||'center')==='left'?'active':''}" onclick="Pizarra.setTextAlign('left')">${ICONS.alignLeft}</button>
+        <button class="pztool ${(el.align||'center')==='center'?'active':''}" onclick="Pizarra.setTextAlign('center')">${ICONS.alignCenter}</button>
+        <button class="pztool ${(el.align||'center')==='right'?'active':''}" onclick="Pizarra.setTextAlign('right')">${ICONS.alignRight}</button>
+        ${PZ_COLORS.filter(c=>c!=='#FFFFFF').map(c=>`<button class="pzswatch ${el.color===c?'active':''}" style="background:${c}" onclick="Pizarra.setTextColor('${c}')"></button>`).join('')}
+      </div>
+      <div class="pzbar">
+        <button class="pzbarbtn" onclick="Pizarra.stopEditingText()">${ICONS.check}Listo</button>
+      </div>
+    `;
+  }
+  return `
+    <div class="pzbar">
+      <button class="pzbarbtn" onclick="Pizarra.copy()">${ICONS.copy}Copiar</button>
+      <button class="pzbarbtn" onclick="Pizarra.cut()">${ICONS.scissors}Cortar</button>
+      ${el.type==='text' ? `<button class="pzbarbtn" onclick="Pizarra.editText()">${ICONS.pencil}Editar</button>` : ''}
+      <button class="pzbarbtn" onclick="Pizarra.layer(1)">${ICONS.layerUp}Adelante</button>
+      <button class="pzbarbtn" onclick="Pizarra.layer(-1)">${ICONS.layerDown}Atrás</button>
+      <button class="pzbarbtn" onclick="Pizarra.remove()">${ICONS.trash}Eliminar</button>
+      <button class="pzbarbtn" onclick="Pizarra.select(null)">${ICONS.x}Cerrar</button>
+    </div>
+  `;
+}
+
+function renderPzEl(el, isSelected){
+  const style = `left:${el.x}%;top:${el.y}%;width:${el.w}%;height:${el.h}%;z-index:${el.z};`;
+  let inner = '';
+  if (el.type === 'image') inner = `<img src="${el.src}" draggable="false"/>`;
+  else if (el.type === 'sticker') inner = `<div class="pztext" style="font-size:${Math.max(20,el.h*3)}px;">${el.text}</div>`;
+  else if (el.type === 'text') inner = `<div class="pztext" contenteditable="${pzEditingTextId===el.id?'true':'false'}" data-id="${el.id}" style="font-family:${el.font||FONT_FAMILIES[0]};font-size:${el.fontSize||14}px;color:${el.color||'#2F5D50'};font-weight:${el.bold?'700':'400'};font-style:${el.italic?'italic':'normal'};text-decoration:${el.underline?'underline':'none'};text-align:${el.align||'center'};">${esc(el.text)}</div>`;
+  return `
+    <div class="pzel ${isSelected?'selected':''}" data-id="${el.id}" style="${style}">
+      ${inner}
+      ${isSelected ? `
+        <div class="pzhandle nw" data-dir="nw"></div>
+        <div class="pzhandle ne" data-dir="ne"></div>
+        <div class="pzhandle sw" data-dir="sw"></div>
+        <div class="pzhandle se" data-dir="se"></div>
+      ` : ''}
+    </div>
+  `;
+}
+
+const Pizarra = {
+  board(){ return getBoard(pzCurrentBoard); },
+  save(){ DB.set('board_'+pzCurrentBoard, this.board()); },
+  addElement(partial){
+    const b = this.board();
+    const base = { id:uid(), x:30, y:30, w:30, h:20, z:(b.elementos.length+1) };
+    b.elementos.push(Object.assign(base, partial));
+    this.save();
+    pzSelected = base.id;
+    pzStickerOpen = false;
+    render();
+  },
+  toggleStickers(){ pzStickerOpen = !pzStickerOpen; render(); },
+  addSticker(emoji){ this.addElement({ type:'sticker', text:emoji, w:16, h:10 }); },
+  addCustomEmoji(){
+    const input = document.getElementById('customEmojiInput');
+    const val = input ? input.value.trim() : '';
+    if (!val){ if(input) input.focus(); return; }
+    this.addElement({ type:'sticker', text:val, w:16, h:10 });
+  },
+  addText(){ pzJustAddedText = true; this.addElement({ type:'text', text:'Escribí algo', w:40, h:12, fontSize:14, color:'#2F5D50', bold:false, italic:false, underline:false, align:'center' }); },
+  editText(){ pzEditingTextId = pzSelected; render(); },
+  stopEditingText(){
+    const editable = document.querySelector('[contenteditable="true"]');
+    if (editable){
+      const el = this.board().elementos.find(x=>x.id===pzEditingTextId);
+      if (el) el.text = editable.innerText;
+    }
+    pzEditingTextId = null;
+    this.save();
+    render();
+  },
+  _selText(){ return this.board().elementos.find(x=>x.id===pzSelected); },
+  toggleTextStyle(prop){
+    const el = this._selText();
+    if (!el) return;
+    el[prop] = !el[prop];
+    this.save();
+    render();
+  },
+  resizeText(delta){
+    const el = this._selText();
+    if (!el) return;
+    el.fontSize = Math.max(10, Math.min(48, (el.fontSize||14) + delta));
+    this.save();
+    render();
+  },
+  setTextAlign(align){
+    const el = this._selText();
+    if (!el) return;
+    el.align = align;
+    this.save();
+    render();
+  },
+  setTextColor(color){
+    const el = this._selText();
+    if (!el) return;
+    el.color = color;
+    this.save();
+    render();
+  },
+  setTextFont(fontIndex){
+    const el = this._selText();
+    if (!el) return;
+    el.font = FONT_FAMILIES[fontIndex] || FONT_FAMILIES[0];
+    this.save();
+    render();
+  },
+  handleFile(evt){
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 700;
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim){
+          const ratio = Math.min(maxDim/w, maxDim/h);
+          w = Math.round(w*ratio); h = Math.round(h*ratio);
+        }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = c.toDataURL('image/jpeg', 0.72);
+        const canvasEl = document.getElementById('pzCanvas');
+        const rect = canvasEl ? canvasEl.getBoundingClientRect() : {width:300,height:300};
+        const wPct = Math.min(60, (w / rect.width) * 100 * 0.6);
+        const hPct = wPct * (h/w) * (rect.width/rect.height);
+        Pizarra.addElement({ type:'image', src:dataUrl, w:wPct||35, h:Math.min(60,hPct)||25 });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    evt.target.value = '';
+  },
+  select(id){ pzSelected = id; pzStickerOpen=false; pzEditingTextId=null; render(); },
+  clipboard: null,
+  copy(){
+    const el = this.board().elementos.find(e=>e.id===pzSelected);
+    if (el) this.clipboard = Object.assign({}, el);
+  },
+  cut(){
+    const el = this.board().elementos.find(e=>e.id===pzSelected);
+    if (!el) return;
+    this.clipboard = Object.assign({}, el);
+    this.board().elementos = this.board().elementos.filter(e=>e.id!==pzSelected);
+    pzSelected = null;
+    this.save();
+    render();
+  },
+  paste(){
+    if (!this.clipboard) return;
+    const b = this.board();
+    const copy = Object.assign({}, this.clipboard, { id:uid(), x:Math.min(80,this.clipboard.x+4), y:Math.min(80,this.clipboard.y+4), z:b.elementos.length+1 });
+    b.elementos.push(copy);
+    pzSelected = copy.id;
+    this.save();
+    render();
+  },
+  layer(dir){
+    const el = this.board().elementos.find(e=>e.id===pzSelected);
+    if (!el) return;
+    el.z += dir * 10;
+    this.save();
+    render();
+  },
+  remove(){
+    const b = this.board();
+    b.elementos = b.elementos.filter(e=>e.id!==pzSelected);
+    pzSelected = null;
+    this.save();
+    render();
+  },
+  commit(){ this.save(); render(); },
+
+  /* --- dibujo libre --- */
+  toggleDraw(){
+    pzDrawMode = !pzDrawMode;
+    pzSelected = null;
+    render();
+  },
+  setColor(c){ pzDrawColor = c; pzErasing = false; this._refreshDrawToolbar(); },
+  setSize(v){ pzDrawSize = Number(v); },
+  toggleEraser(){ pzErasing = !pzErasing; this._refreshDrawToolbar(); },
+  _refreshDrawToolbar(){
+    document.querySelectorAll('.pzswatch').forEach((b,i)=>b.classList.toggle('active', !pzErasing && PZ_COLORS[i]===pzDrawColor));
+    const eraserBtn = document.querySelector('.pzeraser');
+    if (eraserBtn) eraserBtn.classList.toggle('active', pzErasing);
+  },
+  clearDrawing(){
+    const canvas = document.getElementById('pzDrawCanvas');
+    if (canvas){ const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); }
+    this.board().drawing = null;
+  },
+  _blankRef(canvas){
+    const blank = document.createElement('canvas');
+    blank.width = canvas.width; blank.height = canvas.height;
+    const bctx = blank.getContext('2d');
+    bctx.fillStyle = '#FFFFFF';
+    bctx.fillRect(0, 0, blank.width, blank.height);
+    return blank;
+  },
+  exitDraw(){
+    const canvas = document.getElementById('pzDrawCanvas');
+    if (canvas){
+      const isBlank = canvas.toDataURL() === this._blankRef(canvas).toDataURL();
+      this.board().drawing = isBlank ? null : canvas.toDataURL('image/png');
+    }
+    this.save();
+    pzDrawMode = false;
+    render();
+  },
+
+  _prepareDrawingForOcr(source){
+    const sctx = source.getContext('2d');
+    if (!sctx) return null;
+    const pixels = sctx.getImageData(0, 0, source.width, source.height);
+    let minX=source.width, minY=source.height, maxX=-1, maxY=-1;
+    for (let y=0; y<source.height; y++){
+      for (let x=0; x<source.width; x++){
+        const a = pixels.data[(y*source.width+x)*4+3];
+        if (a > 20){ if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y; }
+      }
+    }
+    if (maxX < minX || maxY < minY) return null;
+    const margin = 35;
+    minX = Math.max(0, minX-margin); minY = Math.max(0, minY-margin);
+    maxX = Math.min(source.width-1, maxX+margin); maxY = Math.min(source.height-1, maxY+margin);
+    const w = maxX-minX+1, h = maxY-minY+1;
+    const crop = document.createElement('canvas'); crop.width=w; crop.height=h;
+    const cctx = crop.getContext('2d');
+    cctx.fillStyle = '#fff'; cctx.fillRect(0,0,w,h);
+    cctx.drawImage(source, minX, minY, w, h, 0, 0, w, h);
+    const img = cctx.getImageData(0,0,w,h);
+    for (let i=0; i<img.data.length; i+=4){
+      const brightness = (img.data[i]+img.data[i+1]+img.data[i+2])/3;
+      const ink = brightness < 245;
+      img.data[i]=ink?0:255; img.data[i+1]=ink?0:255; img.data[i+2]=ink?0:255; img.data[i+3]=255;
+    }
+    cctx.putImageData(img, 0, 0);
+    const scale = 3;
+    const out = document.createElement('canvas'); out.width=w*scale; out.height=h*scale;
+    const octx = out.getContext('2d');
+    octx.fillStyle='#fff'; octx.fillRect(0,0,out.width,out.height);
+    octx.imageSmoothingEnabled = false;
+    octx.drawImage(crop, 0, 0, out.width, out.height);
+    return out;
+  },
+
+  async recognizeHandwriting(){
+    const canvas = document.getElementById('pzDrawCanvas');
+    if (!canvas) return;
+    const prepared = this._prepareDrawingForOcr(canvas);
+    if (!prepared){
+      alert('Todavía no escribiste nada en la hoja.');
+      return;
+    }
+    const btn = document.querySelector('.pzrecognize');
+    const originalLabel = btn ? btn.innerHTML : '';
+    if (btn) btn.innerHTML = 'Reconociendo…';
+    try{
+      const mod = await import('https://cdn.jsdelivr.net/npm/tesseract.js@6/+esm');
+      const worker = await mod.createWorker('spa');
+      await worker.setParameters({ tessedit_pageseg_mode: mod.PSM.SINGLE_BLOCK });
+      const result = await worker.recognize(prepared.toDataURL('image/png'));
+      await worker.terminate();
+      const text = String(result?.data?.text || '').replace(/\s+/g,' ').trim();
+      if (text){
+        pzDrawMode = false;
+        this.addElement({ type:'text', text, w:55, h:14, fontSize:14, color:'#2F5D50' });
+      } else {
+        alert('No pude reconocer esa escritura. Probá con letras un poco más separadas y claras.');
+      }
+    }catch(e){
+      console.warn('Reconocimiento de escritura: error', e);
+      alert('No se pudo cargar el reconocedor. Revisá tu conexión a internet y probá de nuevo.');
+    } finally {
+      if (btn && document.body.contains(btn)) btn.innerHTML = originalLabel;
+    }
+  }
+};
+
+function initDrawCanvas(){
+  const canvas = document.getElementById('pzDrawCanvas');
+  const wrap = document.getElementById('pzCanvas');
+  if (!canvas || !wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, rect.width, rect.height);
+  const drawingData = Pizarra.board().drawing;
+  if (drawingData){
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+    img.src = drawingData;
+  }
+  let drawing = false;
+  const pos = (e) => {
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+  canvas.addEventListener('pointerdown', (e) => {
+    drawing = true;
+    canvas.setPointerCapture(e.pointerId);
+    const p = pos(e);
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    const p = pos(e);
+    ctx.globalCompositeOperation = pzErasing ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = pzDrawColor;
+    ctx.lineWidth = pzDrawSize;
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  });
+  const endStroke = () => { drawing = false; };
+  canvas.addEventListener('pointerup', endStroke);
+  canvas.addEventListener('pointerleave', endStroke);
+}
+
+function attachPizarraEvents(){
+  const canvas = document.getElementById('pzCanvas');
+  if (!canvas) return;
+
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.target === canvas) Pizarra.select(null);
+  });
+
+  canvas.querySelectorAll('.pzel').forEach(elDiv => {
+    const id = elDiv.dataset.id;
+
+    elDiv.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.pzhandle')) return;
+      if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') { e.stopPropagation(); return; }
+      e.stopPropagation();
+      if (pzSelected !== id){ Pizarra.select(id); return; }
+      const el = Pizarra.board().elementos.find(x=>x.id===id);
+      const rect = canvas.getBoundingClientRect();
+      const startX = e.clientX, startY = e.clientY;
+      const startXPct = el.x, startYPct = el.y;
+      let moved = false;
+      elDiv.setPointerCapture(e.pointerId);
+      const onMove = (ev) => {
+        const dx = ((ev.clientX - startX) / rect.width) * 100;
+        const dy = ((ev.clientY - startY) / rect.height) * 100;
+        if (Math.abs(dx)>0.3 || Math.abs(dy)>0.3) moved = true;
+        el.x = Math.max(0, Math.min(100-el.w, startXPct + dx));
+        el.y = Math.max(0, Math.min(100-el.h, startYPct + dy));
+        elDiv.style.left = el.x+'%';
+        elDiv.style.top = el.y+'%';
+      };
+      const onUp = () => {
+        elDiv.removeEventListener('pointermove', onMove);
+        elDiv.removeEventListener('pointerup', onUp);
+        if (moved) Pizarra.commit();
+      };
+      elDiv.addEventListener('pointermove', onMove);
+      elDiv.addEventListener('pointerup', onUp);
+    });
+
+    elDiv.querySelectorAll('.pzhandle').forEach(handle => {
+      handle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        const dir = handle.dataset.dir;
+        const el = Pizarra.board().elementos.find(x=>x.id===id);
+        const rect = canvas.getBoundingClientRect();
+        const startX = e.clientX, startY = e.clientY;
+        const start = { x:el.x, y:el.y, w:el.w, h:el.h };
+        handle.setPointerCapture(e.pointerId);
+        const onMove = (ev) => {
+          const dx = ((ev.clientX - startX) / rect.width) * 100;
+          const dy = ((ev.clientY - startY) / rect.height) * 100;
+          if (dir.includes('e')) el.w = Math.max(6, Math.min(100-start.x, start.w + dx));
+          if (dir.includes('s')) el.h = Math.max(6, Math.min(100-start.y, start.h + dy));
+          if (dir.includes('w')){ const nw = Math.max(6, start.w - dx); el.x = start.x + (start.w - nw); el.w = nw; }
+          if (dir.includes('n')){ const nh = Math.max(6, start.h - dy); el.y = start.y + (start.h - nh); el.h = nh; }
+          elDiv.style.left = el.x+'%'; elDiv.style.top = el.y+'%';
+          elDiv.style.width = el.w+'%'; elDiv.style.height = el.h+'%';
+        };
+        const onUp = () => {
+          handle.removeEventListener('pointermove', onMove);
+          handle.removeEventListener('pointerup', onUp);
+          Pizarra.commit();
+        };
+        handle.addEventListener('pointermove', onMove);
+        handle.addEventListener('pointerup', onUp);
+      });
+    });
+
+    const editable = elDiv.querySelector('[contenteditable]');
+    if (editable){
+      editable.addEventListener('blur', () => {
+        const savedText = editable.innerText;
+        setTimeout(() => {
+          const el = Pizarra.board().elementos.find(x=>x.id===id);
+          if (el){ el.text = savedText; Pizarra.save(); }
+          if (pzEditingTextId === id) pzEditingTextId = null;
+          render();
+        }, 0);
+      });
+      if (pzJustAddedText && id === pzSelected){
+        pzJustAddedText = false;
+        pzEditingTextId = id;
+        editable.setAttribute('contenteditable','true');
+        setTimeout(() => {
+          editable.focus();
+          const range = document.createRange();
+          range.selectNodeContents(editable);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }, 0);
+      }
+    }
+  });
+}
+
+
+/* ---------- SISTEMA DE TEXTO ENRIQUECIDO (una sola caja, tocar y escribir) ---------- */
+const RICH_STICKERS = ['🌿','🌱','🍅','🌻','☀️','🧺','📌','✨','💚','🍋','🪴','📷','🌼','🍄','💧','🐝','📝','✅','⭐','❤️','🔥','☕','🍞','🥕','🥬','🐞','🦋','🌈','🎯','📅','⏰','🎁','💰','📚','🧡','💛','💙','🧸','🐐','🐓','🍯','🌾','🚜','🏡','🪣','🌤️','🌙','✏️'];
+const RICH_TEXT_COLORS = ['#2F5D50','#7A3B3B','#B23B3B','#D9782E','#B8860B','#5C3B2E','#5B3FA0','#2E6BB2','#B23070','#8B5A3C','#C96A75','#1E7A4A','#0F5C3A','#2E9E52','#1B6FC9','#5C5C5C'];
+const RICH_HIGHLIGHT_COLORS = ['#FFF59D','#FFE0B2','#F8BBD0','#E1BEE7','#C5CAE9','#B3E5FC','#B2DFDB','#C8E6C9','#DCEDC8','#FFCCBC','#F5F5F5'];
+const RICH_FONTS = ["Georgia","Verdana","Trebuchet MS","'Comic Sans MS'","'Courier New'","'Times New Roman'","'Segoe UI'","Tahoma"];
+const RICH_SIZES = [12,14,16,18,20,24,28,32];
+
+function getRich(key){
+  if (!state.richContent) state.richContent = {};
+  if (!state.richContent[key]) state.richContent[key] = DB.get('rich_'+key, { html:'', drawing:null });
+  return state.richContent[key];
+}
+function saveRich(key){ DB.set('rich_'+key, state.richContent[key]); }
+
+let richActive = null, richActiveTitle = '', richPanel = null;
+let richEraser = false, richPenColor = '#2F5D50', richPenWidth = 3;
+let richStickerSearch = '';
+let richDrawHistory = {}, richDrawFuture = {};
+let richCopied = '';
+let richCustomTextColor = '#7A3B3B', richCustomHighlightColor = '#FFF59D';
+
+function richCard(title, key, placeholder, tint){
+  const data = getRich(key);
+  return `
+    <div class="card${tint?' '+tint:''}">
+      <div class="card-h"><span>${esc(title)}</span></div>
+      <div class="richbox">
+        <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
+             onfocus="RichText.setActive('${key}','${esc(title)}')"
+             oninput="RichText.persist('${key}')">${data.html}</div>
+        <canvas class="richink" id="richink-${key}" data-key="${key}"></canvas>
+      </div>
+    </div>
+  `;
+}
+
+function renderRichToolbar(){
+  const activeData = richActive ? getRich(richActive) : null;
+  return `
+    <div class="richtoolbar-row">
+      <div class="richtoolbar-group">
+        <button class="richbtn" onmousedown="event.preventDefault()" onclick="RichText.command('bold')"><b>B</b></button>
+        <button class="richbtn" onmousedown="event.preventDefault()" onclick="RichText.command('italic')"><i>I</i></button>
+        <button class="richbtn" onmousedown="event.preventDefault()" onclick="RichText.command('underline')"><u>S</u></button>
+      </div>
+      <div class="richtoolbar-group">
+        <button class="richbtn ${richPanel==='fonts'?'active':''}" onclick="RichText.togglePanel('fonts')">Aa</button>
+        <button class="richbtn" onclick="document.getElementById('richFileInput').click()">${ICONS.image}</button>
+        <button class="richbtn ${richPanel==='stickers'?'active':''}" onclick="RichText.togglePanel('stickers')">${ICONS.sticker}</button>
+        <button class="richbtn ${richPanel==='colors'?'active':''}" onclick="RichText.togglePanel('colors')">${ICONS.palette}</button>
+        <button class="richbtn ${richPanel==='pen'?'active':''}" onclick="RichText.togglePanel('pen')">${ICONS.pencil}</button>
+        <button class="richbtn ${richPanel==='more'?'active':''}" onclick="RichText.togglePanel('more')">${ICONS.more}</button>
+      </div>
+    </div>
+
+    ${richPanel==='fonts' ? `
+      <div class="richpanel">
+        <div class="richpanel-row">
+          <select onmousedown="event.stopPropagation()" onchange="RichText.applyFont(this.value)">
+            <option value="" disabled selected>Elegir fuente</option>
+            ${RICH_FONTS.map(f=>`<option value="${f}" style="font-family:${f}">${f.replace(/'/g,'')}</option>`).join('')}
+          </select>
+          <select onmousedown="event.stopPropagation()" onchange="RichText.applySize(this.value)">
+            ${RICH_SIZES.map(s=>`<option value="${s}" ${s===16?'selected':''}>${s} px</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    ` : ''}
+
+    ${richPanel==='stickers' ? `
+      <div class="richpanel">
+        <input type="text" placeholder="Buscar o pegar cualquier emoji..." value="${esc(richStickerSearch)}" oninput="RichText.setStickerSearch(this.value)" style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
+        <div class="richstickergrid">
+          ${RICH_STICKERS.map(s=>`<button onmousedown="event.preventDefault()" onclick="RichText.insertSticker('${s}')">${s}</button>`).join('')}
+        </div>
+      </div>
+    ` : ''}
+
+    ${richPanel==='colors' ? `
+      <div class="richpanel">
+        <div class="richlabel">${ICONS.palette} Color del texto</div>
+        <div class="richpanel-row">
+          ${RICH_TEXT_COLORS.map(c=>`<button class="richswatch" style="background:${c}" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','${c}')"></button>`).join('')}
+          <input type="color" value="${richCustomTextColor}" onmousedown="event.preventDefault()" onchange="RichText.customTextColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
+        </div>
+        <div class="richlabel" style="margin-top:6px;">Resaltador</div>
+        <div class="richpanel-row">
+          ${RICH_HIGHLIGHT_COLORS.map(c=>`<button class="richswatch square" style="background:${c}" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','${c}')"></button>`).join('')}
+          <input type="color" value="${richCustomHighlightColor}" onmousedown="event.preventDefault()" onchange="RichText.customHighlightColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
+        </div>
+        <div class="richpanel-row" style="margin-top:6px;">
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#2F5D50')">Texto normal</button>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','transparent')">Quitar resaltado</button>
+        </div>
+      </div>
+    ` : ''}
+
+    ${richPanel==='pen' ? `
+      <div class="richpanel">
+        <div class="richpanel-row">
+          <button class="richbtn ${!richEraser?'active':''}" onclick="RichText.setEraser(false)">${ICONS.pencil}</button>
+          <button class="richbtn ${richEraser?'active':''}" onclick="RichText.setEraser(true)">${ICONS.eraser}</button>
+          <button class="richbtn" onclick="RichText.undoDraw()">${ICONS.undo}</button>
+          <button class="richbtn" onclick="RichText.redoDraw()">${ICONS.redo}</button>
+          <select onmousedown="event.stopPropagation()" onchange="richPenWidth=Number(this.value)">
+            <option value="2">Fino</option><option value="3" selected>Medio</option><option value="5">Grueso</option><option value="8">Muy grueso</option>
+          </select>
+          <input type="color" value="${richPenColor}" onmousedown="event.preventDefault()" onchange="richPenColor=this.value" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
+        </div>
+        <button class="dashedbtn" onclick="RichText.clearDrawing()">Borrar dibujo</button>
+        <button class="dashedbtn" id="richOcrBtn" onclick="RichText.recognizeHandwriting()">${ICONS.sparkle} Convertir lo escrito a texto</button>
+        <p style="font-size:11px;color:var(--sub);margin-top:6px;">Tocá "${richPanel==='pen'?'lápiz':''}" y escribí directo sobre la hoja de abajo. La primera vez que convertís a texto puede tardar unos segundos en cargar el lector.</p>
+      </div>
+    ` : ''}
+
+    ${richPanel==='more' ? `
+      <div class="richpanel">
+        <div class="richpanel-row">
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.cutBox()">${ICONS.scissors} Cortar caja</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.copyBox()">${ICONS.copy} Copiar caja</button>
+        </div>
+        <div class="richpanel-row">
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.pasteBox()">${ICONS.clipboard} Pegar</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;color:#B23B3B;" onclick="RichText.clearBox()">${ICONS.trash} Vaciar</button>
+        </div>
+      </div>
+    ` : ''}
+
+    <div class="richediting">Editando: <b>${esc(richActiveTitle||'—')}</b></div>
+    <input type="file" id="richFileInput" accept="image/*" style="display:none" onchange="RichText.insertImage(event)"/>
+  `;
+}
+
+function refreshRichToolbar(){
+  const wrap = document.getElementById('richToolbarWrap');
+  if (wrap) wrap.innerHTML = renderRichToolbar();
+  document.querySelectorAll('.richink').forEach(c=>{
+    c.classList.toggle('active', richPanel==='pen' && c.dataset.key===richActive);
+  });
+  if (richPanel==='pen' && richActive) initRichInk(richActive);
+}
+
+const RichText = {
+  setActive(key, title){
+    richActive = key;
+    richActiveTitle = title;
+    refreshRichToolbar();
+  },
+  persist(key){
+    const el = document.getElementById('richtext-'+key);
+    if (!el) return;
+    getRich(key).html = el.innerHTML;
+    saveRich(key);
+  },
+  focusActive(){
+    const el = document.getElementById('richtext-'+richActive);
+    if (el) el.focus();
+  },
+  command(cmd, value){
+    this.focusActive();
+    document.execCommand(cmd, false, value);
+    this.persist(richActive);
+  },
+  insertSticker(s){
+    this.focusActive();
+    document.execCommand('insertText', false, s);
+    this.persist(richActive);
+  },
+  setStickerSearch(v){ richStickerSearch = v; },
+  applyFont(family){ this.command('fontName', family); },
+  applySize(px){
+    this.focusActive();
+    document.execCommand('fontSize', false, '7');
+    const root = document.getElementById('richtext-'+richActive);
+    root?.querySelectorAll('font[size="7"]').forEach(node=>{
+      node.removeAttribute('size');
+      node.style.fontSize = px+'px';
+    });
+    this.persist(richActive);
+  },
+  customTextColor(v){ richCustomTextColor = v; this.command('foreColor', v); },
+  customHighlightColor(v){ richCustomHighlightColor = v; this.command('backColor', v); },
+  insertImage(evt){
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 900;
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim){ const r = Math.min(maxDim/w, maxDim/h); w=Math.round(w*r); h=Math.round(h*r); }
+        const c = document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        const dataUrl = c.toDataURL('image/jpeg', 0.75);
+        RichText.focusActive();
+        document.execCommand('insertHTML', false, `<img src="${dataUrl}" alt="Imagen"/>`);
+        RichText.persist(richActive);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    evt.target.value = '';
+  },
+  cutBox(){
+    const el = document.getElementById('richtext-'+richActive);
+    if (!el) return;
+    richCopied = el.innerHTML;
+    el.innerHTML = '';
+    this.persist(richActive);
+  },
+  copyBox(){
+    const el = document.getElementById('richtext-'+richActive);
+    if (el) richCopied = el.innerHTML;
+  },
+  pasteBox(){
+    const el = document.getElementById('richtext-'+richActive);
+    if (!el || !richCopied) return;
+    el.insertAdjacentHTML('beforeend', richCopied);
+    this.persist(richActive);
+  },
+  clearBox(){
+    const el = document.getElementById('richtext-'+richActive);
+    if (!el) return;
+    el.innerHTML = '';
+    this.persist(richActive);
+  },
+  togglePanel(name){
+    richPanel = (richPanel===name) ? null : name;
+    refreshRichToolbar();
+  },
+  setEraser(v){ richEraser = v; refreshRichToolbar(); },
+
+  _blankRef(canvas){
+    const b = document.createElement('canvas'); b.width=canvas.width; b.height=canvas.height;
+    const bctx = b.getContext('2d'); bctx.fillStyle='#fff'; bctx.fillRect(0,0,b.width,b.height);
+    return b;
+  },
+  saveInkSnapshot(){
+    const canvas = document.getElementById('richink-'+richActive);
+    if (!canvas) return;
+    const data = canvas.toDataURL('image/png');
+    if (!richDrawHistory[richActive]) richDrawHistory[richActive]=[];
+    richDrawHistory[richActive].push(data);
+    if (richDrawHistory[richActive].length>25) richDrawHistory[richActive].shift();
+    richDrawFuture[richActive] = [];
+    getRich(richActive).drawing = data;
+    saveRich(richActive);
+  },
+  restoreDrawing(data){
+    const canvas = document.getElementById('richink-'+richActive);
+    const ctx = canvas?.getContext('2d');
+    if (!canvas||!ctx) return;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if (!data){ getRich(richActive).drawing=null; saveRich(richActive); return; }
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    img.src = data;
+    getRich(richActive).drawing = data;
+    saveRich(richActive);
+  },
+  undoDraw(){
+    const h = richDrawHistory[richActive]; if (!h||!h.length) return;
+    const cur = h.pop(); if (cur) (richDrawFuture[richActive]=richDrawFuture[richActive]||[]).push(cur);
+    this.restoreDrawing(h[h.length-1]);
+  },
+  redoDraw(){
+    const f = richDrawFuture[richActive]; const next = f?.pop(); if (!next) return;
+    (richDrawHistory[richActive]=richDrawHistory[richActive]||[]).push(next);
+    this.restoreDrawing(next);
+  },
+  clearDrawing(){
+    const canvas = document.getElementById('richink-'+richActive);
+    const ctx = canvas?.getContext('2d');
+    if (canvas && ctx){ ctx.clearRect(0,0,canvas.width,canvas.height); getRich(richActive).drawing=null; saveRich(richActive); richDrawHistory[richActive]=[]; richDrawFuture[richActive]=[]; }
+  },
+
+  _prepareDrawingForOcr(source){
+    const sctx = source.getContext('2d'); if (!sctx) return null;
+    const pixels = sctx.getImageData(0,0,source.width,source.height);
+    let minX=source.width,minY=source.height,maxX=-1,maxY=-1;
+    for (let y=0;y<source.height;y++) for (let x=0;x<source.width;x++){
+      const a = pixels.data[(y*source.width+x)*4+3];
+      if (a>20){ if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y; }
+    }
+    if (maxX<minX||maxY<minY) return null;
+    const margin=35;
+    minX=Math.max(0,minX-margin); minY=Math.max(0,minY-margin);
+    maxX=Math.min(source.width-1,maxX+margin); maxY=Math.min(source.height-1,maxY+margin);
+    const w=maxX-minX+1, h=maxY-minY+1;
+    const crop=document.createElement('canvas'); crop.width=w; crop.height=h;
+    const cctx=crop.getContext('2d'); cctx.fillStyle='#fff'; cctx.fillRect(0,0,w,h);
+    cctx.drawImage(source,minX,minY,w,h,0,0,w,h);
+    const img=cctx.getImageData(0,0,w,h);
+    for (let i=0;i<img.data.length;i+=4){
+      const b=(img.data[i]+img.data[i+1]+img.data[i+2])/3; const ink=b<245;
+      img.data[i]=ink?0:255; img.data[i+1]=ink?0:255; img.data[i+2]=ink?0:255; img.data[i+3]=255;
+    }
+    cctx.putImageData(img,0,0);
+    const scale=3, out=document.createElement('canvas'); out.width=w*scale; out.height=h*scale;
+    const octx=out.getContext('2d'); octx.fillStyle='#fff'; octx.fillRect(0,0,out.width,out.height);
+    octx.imageSmoothingEnabled=false; octx.drawImage(crop,0,0,out.width,out.height);
+    return out;
+  },
+  async recognizeHandwriting(){
+    const canvas = document.getElementById('richink-'+richActive);
+    if (!canvas) return;
+    const prepared = this._prepareDrawingForOcr(canvas);
+    if (!prepared){ alert('Primero escribí algo a mano dentro de la caja.'); return; }
+    const btn = document.getElementById('richOcrBtn');
+    const original = btn ? btn.innerHTML : '';
+    if (btn) btn.innerHTML = 'Reconociendo…';
+    try{
+      const mod = await import('https://cdn.jsdelivr.net/npm/tesseract.js@6/+esm');
+      const worker = await mod.createWorker('spa');
+      await worker.setParameters({ tessedit_pageseg_mode: mod.PSM.SINGLE_BLOCK });
+      const result = await worker.recognize(prepared.toDataURL('image/png'));
+      await worker.terminate();
+      const text = String(result?.data?.text||'').replace(/\s+/g,' ').trim();
+      if (!text){ alert('No pude reconocer esa escritura. Probá con letras más separadas y claras.'); return; }
+      const el = document.getElementById('richtext-'+richActive);
+      if (el){ el.append(document.createTextNode((el.innerText.trim()?' ':'')+text)); this.persist(richActive); }
+      this.clearDrawing();
+      richPanel = null;
+      refreshRichToolbar();
+    }catch(e){
+      console.warn('OCR error', e);
+      alert('No se pudo cargar el reconocedor. Revisá tu conexión e intentá de nuevo.');
+    } finally {
+      if (btn && document.body.contains(btn)) btn.innerHTML = original;
+    }
+  }
+};
+
+function initRichInk(key){
+  const canvas = document.getElementById('richink-'+key);
+  const wrap = document.getElementById('richtext-'+key);
+  if (!canvas || !wrap || canvas.dataset.inited) return;
+  const rect = wrap.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.max(rect.width,300) * dpr;
+  canvas.height = Math.max(rect.height,110) * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.lineCap='round'; ctx.lineJoin='round';
+  const saved = getRich(key).drawing;
+  if (saved){
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img,0,0,rect.width,rect.height);
+    img.src = saved;
+  }
+  let drawing = false;
+  const point = (e) => { const r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left), y:(e.clientY-r.top)}; };
+  canvas.addEventListener('pointerdown', (e)=>{
+    if (!canvas.classList.contains('active')) return;
+    drawing=true; canvas.setPointerCapture(e.pointerId);
+    const p=point(e); ctx.beginPath(); ctx.moveTo(p.x,p.y);
+  });
+  canvas.addEventListener('pointermove', (e)=>{
+    if (!drawing) return;
+    const p=point(e);
+    ctx.lineWidth = richEraser?18:richPenWidth;
+    ctx.globalCompositeOperation = richEraser?'destination-out':'source-over';
+    ctx.strokeStyle = richPenColor;
+    ctx.lineTo(p.x,p.y); ctx.stroke();
+  });
+  const stop = ()=>{ if(!drawing) return; drawing=false; ctx.globalCompositeOperation='source-over'; RichText.saveInkSnapshot(); };
+  canvas.addEventListener('pointerup', stop);
+  canvas.addEventListener('pointercancel', stop);
+  canvas.dataset.inited = '1';
+}
+
+/* ---------- ASISTENTE ---------- */
+let asisTab = 'chat';
+let dumpResult = null, dumpLoading = false;
+
+function renderAsistente(){
+  return `
+    <div class="chat-wrap">
+      <div class="asis-top">
+        <div><h1 style="font-size:24px;">Asistente</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">Pedile una mano para organizarte</p></div>
+        <button class="gearbtn" onclick="App.openSettings()">${ICONS.gear}</button>
+      </div>
+      <div class="asistabs">
+        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">Chat</button>
+        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">Volcar pendientes</button>
+      </div>
+      ${asisTab==='chat' ? `
+        <div class="chat-msgs" id="chatMsgs">
+          ${state.chat.map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="${state.apiKey?'Escribí tu mensaje...':'Configurá tu API key primero (⚙)'}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
+          <button class="sendbtn" onclick="App.sendChat()">${ICONS.send}</button>
+        </div>
+      ` : renderBrainDump()}
+    </div>
+  `;
+}
+
+function renderBrainDump(){
+  return `
+    <div class="dump-scroll">
+      <div class="card">
+        <div class="card-b" style="display:flex;gap:10px;align-items:flex-start;">
+          <span class="notascard-icon" style="margin:0;flex-shrink:0;">${ICONS.sparkle}</span>
+          <p style="font-size:13px;color:var(--sub);margin:0;">Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.</p>
+        </div>
+      </div>
+      <textarea id="dumpInput" rows="6" placeholder="Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
+      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${dumpLoading?'Organizando…':'Organizar mis pendientes'}</button>
+
+      ${dumpResult ? `
+        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">Propuesta (${dumpResult.length})</p>
+        ${dumpResult.map((item,i)=>`
+          <div class="card">
+            <div class="card-b">
+              <input type="text" value="${esc(item.text)}" oninput="App.updateDumpItem(${i},this.value)" style="font-weight:600;font-size:14px;"/>
+              <div class="dumpchoices">
+                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">A Prioridades</button>
+                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">A Compras</button>
+                <button class="xbtn" onclick="App.removeDumpItem(${i})">${ICONS.x}</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} Agregar todo a mi planner</button>
+      ` : ''}
+    </div>
+  `;
+}
+
+function scrollChatToBottom(){
+  const el = document.getElementById('chatMsgs');
+  if (el) el.scrollTop = el.scrollHeight;
+}
+
+/* ---------- lógica ---------- */
+const App = {
+  goto(tab, masScreen){
+    state.tab = tab;
+    state.masScreen = (tab==='mas' && masScreen) ? masScreen : null;
+    render();
+  },
+  toggleDay(dia){ openDay = (openDay===dia) ? null : dia; render(); },
+
+  setField(section, field, value){
+    state[section][field] = value;
+    DB.set(section, state[section]);
+  },
+  setDayField(dia, value){
+    state.semana.dias[dia] = value;
+    DB.set('semana', state.semana);
+  },
+  setComidaField(dia, value){
+    state.comidas.dias[dia] = value;
+    DB.set('comidas', state.comidas);
+  },
+  setListField(section, listKey, id, field, value){
+    const item = state[section][listKey].find(x=>x.id===id);
+    if (item){ item[field]=value; DB.set(section, state[section]); }
+  },
+  toggle(section, listKey, id){
+    const item = state[section][listKey].find(x=>x.id===id);
+    if (item){ item.done = !item.done; DB.set(section, state[section]); render(); }
+  },
+  addItem(section, listKey, blank){
+    state[section][listKey].push(Object.assign({id:uid()}, blank));
+    DB.set(section, state[section]); render();
+  },
+  removeItem(section, listKey, id){
+    state[section][listKey] = state[section][listKey].filter(x=>x.id!==id);
+    DB.set(section, state[section]); render();
+  },
+  toggleHabitDay(id, n){
+    const h = state.habitos.lista.find(x=>x.id===id);
+    if (h){ h.marcas[n] = !h.marcas[n]; DB.set('habitos', state.habitos); render(); }
+  },
+  setNestedSimple(section, key, field, value){
+    state[section][key][field] = value;
+    DB.set(section, state[section]);
+  },
+  setNestedField(section, parentId, listKey, id, field, value){
+    const parent = state[section].lista.find(x=>x.id===parentId);
+    const item = parent[listKey].find(x=>x.id===id);
+    if (item){ item[field]=value; DB.set(section, state[section]); }
+  },
+  toggleNested(section, parentId, listKey, id){
+    const parent = state[section].lista.find(x=>x.id===parentId);
+    const item = parent[listKey].find(x=>x.id===id);
+    if (item){ item.done=!item.done; DB.set(section, state[section]); render(); }
+  },
+  addNested(section, parentId, listKey, blank){
+    const parent = state[section].lista.find(x=>x.id===parentId);
+    parent[listKey] = parent[listKey] || [];
+    parent[listKey].push(Object.assign({id:uid()}, blank));
+    DB.set(section, state[section]); render();
+  },
+
+  /* --- asistente / API key --- */
+  openSettings(){
+    const wrap = document.createElement('div');
+    wrap.className = 'modal-bg';
+    wrap.innerHTML = `
+      <div class="modal">
+        <h3>Conectar el asistente</h3>
+        <p>Pegá tu API key de Gemini para que el asistente pueda responderte. Se guarda solo en este dispositivo (localStorage), nunca se envía a ningún otro lado más que a Google.<br><br>Conseguí una gratis en <b>aistudio.google.com/apikey</b>.</p>
+        <input type="text" id="apiKeyInput" placeholder="AIza..." value="${esc(state.apiKey)}"/>
+        <div class="actions">
+          <button class="btn ghost" onclick="this.closest('.modal-bg').remove()">Cancelar</button>
+          <button class="btn primary" onclick="App.saveKey()">Guardar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+  },
+  saveKey(){
+    const val = document.getElementById('apiKeyInput').value.trim();
+    state.apiKey = val;
+    DB.set('apiKey', val);
+    document.querySelector('.modal-bg').remove();
+    render();
+  },
+  async sendChat(){
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    if (!state.apiKey){ App.openSettings(); return; }
+    state.chat.push({role:'user', text});
+    input.value = '';
+    render();
+    state.chat.push({role:'bot', text:'…'});
+    render();
+    try{
+      const contents = state.chat.filter(m=>m.text!=='…').map(m=>({
+        role: m.role==='user' ? 'user' : 'model',
+        parts: [{text:m.text}]
+      }));
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${state.apiKey}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          systemInstruction: { parts: [{text:"Sos el asistente de 'Mi Planner Digital'. Hablás en español rioplatense (voseo), tono cálido y breve. Ayudás a definir el enfoque de la semana, bajar metas a un primer paso concreto, u organizar prioridades. Respuestas cortas (2-4 líneas), sin relleno."}] },
+          contents
+        })
+      });
+      const data = await res.json();
+      const reply = data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('') || 'No pude generar una respuesta, ¿probamos de nuevo?';
+      state.chat.pop();
+      state.chat.push({role:'bot', text:reply});
+    }catch(e){
+      state.chat.pop();
+      state.chat.push({role:'bot', text:'Hubo un problema de conexión. Revisá tu API key o probá de nuevo.'});
+    }
+    render();
+  },
+
+  setAsisTab(tab){ asisTab = tab; render(); },
+
+  async runBrainDump(){
+    const input = document.getElementById('dumpInput');
+    const raw = input ? input.value.trim() : '';
+    if (!raw) return;
+    if (!state.apiKey){ App.openSettings(); return; }
+    dumpLoading = true;
+    render();
+    try{
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${state.apiKey}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          systemInstruction: { parts: [{text:"Separás una lista desordenada de pendientes en ítems sueltos. Para cada ítem decidís si es algo para comprar (destino 'compras') o cualquier otra tarea/pendiente (destino 'prioridades'). Respondé ÚNICAMENTE con un JSON válido: un array de objetos {\"text\":\"...\", \"destino\":\"prioridades\"|\"compras\"}. Sin texto extra, sin markdown, sin comillas triples."}] },
+          contents: [{ role:'user', parts:[{text: raw}] }]
+        })
+      });
+      const data = await res.json();
+      if (data?.error) throw new Error(data.error.message || 'error');
+      let text = (data?.candidates?.[0]?.content?.parts||[]).map(p=>p.text).join('').trim();
+      text = text.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+      const parsed = JSON.parse(text);
+      dumpResult = parsed.filter(x=>x && x.text).map(x=>({ text:x.text, destino: x.destino==='compras'?'compras':'prioridades' }));
+    }catch(e){
+      console.warn('Volcar pendientes: error', e);
+      alert('No pude organizar la lista. Revisá tu conexión o tu API key, y probá de nuevo.');
+    }
+    dumpLoading = false;
+    render();
+  },
+  updateDumpItem(i, val){ if (dumpResult && dumpResult[i]) dumpResult[i].text = val; },
+  setDumpDestino(i, destino){ if (dumpResult && dumpResult[i]){ dumpResult[i].destino = destino; render(); } },
+  removeDumpItem(i){ if (dumpResult){ dumpResult.splice(i,1); render(); } },
+  acceptBrainDump(){
+    if (!dumpResult || !dumpResult.length) return;
+    dumpResult.forEach(item=>{
+      if (item.destino === 'compras'){
+        state.compras.lista.push({ id:uid(), text:item.text, done:false });
+      } else {
+        state.inicio.prioridades.push({ id:uid(), text:item.text, done:false });
+      }
+    });
+    DB.set('compras', state.compras);
+    DB.set('inicio', state.inicio);
+    dumpResult = null;
+    const input2 = document.getElementById('dumpInput');
+    if (input2) input2.value = '';
+    render();
+  },
+
+  /* --- notificaciones locales (sin backend) --- */
+  async enableNotifications(){
+    if (!('Notification' in window)){
+      alert('Este navegador no soporta notificaciones.');
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    render();
+    if (perm === 'granted'){
+      new Notification('Mi Planner Digital', { body:'Listo, te voy a avisar de tus turnos mientras la app esté abierta o instalada.' });
+    }
+  },
+  toggleRecordar(id){
+    const item = state.turnos.lista.find(x=>x.id===id);
+    if (item){
+      item.recordar = !item.recordar;
+      item.notified = false;
+      DB.set('turnos', state.turnos);
+      render();
+    }
+  },
+  resetNotified(id){
+    const item = state.turnos.lista.find(x=>x.id===id);
+    if (item) item.notified = false;
+  },
+
+  /* --- sincronización entre dispositivos (Firebase, cuenta propia del usuario) --- */
+  connectSync(){
+    const raw = document.getElementById('fbConfigInput').value.trim();
+    const code = document.getElementById('syncCodeInput').value.trim();
+    if (!raw || !code){ alert('Completá la configuración de Firebase y un código.'); return; }
+    let parsed;
+    try{
+      const jsonish = raw.replace(/^\s*(const|let|var)\s+\w+\s*=\s*/,'').replace(/;\s*$/,'');
+      parsed = Function('"use strict"; return (' + jsonish + ')')();
+    }catch(e){
+      alert('No pude leer esa configuración. Pegá el objeto tal cual lo copiaste de Firebase.');
+      return;
+    }
+    state.syncConfig = { firebaseConfig: parsed, code, rawConfig: raw };
+    DB.set('syncConfig', state.syncConfig);
+    render();
+    Sync.start();
+  },
+  disableSync(){
+    Sync.stop();
+    state.syncConfig = null;
+    DB.set('syncConfig', null);
+    render();
+  }
+};
+
+/* ---------- módulo de sincronización ---------- */
+const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
+const Sync = {
+  db: null,
+  unsub: null,
+  applyingRemote: false,
+  pushTimer: null,
+  loadScript(src){
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+      const s = document.createElement('script');
+      s.src = src; s.onload = resolve; s.onerror = () => reject(new Error('No se pudo cargar '+src));
+      document.head.appendChild(s);
+    });
+  },
+  async start(){
+    if (!state.syncConfig) return;
+    try{
+      await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+      await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+      const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(state.syncConfig.firebaseConfig);
+      this.db = firebase.firestore();
+      const ref = this.db.collection('planners').doc(state.syncConfig.code);
+      this.unsub = ref.onSnapshot(doc => {
+        if (!doc.exists) return;
+        const remote = doc.data();
+        this.applyingRemote = true;
+        SYNC_KEYS.forEach(k => { if (remote[k] !== undefined){ state[k] = remote[k]; DB.set(k, state[k]); } });
+        this.applyingRemote = false;
+        state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
+        render();
+      }, err => {
+        state.syncStatus = 'No se pudo conectar (revisá la config o tu conexión).';
+        render();
+      });
+    }catch(e){
+      state.syncStatus = 'No se pudo cargar Firebase. Revisá tu conexión a internet.';
+      render();
+    }
+  },
+  stop(){
+    if (this.unsub) this.unsub();
+    this.db = null;
+  },
+  push(){
+    if (!this.db || this.applyingRemote) return;
+    clearTimeout(this.pushTimer);
+    this.pushTimer = setTimeout(() => {
+      const payload = {};
+      SYNC_KEYS.forEach(k => payload[k] = state[k]);
+      this.db.collection('planners').doc(state.syncConfig.code).set(payload, {merge:true}).catch(()=>{});
+    }, 500);
+  }
+};
+
+/* engancha cada guardado local con un push a Firebase, si está conectado */
+const _dbSet = DB.set.bind(DB);
+DB.set = (key, value) => { _dbSet(key, value); if (SYNC_KEYS.includes(key)) Sync.push(); };
+
+/* revisa recordatorios de turnos cada 30s (mientras la app está abierta) */
+function checkReminders(){
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const now = new Date();
+  (state.turnos.lista||[]).forEach(item => {
+    if (!item.recordar || item.notified || !item.fecha || !item.hora) return;
+    const when = new Date(`${item.fecha}T${item.hora}`);
+    if (when <= now && when > new Date(now - 15*60*1000)){
+      new Notification(item.titulo || 'Turno', { body: `Hoy ${item.hora} — ${item.notas||'no te olvides'}` });
+      item.notified = true;
+      DB.set('turnos', state.turnos);
+    }
+  });
+}
+setInterval(checkReminders, 30000);
+
+render();
+if (state.syncConfig) Sync.start();
+
+
+/* ---------- service worker ---------- */
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
