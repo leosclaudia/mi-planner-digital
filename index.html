@@ -1883,6 +1883,7 @@ const Sync = {
   unsub: null,
   applyingRemote: false,
   pushTimer: null,
+  initialPullDone: false,
   loadScript(src){
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -1893,6 +1894,7 @@ const Sync = {
   },
   async start(){
     if (!state.syncConfig) return;
+    this.initialPullDone = false;
     try{
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
@@ -1900,7 +1902,12 @@ const Sync = {
       this.db = firebase.firestore();
       const ref = this.db.collection('planners').doc(state.syncConfig.code);
       this.unsub = ref.onSnapshot(doc => {
-        if (!doc.exists) return;
+        if (!doc.exists){
+          /* código nuevo, todavía no hay nada en la nube: recién ahora se habilita el envío */
+          this.initialPullDone = true;
+          render();
+          return;
+        }
         const remote = doc.data();
         this.applyingRemote = true;
         SYNC_KEYS.forEach(k => { if (remote[k] !== undefined){ state[k] = remote[k]; DB.set(k, state[k]); } });
@@ -1913,6 +1920,8 @@ const Sync = {
           });
         }
         this.applyingRemote = false;
+        /* recién habilitamos el env\u00edo DESPU\u00c9S de haber tra\u00eddo lo que hab\u00eda en la nube, para no pisarlo con datos locales viejos */
+        this.initialPullDone = true;
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
         render();
       }, err => {
@@ -1927,9 +1936,10 @@ const Sync = {
   stop(){
     if (this.unsub) this.unsub();
     this.db = null;
+    this.initialPullDone = false;
   },
   push(){
-    if (!this.db || this.applyingRemote) return;
+    if (!this.db || this.applyingRemote || !this.initialPullDone) return;
     clearTimeout(this.pushTimer);
     this.pushTimer = setTimeout(() => {
       const payload = {};
