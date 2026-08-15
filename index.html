@@ -217,7 +217,6 @@
   }
   img.emoji{height:1.4em;width:1.4em;vertical-align:-0.3em;}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -453,6 +452,7 @@ const ICONS = {
   trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14z"/></svg>',
   type:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></svg>',
   sticker:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 9 9V4a1 1 0 0 0-1-1z"/><path d="M15 3v6a3 3 0 0 0 3 3h6"/></svg>',
+  gif:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M7 9.5v5M17 9.5h-2.5a1.5 1.5 0 0 0-1.5 1.5v2a1.5 1.5 0 0 0 1.5 1.5H17v-2.5h-1.5"/></svg>',
   pencil:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>',
   eraser:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20H9L4.5 15.5a1 1 0 0 1 0-1.4l9-9a1 1 0 0 1 1.4 0l5.6 5.6a1 1 0 0 1 0 1.4L13 20"/></svg>',
   scissors:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.12 15.88M14.47 14.48L20 20M8.12 8.12L12 12"/></svg>',
@@ -549,7 +549,6 @@ function render(){
   if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
-  if (window.twemoji) window.twemoji.parse(app, {base:'https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/', folder:'72x72', ext:'.png'});
 }
 
 /* ---------- PORTADA ---------- */
@@ -1412,24 +1411,61 @@ function attachPizarraEvents(){
 
 /* ---------- SISTEMA DE TEXTO ENRIQUECIDO (una sola caja, tocar y escribir) ---------- */
 const RICH_STICKERS_KW = [
+  /* naturaleza y huerta */
   ['🌿','hoja planta verde'],['🌱','brote planta semilla huerta'],['🍅','tomate verdura comida'],['🌻','girasol flor'],
-  ['☀️','sol calor dia'],['🧺','canasto canasta huerta cosecha'],['📌','pin marcar chinche'],['✨','brillo destello magia'],
-  ['💚','corazon verde'],['🍋','limon fruta cítrico'],['🪴','maceta planta'],['📷','camara foto'],
-  ['🌼','flor margarita'],['🍄','hongo seta'],['💧','agua gota lluvia riego'],['🐝','abeja'],
-  ['📝','nota escribir lapiz'],['✅','listo hecho tilde check'],['⭐','estrella favorito'],['❤️','corazon amor'],
-  ['🔥','fuego caliente'],['☕','cafe taza'],['🍞','pan comida'],['🥕','zanahoria verdura'],
+  ['☀️','sol calor dia'],['🧺','canasto canasta huerta cosecha'],['💚','corazon verde'],['🍋','limon fruta citrico'],
+  ['🪴','maceta planta'],['🌼','flor margarita'],['🌸','flor cerezo'],['🌷','tulipan flor'],['🥀','flor marchita'],
+  ['🍄','hongo seta'],['💧','agua gota lluvia riego'],['🐝','abeja'],['🥕','zanahoria verdura'],
   ['🥬','lechuga verdura'],['🐞','vaquita insecto'],['🦋','mariposa'],['🌈','arcoiris'],
-  ['🎯','objetivo meta'],['📅','calendario fecha'],['⏰','reloj alarma hora'],['🎁','regalo'],
-  ['💰','dinero plata'],['📚','libros lectura'],['🧡','corazon naranja'],['💛','corazon amarillo'],
-  ['💙','corazon azul'],['🧸','oso peluche'],['🐐','cabra animal'],['🐓','gallo animal'],
-  ['🍯','miel'],['🌾','trigo campo'],['🚜','tractor campo'],['🏡','casa hogar'],
-  ['🪣','balde'],['🌤️','sol nube clima'],['🌙','luna noche'],['✏️','lapiz escribir'],
-  ['🛒','carrito compras'],['🧾','ticket recibo cuenta'],['💻','computadora laptop'],['📱','celular telefono'],
-  ['🎨','arte pintura paleta'],['🧵','hilo costura'],['🌳','arbol'],['🍀','trebol suerte'],
-  ['🥗','ensalada comida sana'],['🍕','pizza comida'],['🍔','hamburguesa comida'],['🥐','medialuna desayuno'],
-  ['🎵','musica nota'],['📖','libro abierto lectura'],['🖊️','lapicera escribir'],['🚗','auto viaje'],
-  ['✈️','avion viaje'],['🏖️','playa vacaciones'],['🎂','torta cumpleaños'],['🙌','manos festejo'],
+  ['🌾','trigo campo'],['🚜','tractor campo'],['🏡','casa hogar'],['🪣','balde'],
+  ['🌤️','sol nube clima'],['⛅','nublado clima'],['🌧️','lluvia clima'],['⛈️','tormenta clima'],['❄️','nieve frio'],
+  ['🌙','luna noche'],['🌳','arbol'],['🌲','pino arbol'],['🍀','trebol suerte'],['🌵','cactus planta'],
+  ['🍂','hoja otoño'],['🐛','oruga bicho'],['🐌','caracol'],['🐦','pajaro ave'],['🦜','loro ave'],
+  /* animales */
+  ['🐐','cabra animal'],['🐓','gallo animal'],['🐄','vaca animal'],['🐖','chancho cerdo animal'],['🐕','perro'],
+  ['🐈','gato'],['🐰','conejo'],['🐴','caballo'],['🦆','pato'],['🐢','tortuga'],
+  ['🐠','pez'],['🐬','delfin'],['🦁','leon'],['🐘','elefante'],['🐼','panda'],['🦉','buho'],
+  /* caritas y emociones */
+  ['😀','feliz sonrisa'],['😊','contento sonrisa'],['😂','risa gracioso'],['🥰','amor cariño'],['😍','enamorado'],
+  ['😉','guiño'],['😴','sueño cansado dormir'],['🥱','bostezo cansado'],['😅','alivio nervioso'],['😎','copado lentes'],
+  ['🤔','pensando duda'],['😢','triste llorar'],['😭','llanto triste'],['😡','enojado bronca'],['😱','sorpresa susto'],
+  ['🥳','fiesta festejo'],['😇','angel bueno'],['🤗','abrazo'],['😋','rico sabroso'],['🤤','antojo'],
+  ['🙃','al reves'],['😐','neutral'],['😬','incomodo'],['🤯','explota cabeza sorpresa'],['🥵','calor'],
+  ['🥶','frio'],['🤒','enfermo termometro'],['🤧','estornudo resfrio'],['😷','barbijo enfermo'],['🤢','asco'],
+  /* comida */
+  ['📝','nota escribir lapiz'],['✅','listo hecho tilde check'],['⭐','estrella favorito'],['❤️','corazon amor'],
+  ['🔥','fuego caliente'],['☕','cafe taza'],['🧡','corazon naranja'],['💛','corazon amarillo'],
+  ['💙','corazon azul'],['💜','corazon violeta'],['🖤','corazon negro'],['🤍','corazon blanco'],['💕','corazones amor'],
+  ['🎁','regalo'],['💰','dinero plata'],['📚','libros lectura'],['🧸','oso peluche'],['🍯','miel'],
+  ['✏️','lapiz escribir'],['🛒','carrito compras'],['🧾','ticket recibo cuenta'],['💻','computadora laptop'],
+  ['📱','celular telefono'],['🎨','arte pintura paleta'],['🧵','hilo costura'],['🥗','ensalada comida sana'],
+  ['🍕','pizza comida'],['🍔','hamburguesa comida'],['🥐','medialuna desayuno'],['🍎','manzana fruta'],
+  ['🍌','banana fruta'],['🍇','uvas fruta'],['🍉','sandia fruta'],['🍓','frutilla fruta'],['🥑','palta fruta'],
+  ['🍞','pan'],['🧀','queso'],['🥩','carne'],['🍗','pollo comida'],['🍟','papas fritas'],
+  ['🌮','taco comida'],['🍝','fideos pasta comida'],['🍲','guiso comida'],['🍿','pochoclo pop corn'],
+  ['🍩','dona postre'],['🍪','galletita postre'],['🎂','torta cumpleaños'],['🧁','cupcake postre'],
+  ['🍫','chocolate'],['🍺','cerveza'],['🍷','vino'],['🥤','bebida gaseosa'],['🧃','jugo caja'],
+  ['🍵','te infusion'],['🥛','leche'],
+  /* trabajo, casa, objetos */
+  ['🎵','musica nota'],['📖','libro abierto lectura'],['🖊️','lapicera escribir'],['🙌','manos festejo'],
   ['💪','fuerza esfuerzo'],['🧘','yoga meditacion calma'],['🛏️','cama dormir descanso'],['🧹','escoba limpieza'],
+  ['🎯','objetivo meta'],['📅','calendario fecha'],['⏰','reloj alarma hora'],['⏳','tiempo espera'],
+  ['🔑','llave'],['🔒','candado seguro'],['💡','idea foco lampara'],['🔋','bateria energia'],
+  ['🧴','crema cosmetico'],['🧼','jabon limpieza'],['🪥','cepillo dientes'],['🧻','papel higienico'],
+  ['🛁','bañera baño'],['🚿','ducha baño'],['🧦','medias ropa'],['👕','remera ropa'],['👖','pantalon ropa'],
+  ['👗','vestido ropa'],['👟','zapatillas ropa'],['🧢','gorra ropa'],['👜','cartera bolso'],
+  ['💊','pastilla remedio'],['🩹','curita herida'],['🌡️','termometro fiebre'],['🩺','estetoscopio doctor'],
+  /* viajes y salidas */
+  ['🚗','auto viaje'],['✈️','avion viaje'],['🏖️','playa vacaciones'],['🚌','colectivo bondi viaje'],
+  ['🚲','bici bicicleta'],['⛽','nafta combustible'],['🗺️','mapa viaje'],['🧳','valija viaje'],
+  ['🏔️','montaña'],['🏕️','camping'],['⛺','carpa camping'],['🎡','feria parque'],['🎉','fiesta celebracion'],
+  ['🎈','globo fiesta'],['🎊','confeti fiesta'],['🎄','navidad arbol'],['🎃','halloween calabaza'],
+  /* símbolos y agenda */
+  ['📌','pin marcar chinche'],['✨','brillo destello magia'],['❗','importante atencion'],['❓','duda pregunta'],
+  ['➕','mas sumar agregar'],['➖','menos restar'],['💯','cien por ciento'],['🔄','repetir actualizar'],
+  ['📍','ubicacion lugar'],['📎','clip sujetador'],['🗑️','basura borrar'],['📤','enviar salida'],['📥','recibir entrada'],
+  ['🧠','cerebro pensar mente'],['👀','ojos mirar'],['👍','bien pulgar arriba'],['👎','mal pulgar abajo'],
+  ['👏','aplauso felicitaciones'],['🙏','gracias por favor'],['🤝','acuerdo trato saludo'],['✌️','paz victoria'],
 ];
 const RICH_STICKERS = RICH_STICKERS_KW.map(x=>x[0]);
 const STICKER_KEYWORDS = Object.fromEntries(RICH_STICKERS_KW);
@@ -1512,6 +1548,7 @@ function renderRichToolbar(){
         <button class="richbtn ${richPanel==='fonts'?'active':''}" onclick="RichText.togglePanel('fonts')">Aa</button>
         <button class="richbtn" onclick="document.getElementById('richFileInput').click()">${ICONS.image}</button>
         <button class="richbtn ${richPanel==='stickers'?'active':''}" onclick="RichText.togglePanel('stickers')">${ICONS.sticker}</button>
+        <button class="richbtn ${richPanel==='gif'?'active':''}" onclick="RichText.togglePanel('gif')">${ICONS.gif}</button>
         <button class="richbtn ${richPanel==='colors'?'active':''}" onclick="RichText.togglePanel('colors')">${ICONS.palette}</button>
         <button class="richbtn ${richPanel==='pen'?'active':''}" onclick="RichText.togglePanel('pen')">${ICONS.pencil}</button>
         <button class="richbtn ${richPanel==='more'?'active':''}" onclick="RichText.togglePanel('more')">${ICONS.more}</button>
@@ -1540,7 +1577,30 @@ function renderRichToolbar(){
                style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
         <div id="stickerInsertArea">${renderStickerInsertBtn()}</div>
         <div class="richstickergrid" id="stickerGrid">${renderStickerGridItems()}</div>
-        <p style="font-size:9.5px;color:var(--sub);text-align:center;margin-top:8px;">Emojis: Twemoji (Twitter) — CC-BY 4.0</p>
+      </div>
+    ` : ''}
+
+    ${richPanel==='gif' ? `
+      <div class="richpanel">
+        <p style="font-size:11.5px;color:var(--sub);margin-bottom:10px;line-height:1.6;">
+          <b>1.</b> ${state.lang==='en'?'Type a word and open Giphy to search.':'Escribí una palabra y abrí Giphy para buscar.'}<br/>
+          <b>2.</b> ${state.lang==='en'?'On Giphy, long-press the GIF you like → Copy link.':'En Giphy, mantené presionado el GIF que te guste → Copiar link.'}<br/>
+          <b>3.</b> ${state.lang==='en'?'Come back here, paste the link below and tap Insert.':'Volvé acá, pegá el link abajo y tocá Insertar.'}
+        </p>
+        <div class="richpanel-row">
+          <input type="text" id="gifSearchInput" placeholder="${state.lang==='en'?'e.g: cat, coffee, garden':'ej: gato, café, huerta'}" style="flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;"
+                 oninput="RichText.updateGifLink(this.value)"/>
+          <a id="gifOpenLink" href="https://giphy.com/trending-gifs" target="_blank" rel="noopener" class="dashedbtn" style="margin-top:0;text-decoration:none;display:flex;align-items:center;justify-content:center;">🔍 ${state.lang==='en'?'Open Giphy':'Abrir Giphy'}</a>
+        </div>
+        <div class="richpanel-row" style="margin-top:14px;">
+          <input type="text" id="gifUrlInput" placeholder="https://media.giphy.com/..." style="flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;"
+                 onkeydown="if(event.key==='Enter'){event.preventDefault();RichText.insertGif();}"/>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.insertGif()">${state.lang==='en'?'Insert':'Insertar'}</button>
+        </div>
+        <p id="gifError" style="font-size:11.5px;color:#B23B3B;margin-top:6px;"></p>
+        <p style="font-size:10px;color:var(--sub);margin-top:10px;">${state.lang==='en'
+          ? '🎉 Just for fun — GIFs will not animate when printed or exported to PDF.'
+          : '🎉 Solo por diversión — los GIF no se van a mover al imprimir o exportar a PDF.'}</p>
       </div>
     ` : ''}
 
@@ -1634,14 +1694,35 @@ const RichText = {
     document.execCommand('insertText', false, s);
     this.persist(richActive);
   },
+  updateGifLink(q){
+    const a = document.getElementById('gifOpenLink');
+    if (!a) return;
+    a.href = q.trim() ? `https://giphy.com/search/${encodeURIComponent(q.trim())}` : 'https://giphy.com/trending-gifs';
+  },
+  insertGif(){
+    const input = document.getElementById('gifUrlInput');
+    const errEl = document.getElementById('gifError');
+    const url = input ? input.value.trim() : '';
+    if (errEl) errEl.textContent = '';
+    if (!url){
+      if (errEl) errEl.textContent = state.lang==='en' ? 'Paste a link first.' : 'Pegá un link primero.';
+      return;
+    }
+    if (!/^https?:\/\//i.test(url)){
+      if (errEl) errEl.textContent = state.lang==='en' ? 'That doesn\'t look like a valid link.' : 'Eso no parece un link válido.';
+      return;
+    }
+    this.focusActive();
+    document.execCommand('insertHTML', false, `<img src="${esc(url)}" alt="GIF" style="max-width:100%;"/>`);
+    this.persist(richActive);
+    if (input) input.value = '';
+  },
   setStickerSearch(v){
     richStickerSearch = v;
     const grid = document.getElementById('stickerGrid');
     const insertArea = document.getElementById('stickerInsertArea');
     if (grid) grid.innerHTML = renderStickerGridItems();
     if (insertArea) insertArea.innerHTML = renderStickerInsertBtn();
-    if (window.twemoji && grid) window.twemoji.parse(grid, {base:'https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/', folder:'72x72', ext:'.png'});
-    if (window.twemoji && insertArea) window.twemoji.parse(insertArea, {base:'https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/', folder:'72x72', ext:'.png'});
   },
   insertPastedSticker(){
     const match = richStickerSearch.match(/\p{Extended_Pictographic}/u);
@@ -1671,6 +1752,23 @@ const RichText = {
   insertImage(evt){
     const file = evt.target.files[0];
     if (!file) return;
+    if (file.type === 'image/gif'){
+      /* los GIF se insertan tal cual, sin recomprimir, para no perder la animación */
+      if (file.size > 3*1024*1024){
+        const ok = confirm(state.lang==='en'
+          ? 'This GIF is quite heavy and could fill up storage quickly. Insert it anyway?'
+          : 'Este GIF pesa bastante y puede llenar rápido el espacio guardado en el navegador. ¿Lo insertás igual?');
+        if (!ok) return;
+      }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        RichText.focusActive();
+        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF"/>`);
+        RichText.persist(richActive);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
