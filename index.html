@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Mi Planner Digital</title>
-<meta name="theme-color" content="#2F5D50" />
+<meta name="theme-color" content="#65475F" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -13,9 +13,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FBF8F1; --card:#FFFDFC; --ink:#2F5D50; --sub:#6E7772;
+    --bg:#FBF8F1; --card:#FFFDFC; --ink:#65475F; --sub:#6E7772;
     --mint:#DDE9DF; --mintLine:#AFC8B7; --terracota:#F2DFD6; --terracotaLine:#D9B3A3;
-    --accent:#79B553;
+    --accent:#9B7A94;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   svg{width:16px;height:16px;display:block;flex-shrink:0;}
@@ -142,8 +142,8 @@
   .richswatch{width:28px;height:28px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px var(--mintLine);cursor:pointer;flex-shrink:0;}
   .richswatch.square{border-radius:8px;}
   .richlabel{font-size:11px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:5px;width:100%;margin-bottom:2px;}
-  .richstickergrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;max-height:150px;overflow-y:auto;margin-bottom:8px;}
-  .richstickergrid button{background:var(--mint);border:none;border-radius:8px;height:32px;font-size:16px;cursor:pointer;}
+  .richstickergrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:220px;overflow-y:auto;margin-bottom:8px;}
+  .richstickergrid button{background:#fff;border:1px solid var(--mintLine);border-radius:10px;height:44px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
   .richediting{font-size:11px;color:var(--sub);margin-top:6px;}
   .richbox{position:relative;min-height:110px;}
   .richtext{position:relative;z-index:10;min-height:110px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--ink);outline:none;}
@@ -195,13 +195,13 @@
   @media print{
     body > *:not(#printArea){display:none !important;}
     #printArea{display:block !important;}
-    .p-doc{font-family:'Inter',system-ui,sans-serif;color:#2F5D50;max-width:100%;}
-    .p-cover{text-align:center;padding:20px 0 24px;border-bottom:2px solid #2F5D50;margin-bottom:18px;}
+    .p-doc{font-family:'Inter',system-ui,sans-serif;color:#65475F;max-width:100%;}
+    .p-cover{text-align:center;padding:20px 0 24px;border-bottom:2px solid #65475F;margin-bottom:18px;}
     .p-cover h1{font-family:'Lora',serif;font-size:26px;margin:0 0 6px;}
     .p-cover p{font-size:13px;color:#6E7772;margin:0;text-transform:capitalize;}
     .p-section{page-break-inside:avoid;margin-bottom:22px;}
-    .p-section h2{font-family:'Lora',serif;font-size:18px;background:#DDE9DF;padding:6px 10px;border-radius:6px;margin:0 0 10px;}
-    .p-section h3{font-size:13px;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.03em;color:#2F5D50;}
+    .p-section h2{font-family:'Lora',serif;font-size:18px;background:#EADFE7;padding:6px 10px;border-radius:6px;margin:0 0 10px;}
+    .p-section h3{font-size:13px;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.03em;color:#65475F;}
     .p-sub{font-size:12.5px;margin:2px 0 6px;}
     .p-empty{font-size:12px;color:#999;margin:2px 0 8px;}
     .p-rich{font-size:12.5px;line-height:1.5;margin-bottom:6px;}
@@ -215,7 +215,9 @@
     .p-subcard{border:1px solid #DDE9DF;border-radius:8px;padding:10px 12px;margin-bottom:10px;page-break-inside:avoid;}
     @page{margin:16mm;}
   }
+  img.emoji{height:1.4em;width:1.4em;vertical-align:-0.3em;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -547,6 +549,7 @@ function render(){
   if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
+  if (window.twemoji) window.twemoji.parse(app, {base:'https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/', folder:'72x72', ext:'.png'});
 }
 
 /* ---------- PORTADA ---------- */
@@ -1408,8 +1411,29 @@ function attachPizarraEvents(){
 
 
 /* ---------- SISTEMA DE TEXTO ENRIQUECIDO (una sola caja, tocar y escribir) ---------- */
-const RICH_STICKERS = ['🌿','🌱','🍅','🌻','☀️','🧺','📌','✨','💚','🍋','🪴','📷','🌼','🍄','💧','🐝','📝','✅','⭐','❤️','🔥','☕','🍞','🥕','🥬','🐞','🦋','🌈','🎯','📅','⏰','🎁','💰','📚','🧡','💛','💙','🧸','🐐','🐓','🍯','🌾','🚜','🏡','🪣','🌤️','🌙','✏️'];
-const RICH_TEXT_COLORS = ['#2F5D50','#7A3B3B','#B23B3B','#D9782E','#B8860B','#5C3B2E','#5B3FA0','#2E6BB2','#B23070','#8B5A3C','#C96A75','#1E7A4A','#0F5C3A','#2E9E52','#1B6FC9','#5C5C5C'];
+const RICH_STICKERS_KW = [
+  ['🌿','hoja planta verde'],['🌱','brote planta semilla huerta'],['🍅','tomate verdura comida'],['🌻','girasol flor'],
+  ['☀️','sol calor dia'],['🧺','canasto canasta huerta cosecha'],['📌','pin marcar chinche'],['✨','brillo destello magia'],
+  ['💚','corazon verde'],['🍋','limon fruta cítrico'],['🪴','maceta planta'],['📷','camara foto'],
+  ['🌼','flor margarita'],['🍄','hongo seta'],['💧','agua gota lluvia riego'],['🐝','abeja'],
+  ['📝','nota escribir lapiz'],['✅','listo hecho tilde check'],['⭐','estrella favorito'],['❤️','corazon amor'],
+  ['🔥','fuego caliente'],['☕','cafe taza'],['🍞','pan comida'],['🥕','zanahoria verdura'],
+  ['🥬','lechuga verdura'],['🐞','vaquita insecto'],['🦋','mariposa'],['🌈','arcoiris'],
+  ['🎯','objetivo meta'],['📅','calendario fecha'],['⏰','reloj alarma hora'],['🎁','regalo'],
+  ['💰','dinero plata'],['📚','libros lectura'],['🧡','corazon naranja'],['💛','corazon amarillo'],
+  ['💙','corazon azul'],['🧸','oso peluche'],['🐐','cabra animal'],['🐓','gallo animal'],
+  ['🍯','miel'],['🌾','trigo campo'],['🚜','tractor campo'],['🏡','casa hogar'],
+  ['🪣','balde'],['🌤️','sol nube clima'],['🌙','luna noche'],['✏️','lapiz escribir'],
+  ['🛒','carrito compras'],['🧾','ticket recibo cuenta'],['💻','computadora laptop'],['📱','celular telefono'],
+  ['🎨','arte pintura paleta'],['🧵','hilo costura'],['🌳','arbol'],['🍀','trebol suerte'],
+  ['🥗','ensalada comida sana'],['🍕','pizza comida'],['🍔','hamburguesa comida'],['🥐','medialuna desayuno'],
+  ['🎵','musica nota'],['📖','libro abierto lectura'],['🖊️','lapicera escribir'],['🚗','auto viaje'],
+  ['✈️','avion viaje'],['🏖️','playa vacaciones'],['🎂','torta cumpleaños'],['🙌','manos festejo'],
+  ['💪','fuerza esfuerzo'],['🧘','yoga meditacion calma'],['🛏️','cama dormir descanso'],['🧹','escoba limpieza'],
+];
+const RICH_STICKERS = RICH_STICKERS_KW.map(x=>x[0]);
+const STICKER_KEYWORDS = Object.fromEntries(RICH_STICKERS_KW);
+const RICH_TEXT_COLORS = ['#65475F','#7A3B3B','#B23B3B','#D9782E','#B8860B','#5C3B2E','#5B3FA0','#2E6BB2','#B23070','#8B5A3C','#C96A75','#1E7A4A','#0F5C3A','#2E9E52','#1B6FC9','#5C5C5C'];
 const RICH_HIGHLIGHT_COLORS = ['#FFF59D','#FFE0B2','#F8BBD0','#E1BEE7','#C5CAE9','#B3E5FC','#B2DFDB','#C8E6C9','#DCEDC8','#FFCCBC','#F5F5F5'];
 const RICH_FONTS = ["Georgia","Verdana","Trebuchet MS","'Comic Sans MS'","'Courier New'","'Times New Roman'","'Segoe UI'","Tahoma"];
 const RICH_SIZES = [12,14,16,18,20,24,28,32];
@@ -1430,7 +1454,7 @@ function migrateDayTextToRich(key, oldText){
 }
 
 let richActive = null, richActiveTitle = '', richPanel = null;
-let richEraser = false, richPenColor = '#2F5D50', richPenWidth = 3;
+let richEraser = false, richPenColor = '#65475F', richPenWidth = 3;
 let richStickerSearch = '';
 let richDrawHistory = {}, richDrawFuture = {};
 let richCopied = '';
@@ -1459,6 +1483,20 @@ function richBoxOnly(key, title, placeholder){
       </div>
     </div>
   `;
+}
+
+function renderStickerGridItems(){
+  const q = richStickerSearch.trim().toLowerCase();
+  const filtered = !q ? RICH_STICKERS : RICH_STICKERS.filter(s => (STICKER_KEYWORDS[s]||'').includes(q));
+  if (!filtered.length){
+    return `<p style="grid-column:1/-1;font-size:12.5px;color:var(--sub);text-align:center;padding:10px 0;">${state.lang==='en'?'No matches — paste any emoji above and tap Insert.':'Sin resultados — pegá cualquier emoji arriba y tocá Insertar.'}</p>`;
+  }
+  return filtered.map(s=>`<button onmousedown="event.preventDefault()" onclick="RichText.insertSticker('${s}')">${s}</button>`).join('');
+}
+function renderStickerInsertBtn(){
+  const emojiMatch = richStickerSearch.match(/\p{Extended_Pictographic}/u);
+  if (!emojiMatch) return '';
+  return `<button class="dashedbtn" style="margin-top:0;margin-bottom:10px;font-size:15px;" onmousedown="event.preventDefault()" onclick="RichText.insertPastedSticker()">${state.lang==='en'?'Insert':'Insertar'} ${emojiMatch[0]}</button>`;
 }
 
 function renderRichToolbar(){
@@ -1496,12 +1534,16 @@ function renderRichToolbar(){
 
     ${richPanel==='stickers' ? `
       <div class="richpanel">
-        <input type="text" placeholder="${esc(t('rich_search_sticker'))}" value="${esc(richStickerSearch)}" oninput="RichText.setStickerSearch(this.value)" style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
-        <div class="richstickergrid">
-          ${RICH_STICKERS.map(s=>`<button onmousedown="event.preventDefault()" onclick="RichText.insertSticker('${s}')">${s}</button>`).join('')}
-        </div>
+        <input type="text" id="stickerSearchInput" placeholder="${esc(t('rich_search_sticker'))}" value="${esc(richStickerSearch)}"
+               oninput="RichText.setStickerSearch(this.value)"
+               onkeydown="if(event.key==='Enter'){event.preventDefault();RichText.insertPastedSticker();}"
+               style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
+        <div id="stickerInsertArea">${renderStickerInsertBtn()}</div>
+        <div class="richstickergrid" id="stickerGrid">${renderStickerGridItems()}</div>
+        <p style="font-size:9.5px;color:var(--sub);text-align:center;margin-top:8px;">Emojis: Twemoji (Twitter) — CC-BY 4.0</p>
       </div>
     ` : ''}
+
 
     ${richPanel==='colors' ? `
       <div class="richpanel">
@@ -1516,7 +1558,7 @@ function renderRichToolbar(){
           <input type="color" value="${richCustomHighlightColor}" onmousedown="event.preventDefault()" onchange="RichText.customHighlightColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
         <div class="richpanel-row" style="margin-top:6px;">
-          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#2F5D50')">${esc(t('rich_texto_normal'))}</button>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#65475F')">${esc(t('rich_texto_normal'))}</button>
           <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','transparent')">${esc(t('rich_quitar_resaltado'))}</button>
         </div>
       </div>
@@ -1592,7 +1634,27 @@ const RichText = {
     document.execCommand('insertText', false, s);
     this.persist(richActive);
   },
-  setStickerSearch(v){ richStickerSearch = v; },
+  setStickerSearch(v){
+    richStickerSearch = v;
+    const grid = document.getElementById('stickerGrid');
+    const insertArea = document.getElementById('stickerInsertArea');
+    if (grid) grid.innerHTML = renderStickerGridItems();
+    if (insertArea) insertArea.innerHTML = renderStickerInsertBtn();
+    if (window.twemoji && grid) window.twemoji.parse(grid, {base:'https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/', folder:'72x72', ext:'.png'});
+    if (window.twemoji && insertArea) window.twemoji.parse(insertArea, {base:'https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/', folder:'72x72', ext:'.png'});
+  },
+  insertPastedSticker(){
+    const match = richStickerSearch.match(/\p{Extended_Pictographic}/u);
+    if (!match) return;
+    this.insertSticker(match[0]);
+    richStickerSearch = '';
+    const input = document.getElementById('stickerSearchInput');
+    if (input) input.value = '';
+    const grid = document.getElementById('stickerGrid');
+    const insertArea = document.getElementById('stickerInsertArea');
+    if (grid) grid.innerHTML = renderStickerGridItems();
+    if (insertArea) insertArea.innerHTML = '';
+  },
   applyFont(family){ this.command('fontName', family); },
   applySize(px){
     this.focusActive();
