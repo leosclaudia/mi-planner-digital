@@ -333,7 +333,7 @@ function render(){
   if (screenKey === 'asistente') scrollChatToBottom();
   if (expandedBoardKey) attachPizarraEvents();
   if (expandedBoardKey && pzDrawMode) initDrawCanvas();
-  if (screenKey === 'inicio' || screenKey === 'notas'){
+  if (screenKey === 'inicio' || screenKey === 'notas' || screenKey === 'semana'){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
 }
@@ -391,37 +391,29 @@ function renderInicio(){
 
 /* ---------- SEMANA ---------- */
 let openDay = DIAS[0];
+const DIA_SLUGS = {Lunes:'lunes',Martes:'martes','Miércoles':'miercoles',Jueves:'jueves',Viernes:'viernes','Sábado':'sabado',Domingo:'domingo'};
 function renderSemana(){
   const d = state.semana;
   return `
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     <div class="card">
       <div class="card-b">
         <label style="font-size:11px;font-weight:700;">ENFOQUE DE LA SEMANA</label>
         <input type="text" value="${esc(d.enfoque)}" placeholder="¿En qué te querés enfocar?" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
       </div>
     </div>
-    ${DIAS.map((dia,dIdx)=>{
+    ${DIAS.map((dia)=>{
       const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota':'';
       const isOpen = openDay===dia;
-      const boardKey = 'semana';
-      const slotKey = 'semana::'+dia;
-      const boardOpen = expandedSlot===slotKey;
-      const dayBoard = getBoard(boardKey);
-      const reallyHasContent = dayBoard.elementos.length > 0 || dayBoard.drawing;
-      const hasBoardContent = dIdx===0 && reallyHasContent;
+      const key = 'semana_'+DIA_SLUGS[dia];
+      migrateDayTextToRich(key, d.dias[dia]);
       return `
       <div class="card ${tint}">
-        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')"><span>${dia.toUpperCase()}</span><button class="card-h-btn" onclick="event.stopPropagation();toggleBoard('${boardKey}','${slotKey}')">${boardOpen?ICONS.x:ICONS.pencil}</button></div>
-        ${(!boardOpen && hasBoardContent) ? `
-          <div class="pzpreview" onclick="toggleBoard('${boardKey}','${slotKey}')">
-            <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
-            <div class="pzpreview-canvas">
-              ${dayBoard.drawing ? `<img src="${dayBoard.drawing}"/>` : ''}
-              ${dayBoard.elementos.map(el=>renderPzPreviewEl(el)).join('')}
-            </div>
-          </div>
-        ` : ''}
-        ${boardOpen ? `<div class="card-b" style="padding-top:12px;">${renderBoard(boardKey,{height:'280px'})}</div>` : (isOpen && !reallyHasContent ?`<div class="card-b"><textarea rows="3" placeholder="Tareas, notas..." oninput="App.setDayField('${dia}',this.value)">${esc(d.dias[dia]||'')}</textarea></div>`:'')}
+        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
+          <span>${dia.toUpperCase()}</span>
+          <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
+        </div>
+        ${isOpen ? richBoxOnly(key, dia, 'Tareas, notas...') : ''}
       </div>`;
     }).join('')}
   `;
@@ -1230,6 +1222,14 @@ function getRich(key){
   return state.richContent[key];
 }
 function saveRich(key){ DB.set('rich_'+key, state.richContent[key]); }
+/* Trae al lienzo nuevo el texto viejo escrito en un día de Semana antes de esta actualización, para no perderlo */
+function migrateDayTextToRich(key, oldText){
+  if (!oldText) return;
+  const data = getRich(key);
+  if (data.html) return;
+  data.html = esc(oldText);
+  saveRich(key);
+}
 
 let richActive = null, richActiveTitle = '', richPanel = null;
 let richEraser = false, richPenColor = '#2F5D50', richPenWidth = 3;
@@ -1243,6 +1243,16 @@ function richCard(title, key, placeholder, tint){
   return `
     <div class="card${tint?' '+tint:''}">
       <div class="card-h"><span>${esc(title)}</span></div>
+      ${richBoxOnly(key, title, placeholder)}
+    </div>
+  `;
+}
+
+/* Igual que richCard pero sin el header propio — para usarla dentro de una tarjeta que ya tiene su propio título (ej. cada día en Semana) */
+function richBoxOnly(key, title, placeholder){
+  const data = getRich(key);
+  return `
+    <div class="card-b" style="padding-top:12px;">
       <div class="richbox">
         <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
              onfocus="RichText.setActive('${key}','${esc(title)}')"
