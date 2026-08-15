@@ -187,6 +187,34 @@
   .langtoggle-seg{border:none;background:none;color:var(--sub);font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:6px 13px;border-radius:16px;cursor:pointer;}
   .langtoggle-seg.active{background:var(--ink);color:#fff;}
   .portada-lang{position:absolute;top:20px;right:20px;z-index:2;}
+  .printbtn{flex-shrink:0;background:var(--card);border:1px solid var(--mintLine);color:var(--ink);width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-top:2px;}
+  .printbtn svg{width:16px;height:16px;}
+
+  /* ---------- vista de impresión / exportación ---------- */
+  #printArea{display:none;}
+  @media print{
+    body > *:not(#printArea){display:none !important;}
+    #printArea{display:block !important;}
+    .p-doc{font-family:'Inter',system-ui,sans-serif;color:#2F5D50;max-width:100%;}
+    .p-cover{text-align:center;padding:20px 0 24px;border-bottom:2px solid #2F5D50;margin-bottom:18px;}
+    .p-cover h1{font-family:'Lora',serif;font-size:26px;margin:0 0 6px;}
+    .p-cover p{font-size:13px;color:#6E7772;margin:0;text-transform:capitalize;}
+    .p-section{page-break-inside:avoid;margin-bottom:22px;}
+    .p-section h2{font-family:'Lora',serif;font-size:18px;background:#DDE9DF;padding:6px 10px;border-radius:6px;margin:0 0 10px;}
+    .p-section h3{font-size:13px;margin:12px 0 4px;text-transform:uppercase;letter-spacing:.03em;color:#2F5D50;}
+    .p-sub{font-size:12.5px;margin:2px 0 6px;}
+    .p-empty{font-size:12px;color:#999;margin:2px 0 8px;}
+    .p-rich{font-size:12.5px;line-height:1.5;margin-bottom:6px;}
+    .p-rich img{max-width:200px;height:auto;}
+    .p-drawing{max-width:100%;max-height:220px;border:1px solid #DDE9DF;border-radius:6px;margin-bottom:8px;}
+    .p-checklist{list-style:none;padding:0;margin:0 0 8px;font-size:12.5px;}
+    .p-checklist li{padding:2px 0;}
+    .p-checklist li.p-done{color:#999;text-decoration:line-through;}
+    .p-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;}
+    .p-table th,.p-table td{border:1px solid #DDE9DF;padding:4px 8px;text-align:left;}
+    .p-subcard{border:1px solid #DDE9DF;border-radius:8px;padding:10px 12px;margin-bottom:10px;page-break-inside:avoid;}
+    @page{margin:16mm;}
+  }
 </style>
 </head>
 <body>
@@ -281,6 +309,7 @@ const I18N = {
     rich_borrar_dibujo:'Borrar dibujo', rich_convertir_texto:'Convertir lo escrito a texto',
     rich_cortar:'Cortar caja', rich_copiar:'Copiar caja', rich_pegar:'Pegar', rich_vaciar:'Vaciar',
     chat_welcome:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.',
+    btn_print:'Imprimir / Exportar PDF',
     lang_toggle:'English',
   },
   en: {
@@ -357,6 +386,7 @@ const I18N = {
     rich_borrar_dibujo:'Clear drawing', rich_convertir_texto:'Convert handwriting to text',
     rich_cortar:'Cut box', rich_copiar:'Copy box', rich_pegar:'Paste', rich_vaciar:'Clear',
     chat_welcome:'Hi! I\'m your planner assistant. Tell me what\'s going on and I\'ll help you get organized.',
+    btn_print:'Print / Export PDF',
     lang_toggle:'Español',
   }
 };
@@ -432,7 +462,8 @@ const ICONS = {
   more:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8M3 10l4-4M3 10l4 4"/></svg>',
   redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>',
-  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>'
+  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
+  printer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
 };
 
 const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -489,7 +520,8 @@ function render(){
     contentHtml = renderAsistente();
   } else {
     const langBtn = screenKey==='inicio' ? renderLangToggle() : '';
-    headerHtml = `<header class="top">${backRow}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div>${langBtn}</div><div class="rule"></div></header>`;
+    const printBtn = (screenKey!=='mas' && screenKey!=='sync') ? `<button class="printbtn" onclick="App.printSection('${screenKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
+    headerHtml = `<header class="top">${backRow}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">${printBtn}${langBtn}</div></div><div class="rule"></div></header>`;
     if (screenKey==='inicio') contentHtml = renderInicio();
     else if (screenKey==='semana') contentHtml = renderSemana();
     else if (screenKey==='habitos') contentHtml = renderHabitos();
@@ -637,7 +669,8 @@ function renderMas(){
   ];
   return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
     <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
-  `).join('')}</div>`;
+  `).join('')}</div>
+  <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>`;
 }
 
 /* ---------- FINANZAS ---------- */
@@ -2053,8 +2086,155 @@ const App = {
     state.syncConfig = null;
     DB.set('syncConfig', null);
     render();
+  },
+
+  /* --- exportar / imprimir todo el planner --- */
+  printPlanner(){
+    const old = document.getElementById('printArea');
+    if (old) old.remove();
+    const div = document.createElement('div');
+    div.id = 'printArea';
+    div.innerHTML = buildPrintHTML();
+    document.body.appendChild(div);
+    setTimeout(() => window.print(), 50);
+  },
+
+  /* --- imprimir solo la sección/pantalla actual --- */
+  printSection(screenKey){
+    const old = document.getElementById('printArea');
+    if (old) old.remove();
+    const div = document.createElement('div');
+    div.id = 'printArea';
+    div.innerHTML = buildPrintSectionHTML(screenKey);
+    document.body.appendChild(div);
+    setTimeout(() => window.print(), 50);
   }
 };
+
+function pText(html){
+  if (!html) return '';
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.innerHTML;
+}
+function pEmpty(){ return `<p class="p-empty">—</p>`; }
+function pRichBlock(key){
+  const data = getRich(key);
+  const hasText = data.html && data.html.trim() && data.html.trim() !== '<br>';
+  const hasDrawing = !!data.drawing;
+  if (!hasText && !hasDrawing) return pEmpty();
+  return `${hasText?`<div class="p-rich">${pText(data.html)}</div>`:''}${hasDrawing?`<img class="p-drawing" src="${data.drawing}"/>`:''}`;
+}
+
+/* Arma el documento HTML completo para impresión/exportación a PDF (usa window.print) */
+/* Cada función arma el HTML de UNA sección (con su <section> propia), para poder imprimir solo esa pantalla o todas juntas */
+const PRINT_BUILDERS = {
+  inicio(){
+    let html = `<section class="p-section"><h2>${esc(t('title_inicio'))}</h2>`;
+    html += `<h3>${esc(t('card_hoy'))}</h3>${pRichBlock('r_inicio_hoy')}`;
+    html += `<h3>${esc(t('card_prioridades'))}</h3>`;
+    const prioridades = state.inicio.prioridades.filter(p=>p.text);
+    html += prioridades.length ? `<ul class="p-checklist">${prioridades.map(p=>`<li class="${p.done?'p-done':''}">${p.done?'☑':'☐'} ${esc(p.text)}</li>`).join('')}</ul>` : pEmpty();
+    html += `<h3>${esc(t('card_recordatorios'))}</h3>${pRichBlock('r_inicio_recordatorios')}`;
+    return html + `</section>`;
+  },
+  semana(){
+    let html = `<section class="p-section"><h2>${esc(t('title_semana'))}</h2>`;
+    html += `<p class="p-sub"><b>${esc(t('card_enfoque'))}:</b> ${esc(state.semana.enfoque||'—')}</p>`;
+    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('semana_'+DIA_SLUGS[dia])}`; });
+    return html + `</section>`;
+  },
+  habitos(){
+    let html = `<section class="p-section"><h2>${esc(t('title_habitos'))}</h2>`;
+    const habitos = state.habitos.lista.filter(h=>h.nombre);
+    if (habitos.length){
+      html += `<ul>${habitos.map(h=>{
+        const marcados = Object.keys(h.marcas||{}).filter(k=>h.marcas[k]).length;
+        return `<li>${esc(h.nombre)} — ${marcados} ${state.lang==='en'?'days checked':'días marcados'}</li>`;
+      }).join('')}</ul>`;
+    } else html += pEmpty();
+    return html + `</section>`;
+  },
+  finanzas(){
+    const f = state.finanzas;
+    let html = `<section class="p-section"><h2>${esc(t('title_finanzas'))}</h2>`;
+    html += `<p class="p-sub"><b>${esc(t('card_ingresos'))}:</b> $${esc(f.ingresos||'0')} &nbsp; <b>${esc(t('card_gastos'))}:</b> $${esc(f.gastos||'0')} &nbsp; <b>${esc(t('card_ahorro'))}:</b> $${esc(f.ahorro||'0')}</p>`;
+    html += `<h3>${esc(t('card_movimientos'))}</h3>`;
+    const movs = f.movimientos.filter(m=>m.fecha||m.detalle||m.monto);
+    html += movs.length ? `<table class="p-table"><tr><th>${esc(t('ph_fecha'))}</th><th>${esc(t('ph_detalle'))}</th><th>${esc(t('ph_monto'))}</th></tr>${movs.map(m=>`<tr><td>${esc(m.fecha)}</td><td>${esc(m.detalle)}</td><td>${esc(m.monto)}</td></tr>`).join('')}</table>` : pEmpty();
+    html += `<h3>${esc(t('card_para_recordar'))}</h3>`;
+    const recordar = f.recordar.filter(r=>r.text);
+    html += recordar.length ? `<ul class="p-checklist">${recordar.map(r=>`<li class="${r.done?'p-done':''}">${r.done?'☑':'☐'} ${esc(r.text)}</li>`).join('')}</ul>` : pEmpty();
+    return html + `</section>`;
+  },
+  proyectos(){
+    let html = `<section class="p-section"><h2>${esc(t('title_proyectos'))}</h2>`;
+    const proyectos = state.proyectos.lista.filter(p=>p.nombre);
+    if (proyectos.length){
+      proyectos.forEach(p=>{
+        html += `<div class="p-subcard"><h3>${esc(p.nombre)}${p.fecha?` — ${esc(p.fecha)}`:''}</h3>`;
+        html += `<p class="p-sub"><b>${esc(t('card_objetivo'))}:</b></p>${pRichBlock('proy_'+p.id+'_obj')}`;
+        const pasos = (p.pasos||[]).filter(ps=>ps.text);
+        html += `<p class="p-sub"><b>${esc(t('card_pasos'))}:</b></p>`;
+        html += pasos.length ? `<ul class="p-checklist">${pasos.map(ps=>`<li class="${ps.done?'p-done':''}">${ps.done?'☑':'☐'} ${esc(ps.text)}</li>`).join('')}</ul>` : pEmpty();
+        html += `<p class="p-sub"><b>${esc(t('card_ideas'))}:</b></p>${pRichBlock('proy_'+p.id+'_notas')}`;
+        html += `</div>`;
+      });
+    } else html += pEmpty();
+    return html + `</section>`;
+  },
+  objetivos(){
+    let html = `<section class="p-section"><h2>${esc(t('title_objetivos'))}</h2>`;
+    [['personal','cat_personal'],['trabajo','cat_trabajo'],['bienestar','cat_bienestar'],['dinero','cat_dinero']].forEach(([key,labelKey])=>{
+      const o = state.objetivos[key];
+      html += `<h3>${esc(t(labelKey))}</h3><p class="p-sub"><b>${esc(t('lbl_meta'))}:</b> ${esc(o.meta||'—')} &nbsp; <b>${esc(t('lbl_primer_paso'))}:</b> ${esc(o.paso||'—')} &nbsp; <b>${esc(t('lbl_senal'))}:</b> ${esc(o.fecha||'—')}</p>`;
+    });
+    return html + `</section>`;
+  },
+  compras(){
+    let html = `<section class="p-section"><h2>${esc(t('title_compras'))}</h2>`;
+    const compras = state.compras.lista.filter(i=>i.text);
+    html += compras.length ? `<ul class="p-checklist">${compras.map(i=>`<li class="${i.done?'p-done':''}">${i.done?'☑':'☐'} ${esc(i.text)}</li>`).join('')}</ul>` : pEmpty();
+    return html + `</section>`;
+  },
+  turnos(){
+    let html = `<section class="p-section"><h2>${esc(t('title_turnos'))}</h2>`;
+    const turnos = state.turnos.lista.filter(x=>x.titulo||x.fecha);
+    if (turnos.length){
+      turnos.forEach(item=>{
+        html += `<div class="p-subcard"><h3>${esc(item.titulo||'—')}</h3><p class="p-sub">${esc(item.fecha||'')} ${esc(item.hora||'')}</p>${pRichBlock('turno_'+item.id)}</div>`;
+      });
+    } else html += pEmpty();
+    return html + `</section>`;
+  },
+  comidas(){
+    let html = `<section class="p-section"><h2>${esc(t('title_comidas'))}</h2>`;
+    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('comida_'+DIA_SLUGS[dia])}`; });
+    return html + `</section>`;
+  },
+  notas(){
+    return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pRichBlock('r_notas')}</section>`;
+  }
+};
+const PRINT_ORDER = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
+
+function printCover(){
+  const today = new Date().toLocaleDateString(state.lang==='en'?'en-US':'es-AR', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+  return `<div class="p-cover"><h1>${esc(t('portada_title1'))} ${esc(t('portada_title2'))}</h1><p>${esc(today)}</p></div>`;
+}
+
+/* Arma el documento completo (todas las secciones) para el botón de Más */
+function buildPrintHTML(){
+  const sections = PRINT_ORDER.map(key => PRINT_BUILDERS[key]()).join('');
+  return `<div class="p-doc">${printCover()}${sections}</div>`;
+}
+
+/* Arma el documento de UNA sola sección, para el botón de imprimir de cada pantalla */
+function buildPrintSectionHTML(screenKey){
+  const builder = PRINT_BUILDERS[screenKey];
+  if (!builder) return buildPrintHTML();
+  return `<div class="p-doc">${printCover()}${builder()}</div>`;
+}
 
 /* ---------- módulo de sincronización ---------- */
 const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
@@ -2132,6 +2312,10 @@ function checkReminders(){
 setInterval(checkReminders, 30000);
 
 document.documentElement.lang = state.lang;
+window.addEventListener('afterprint', () => {
+  const el = document.getElementById('printArea');
+  if (el) el.remove();
+});
 render();
 if (state.syncConfig) Sync.start();
 
