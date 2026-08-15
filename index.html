@@ -183,6 +183,10 @@
   .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
   .card-h-btn svg{width:14px;height:14px;}
+  .langtoggle{flex-shrink:0;display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--mintLine);border-radius:20px;padding:3px;gap:2px;margin-top:2px;}
+  .langtoggle-seg{border:none;background:none;color:var(--sub);font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:6px 13px;border-radius:16px;cursor:pointer;}
+  .langtoggle-seg.active{background:var(--ink);color:#fff;}
+  .portada-lang{position:absolute;top:20px;right:20px;z-index:2;}
 </style>
 </head>
 <body>
@@ -201,6 +205,169 @@ const DB = {
 };
 const uid = () => Math.random().toString(36).slice(2,9);
 
+/* ---------- traducciones ---------- */
+const I18N = {
+  es: {
+    tab_inicio:'Inicio', tab_semana:'Semana', tab_habitos:'Hábitos', tab_asistente:'Asistente', tab_mas:'Más',
+    title_inicio:'Inicio', sub_inicio:'Un espacio simple para ordenar lo importante',
+    title_semana:'Semana', sub_semana:'Tocá un día para abrirlo',
+    title_habitos:'Hábitos', sub_habitos:'Marcá cada día sin buscar perfección',
+    title_mas:'Más', sub_mas:'El resto de tu planner',
+    title_finanzas:'Finanzas', sub_finanzas:'Lo que entra, lo que sale y lo que querés cuidar',
+    title_proyectos:'Proyectos', sub_proyectos:'Uno por cada idea que querés llevar a la práctica',
+    title_notas:'Notas', sub_notas:'Escribí, dibujá o pegá lo que quieras',
+    title_objetivos:'Objetivos', sub_objetivos:'Elegí pocas metas, claras y posibles',
+    title_asistente:'Asistente', sub_asistente:'Pedile una mano para organizarte',
+    title_compras:'Compras', sub_compras:'Lo que tenés que comprar',
+    title_turnos:'Turnos', sub_turnos:'Citas, clases y encuentros',
+    title_comidas:'Comidas', sub_comidas:'Un menú simple para la semana',
+    title_sync:'Sincronizar', sub_sync:'Compartí tu planner entre dispositivos',
+    back_mas:'Más',
+    menu_finanzas:'Finanzas', menu_finanzas_sub:'Ingresos, gastos y ahorro',
+    menu_proyectos:'Proyectos', menu_proyectos_sub:'Uno por cada idea',
+    menu_objetivos:'Objetivos', menu_objetivos_sub:'Metas del año',
+    menu_notas:'Notas', menu_notas_sub:'Espacio libre',
+    menu_compras:'Compras', menu_compras_sub:'Lista para el mercado',
+    menu_turnos:'Turnos', menu_turnos_sub:'Citas y encuentros',
+    menu_comidas:'Comidas', menu_comidas_sub:'Menú de la semana',
+    menu_sync:'Sincronizar', menu_sync_sub:'Entre tus dispositivos',
+    portada_title1:'MI PLANNER', portada_title2:'DIGITAL', portada_tagline:'para vos',
+    portada_desc:'Organizá tu día a día, tu huerta y tus proyectos, a tu manera',
+    portada_start:'TOCÁ PARA COMENZAR',
+    card_hoy:'HOY', ph_hoy:'¿Qué es lo más importante de hoy?...',
+    card_prioridades:'PRIORIDADES', ph_prioridad:'Escribí una prioridad', btn_agregar_prioridad:'Agregar prioridad',
+    card_recordatorios:'RECORDATORIOS', ph_recordatorios:'Cosas para no olvidar...',
+    card_enfoque:'ENFOQUE DE LA SEMANA', ph_enfoque:'¿En qué te querés enfocar?',
+    ph_dia_notas:'Tareas, notas...',
+    dia_lunes:'Lunes', dia_martes:'Martes', dia_miercoles:'Miércoles', dia_jueves:'Jueves', dia_viernes:'Viernes', dia_sabado:'Sábado', dia_domingo:'Domingo',
+    card_ingresos:'INGRESOS', card_gastos:'GASTOS', card_ahorro:'AHORRO / META',
+    card_movimientos:'MOVIMIENTOS', ph_fecha:'Fecha', ph_detalle:'Detalle', ph_monto:'Monto', btn_agregar_mov:'Agregar movimiento',
+    card_para_recordar:'PARA RECORDAR', ph_algo_recordar:'Algo para recordar', btn_agregar:'Agregar',
+    ph_nombre_proyecto:'Nombre del proyecto', ph_fecha_objetivo:'Fecha objetivo',
+    card_objetivo:'OBJETIVO / RESULTADO', ph_objetivo:'¿Cómo se ve el éxito?',
+    card_pasos:'PRÓXIMOS PASOS', ph_paso:'Paso siguiente', btn_agregar_paso:'Agregar paso',
+    card_ideas:'IDEAS, RECURSOS Y NOTAS', ph_ideas:'Anotá lo que sirva...',
+    btn_nuevo_proyecto:'Nuevo proyecto', ph_objetivo_generico:'Objetivo del proyecto', ph_ideas_generico:'Ideas y notas',
+    lbl_meta:'Meta', ph_meta:'¿Qué querés lograr?',
+    lbl_primer_paso:'1er paso', ph_primer_paso:'¿Cuál es el primer paso?',
+    lbl_senal:'Señal', ph_senal:'fecha / señal de avance',
+    cat_personal:'PERSONAL', cat_trabajo:'TRABAJO / PROYECTOS', cat_bienestar:'BIENESTAR', cat_dinero:'DINERO',
+    card_lista_compras:'LISTA DE COMPRAS', ph_compra:'¿Qué falta comprar?',
+    ph_turno_titulo:'¿Con quién / qué es?', btn_avisarme:'Avisarme', btn_te_avisare:'Te voy a avisar',
+    btn_activar_recordatorios:'Activar recordatorios en este dispositivo', btn_nuevo_turno:'Nuevo turno',
+    ph_notas_turno:'Notas...', ph_notas_turno_generico:'Notas del turno',
+    ph_comida:'¿Qué vas a comer?',
+    ph_nombre_habito:'Nombre del hábito', btn_agregar_habito:'Agregar hábito',
+    card_conectado:'CONECTADO', txt_sync_con:'Este dispositivo está sincronizando con el código:',
+    txt_sync_instrucciones:'Ingresá el mismo código y la misma configuración en tu otro dispositivo para que compartan los datos.',
+    btn_desconectar:'Desconectar este dispositivo',
+    card_config_firebase:'CONFIGURACIÓN DE FIREBASE',
+    txt_firebase_instrucciones:'Creá un proyecto gratis en <b>console.firebase.google.com</b> → Firestore Database → y pegá acá la config web (Configuración del proyecto → tus apps → SDK setup and configuration).',
+    card_codigo_sync:'CÓDIGO DE SINCRONIZACIÓN',
+    txt_codigo_instrucciones:'Inventá una palabra o frase. Usá la misma en todos tus dispositivos.',
+    ph_codigo_sync:'ej: planner-familia-2026',
+    btn_conectar:'Conectar', txt_sync_privacidad:'Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.',
+    tab_chat:'Chat', tab_dump:'Volcar pendientes',
+    ph_chat_msg:'Escribí tu mensaje...', ph_chat_apikey:'Configurá tu API key primero (⚙)',
+    dump_intro:'Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.',
+    ph_dump:'Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta',
+    btn_organizar:'Organizar mis pendientes', btn_organizando:'Organizando…',
+    txt_propuesta:'Propuesta', btn_a_prioridades:'A Prioridades', btn_a_compras:'A Compras',
+    btn_agregar_todo:'Agregar todo a mi planner',
+    rich_editing:'Editando:', rich_choose_font:'Elegir fuente', rich_search_sticker:'Buscar o pegar cualquier emoji...',
+    rich_color_texto:'Color del texto', rich_resaltador:'Resaltador',
+    rich_texto_normal:'Texto normal', rich_quitar_resaltado:'Quitar resaltado',
+    rich_fino:'Fino', rich_medio:'Medio', rich_grueso:'Grueso', rich_muy_grueso:'Muy grueso',
+    rich_borrar_dibujo:'Borrar dibujo', rich_convertir_texto:'Convertir lo escrito a texto',
+    rich_cortar:'Cortar caja', rich_copiar:'Copiar caja', rich_pegar:'Pegar', rich_vaciar:'Vaciar',
+    chat_welcome:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.',
+    lang_toggle:'English',
+  },
+  en: {
+    tab_inicio:'Home', tab_semana:'Week', tab_habitos:'Habits', tab_asistente:'Assistant', tab_mas:'More',
+    title_inicio:'Home', sub_inicio:'A simple space to sort out what matters',
+    title_semana:'Week', sub_semana:'Tap a day to open it',
+    title_habitos:'Habits', sub_habitos:'Check off each day, no need for perfection',
+    title_mas:'More', sub_mas:'The rest of your planner',
+    title_finanzas:'Finances', sub_finanzas:'What comes in, what goes out, and what you want to protect',
+    title_proyectos:'Projects', sub_proyectos:'One for each idea you want to put into action',
+    title_notas:'Notes', sub_notas:'Write, draw, or paste whatever you want',
+    title_objetivos:'Goals', sub_objetivos:'Choose a few goals, clear and achievable',
+    title_asistente:'Assistant', sub_asistente:'Ask for a hand getting organized',
+    title_compras:'Shopping', sub_compras:'What you need to buy',
+    title_turnos:'Appointments', sub_turnos:'Appointments, classes and meetings',
+    title_comidas:'Meals', sub_comidas:'A simple menu for the week',
+    title_sync:'Sync', sub_sync:'Share your planner across devices',
+    back_mas:'More',
+    menu_finanzas:'Finances', menu_finanzas_sub:'Income, expenses and savings',
+    menu_proyectos:'Projects', menu_proyectos_sub:'One for each idea',
+    menu_objetivos:'Goals', menu_objetivos_sub:'This year\'s goals',
+    menu_notas:'Notes', menu_notas_sub:'Free space',
+    menu_compras:'Shopping', menu_compras_sub:'Grocery list',
+    menu_turnos:'Appointments', menu_turnos_sub:'Appointments and meetings',
+    menu_comidas:'Meals', menu_comidas_sub:'Weekly menu',
+    menu_sync:'Sync', menu_sync_sub:'Between your devices',
+    portada_title1:'MY DIGITAL', portada_title2:'PLANNER', portada_tagline:'made for you',
+    portada_desc:'Organize your day to day, your garden, and your projects, your way',
+    portada_start:'TAP TO START',
+    card_hoy:'TODAY', ph_hoy:'What\'s most important today?...',
+    card_prioridades:'PRIORITIES', ph_prioridad:'Write a priority', btn_agregar_prioridad:'Add priority',
+    card_recordatorios:'REMINDERS', ph_recordatorios:'Things not to forget...',
+    card_enfoque:'FOCUS OF THE WEEK', ph_enfoque:'What do you want to focus on?',
+    ph_dia_notas:'Tasks, notes...',
+    dia_lunes:'Monday', dia_martes:'Tuesday', dia_miercoles:'Wednesday', dia_jueves:'Thursday', dia_viernes:'Friday', dia_sabado:'Saturday', dia_domingo:'Sunday',
+    card_ingresos:'INCOME', card_gastos:'EXPENSES', card_ahorro:'SAVINGS / GOAL',
+    card_movimientos:'TRANSACTIONS', ph_fecha:'Date', ph_detalle:'Detail', ph_monto:'Amount', btn_agregar_mov:'Add transaction',
+    card_para_recordar:'TO REMEMBER', ph_algo_recordar:'Something to remember', btn_agregar:'Add',
+    ph_nombre_proyecto:'Project name', ph_fecha_objetivo:'Target date',
+    card_objetivo:'GOAL / OUTCOME', ph_objetivo:'What does success look like?',
+    card_pasos:'NEXT STEPS', ph_paso:'Next step', btn_agregar_paso:'Add step',
+    card_ideas:'IDEAS, RESOURCES AND NOTES', ph_ideas:'Jot down anything useful...',
+    btn_nuevo_proyecto:'New project', ph_objetivo_generico:'Project goal', ph_ideas_generico:'Ideas and notes',
+    lbl_meta:'Goal', ph_meta:'What do you want to achieve?',
+    lbl_primer_paso:'1st step', ph_primer_paso:'What\'s the first step?',
+    lbl_senal:'Signal', ph_senal:'date / sign of progress',
+    cat_personal:'PERSONAL', cat_trabajo:'WORK / PROJECTS', cat_bienestar:'WELLNESS', cat_dinero:'MONEY',
+    card_lista_compras:'SHOPPING LIST', ph_compra:'What do you need to buy?',
+    ph_turno_titulo:'Who / what is it?', btn_avisarme:'Notify me', btn_te_avisare:'I\'ll remind you',
+    btn_activar_recordatorios:'Enable reminders on this device', btn_nuevo_turno:'New appointment',
+    ph_notas_turno:'Notes...', ph_notas_turno_generico:'Appointment notes',
+    ph_comida:'What are you eating?',
+    ph_nombre_habito:'Habit name', btn_agregar_habito:'Add habit',
+    card_conectado:'CONNECTED', txt_sync_con:'This device is syncing with the code:',
+    txt_sync_instrucciones:'Enter the same code and the same configuration on your other device so they share data.',
+    btn_desconectar:'Disconnect this device',
+    card_config_firebase:'FIREBASE CONFIGURATION',
+    txt_firebase_instrucciones:'Create a free project at <b>console.firebase.google.com</b> → Firestore Database → and paste the web config here (Project settings → your apps → SDK setup and configuration).',
+    card_codigo_sync:'SYNC CODE',
+    txt_codigo_instrucciones:'Make up a word or phrase. Use the same one on all your devices.',
+    ph_codigo_sync:'e.g: family-planner-2026',
+    btn_conectar:'Connect', txt_sync_privacidad:'None of this goes through our servers: it\'s saved directly to your own Firebase project, under your own account.',
+    tab_chat:'Chat', tab_dump:'Brain dump',
+    ph_chat_msg:'Type your message...', ph_chat_apikey:'Set up your API key first (⚙)',
+    dump_intro:'Write down everything on your mind, in any order. The assistant splits it into separate items and suggests whether they go to today\'s Priorities or the Shopping list. You can adjust everything before saving.',
+    ph_dump:'E.g: call the accountant, buy tomatoes and bread, water the garden, reply to client email',
+    btn_organizar:'Organize my to-dos', btn_organizando:'Organizing…',
+    txt_propuesta:'Proposal', btn_a_prioridades:'To Priorities', btn_a_compras:'To Shopping',
+    btn_agregar_todo:'Add everything to my planner',
+    rich_editing:'Editing:', rich_choose_font:'Choose font', rich_search_sticker:'Search or paste any emoji...',
+    rich_color_texto:'Text color', rich_resaltador:'Highlighter',
+    rich_texto_normal:'Normal text', rich_quitar_resaltado:'Remove highlight',
+    rich_fino:'Thin', rich_medio:'Medium', rich_grueso:'Thick', rich_muy_grueso:'Extra thick',
+    rich_borrar_dibujo:'Clear drawing', rich_convertir_texto:'Convert handwriting to text',
+    rich_cortar:'Cut box', rich_copiar:'Copy box', rich_pegar:'Paste', rich_vaciar:'Clear',
+    chat_welcome:'Hi! I\'m your planner assistant. Tell me what\'s going on and I\'ll help you get organized.',
+    lang_toggle:'Español',
+  }
+};
+function t(key){
+  const lang = (typeof state!=='undefined' && state.lang) ? state.lang : 'es';
+  const dict = I18N[lang] || I18N.es;
+  return dict[key] !== undefined ? dict[key] : (I18N.es[key] !== undefined ? I18N.es[key] : key);
+}
+function dayLabel(dia){ return t('dia_'+(DIA_SLUGS[dia]||'')); }
+
+
 /* ---------- estado ---------- */
 let state = {
   tab: 'portada',            // portada | inicio | semana | habitos | asistente | mas
@@ -217,11 +384,12 @@ let state = {
   compras: DB.get('compras', { lista:[{id:uid(),text:'',done:false}] }),
   turnos: DB.get('turnos', { lista:[] }),
   comidas: DB.get('comidas', { dias:{} }),
-  chat: [{role:'bot', text:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.'}],
+  chat: [],
   apiKey: DB.get('apiKey', ''),
   syncConfig: DB.get('syncConfig', null),
   syncStatus: '',
-  boards: {}
+  boards: {},
+  lang: DB.get('lang', 'es')
 };
 
 /* tableros dinámicos: uno por cada caja, se crean solos la primera vez que se abren */
@@ -263,7 +431,8 @@ const ICONS = {
   palette:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.2-.8-.4-1.1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-4.9-4.5-9-11-9z"/></svg>',
   more:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>',
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8M3 10l4-4M3 10l4 4"/></svg>',
-  redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>'
+  redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>',
+  globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>'
 };
 
 const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -274,22 +443,31 @@ function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').repla
 function chkSvg(done){ return done ? ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>','').replace('stroke="currentColor"','stroke="white"') : ''; }
 
 /* ---------- render principal ---------- */
+function renderLangToggle(extraClass){
+  return `
+    <div class="langtoggle${extraClass?' '+extraClass:''}">
+      <button class="langtoggle-seg ${state.lang==='es'?'active':''}" onclick="App.setLang('es')">ES</button>
+      <button class="langtoggle-seg ${state.lang==='en'?'active':''}" onclick="App.setLang('en')">EN</button>
+    </div>
+  `;
+}
+
 function render(){
   const app = document.getElementById('app');
   const titles = {
-    inicio:['Inicio','Un espacio simple para ordenar lo importante'],
-    semana:['Semana','Tocá un día para abrirlo'],
-    habitos:['Hábitos','Marcá cada día sin buscar perfección'],
-    mas:['Más','El resto de tu planner'],
-    finanzas:['Finanzas','Lo que entra, lo que sale y lo que querés cuidar'],
-    proyectos:['Proyectos','Uno por cada idea que querés llevar a la práctica'],
-    notas:['Notas','Escribí, dibujá o pegá lo que quieras'],
-    objetivos:['Objetivos','Elegí pocas metas, claras y posibles'],
-    asistente:['Asistente','Pedile una mano para organizarte'],
-    compras:['Compras','Lo que tenés que comprar'],
-    turnos:['Turnos','Citas, clases y encuentros'],
-    comidas:['Comidas','Un menú simple para la semana'],
-    sync:['Sincronizar','Compartí tu planner entre dispositivos'],
+    inicio:[t('title_inicio'), t('sub_inicio')],
+    semana:[t('title_semana'), t('sub_semana')],
+    habitos:[t('title_habitos'), t('sub_habitos')],
+    mas:[t('title_mas'), t('sub_mas')],
+    finanzas:[t('title_finanzas'), t('sub_finanzas')],
+    proyectos:[t('title_proyectos'), t('sub_proyectos')],
+    notas:[t('title_notas'), t('sub_notas')],
+    objetivos:[t('title_objetivos'), t('sub_objetivos')],
+    asistente:[t('title_asistente'), t('sub_asistente')],
+    compras:[t('title_compras'), t('sub_compras')],
+    turnos:[t('title_turnos'), t('sub_turnos')],
+    comidas:[t('title_comidas'), t('sub_comidas')],
+    sync:[t('title_sync'), t('sub_sync')],
   };
   let screenKey = state.tab === 'mas' && state.masScreen ? state.masScreen : state.tab;
 
@@ -301,7 +479,7 @@ function render(){
   let [title, subtitle] = titles[screenKey];
   let backRow = '';
   if (state.tab === 'mas' && state.masScreen){
-    backRow = `<div class="backrow" onclick="App.goto('mas', null)">${ICONS.chevron} Más</div>`;
+    backRow = `<div class="backrow" onclick="App.goto('mas', null)">${ICONS.chevron} ${t('back_mas')}</div>`;
   }
 
   let contentHtml = '';
@@ -310,7 +488,8 @@ function render(){
     headerHtml = '';
     contentHtml = renderAsistente();
   } else {
-    headerHtml = `<header class="top">${backRow}<h1>${title}</h1><p>${subtitle}</p><div class="rule"></div></header>`;
+    const langBtn = screenKey==='inicio' ? renderLangToggle() : '';
+    headerHtml = `<header class="top">${backRow}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div>${langBtn}</div><div class="rule"></div></header>`;
     if (screenKey==='inicio') contentHtml = renderInicio();
     else if (screenKey==='semana') contentHtml = renderSemana();
     else if (screenKey==='habitos') contentHtml = renderHabitos();
@@ -342,15 +521,16 @@ function render(){
 function renderPortada(){
   return `
     <div class="portada">
+      ${renderLangToggle('portada-lang')}
       <div class="blob blob-a"></div>
       <div class="blob blob-b"></div>
       <div class="blob blob-c"></div>
       <div class="portada-card">
-        <h1>MI PLANNER<br/>DIGITAL</h1>
-        <p class="tagline">para vos</p>
+        <h1>${esc(t('portada_title1'))}<br/>${esc(t('portada_title2'))}</h1>
+        <p class="tagline">${esc(t('portada_tagline'))}</p>
         <div class="rule2"></div>
-        <p class="desc">Organizá tu día a día, tu huerta y tus proyectos, a tu manera</p>
-        <button class="startbtn" onclick="App.goto('inicio')">TOCÁ PARA COMENZAR</button>
+        <p class="desc">${esc(t('portada_desc'))}</p>
+        <button class="startbtn" onclick="App.goto('inicio')">${esc(t('portada_start'))}</button>
       </div>
     </div>
   `;
@@ -358,14 +538,14 @@ function renderPortada(){
 
 function renderTabBar(){
   const tabs = [
-    ['inicio', ICONS.home, 'Inicio'],
-    ['semana', ICONS.calendar, 'Semana'],
-    ['habitos', ICONS.check, 'Hábitos'],
-    ['asistente', ICONS.sparkle, 'Asistente'],
-    ['mas', ICONS.grid, 'Más'],
+    ['inicio', ICONS.home, t('tab_inicio')],
+    ['semana', ICONS.calendar, t('tab_semana')],
+    ['habitos', ICONS.check, t('tab_habitos')],
+    ['asistente', ICONS.sparkle, t('tab_asistente')],
+    ['mas', ICONS.grid, t('tab_mas')],
   ];
   return `<div class="tabbar">${tabs.map(([id,icon,label])=>`
-    <button class="tab ${state.tab===id?'active':''}" onclick="App.goto('${id}')">${icon}<span>${label}</span></button>
+    <button class="tab ${state.tab===id?'active':''}" onclick="App.goto('${id}')">${icon}<span>${esc(label)}</span></button>
   `).join('')}</div>`;
 }
 
@@ -374,18 +554,18 @@ function renderInicio(){
   const d = state.inicio;
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard('HOY','r_inicio_hoy','¿Qué es lo más importante de hoy?...')}
-    ${cardBox('PRIORIDADES', `
+    ${richCard(t('card_hoy'),'r_inicio_hoy',t('ph_hoy'))}
+    ${cardBox(t('card_prioridades'), `
       ${d.prioridades.map(p=>`
         <div class="row">
           <button class="chk ${p.done?'done':''}" onclick="App.toggle('inicio','prioridades','${p.id}')">${p.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-          <input type="text" value="${esc(p.text)}" placeholder="Escribí una prioridad" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
+          <input type="text" value="${esc(p.text)}" placeholder="${esc(t('ph_prioridad'))}" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('inicio','prioridades','${p.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
-      <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} Agregar prioridad</button>
+      <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_prioridad'))}</button>
     `, 'terracota')}
-    ${richCard('RECORDATORIOS','r_inicio_recordatorios','Cosas para no olvidar...')}
+    ${richCard(t('card_recordatorios'),'r_inicio_recordatorios',t('ph_recordatorios'))}
   `;
 }
 
@@ -398,8 +578,8 @@ function renderSemana(){
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     <div class="card">
       <div class="card-b">
-        <label style="font-size:11px;font-weight:700;">ENFOQUE DE LA SEMANA</label>
-        <input type="text" value="${esc(d.enfoque)}" placeholder="¿En qué te querés enfocar?" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
+        <label style="font-size:11px;font-weight:700;">${esc(t('card_enfoque'))}</label>
+        <input type="text" value="${esc(d.enfoque)}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
       </div>
     </div>
     ${DIAS.map((dia)=>{
@@ -407,13 +587,14 @@ function renderSemana(){
       const isOpen = openDay===dia;
       const key = 'semana_'+DIA_SLUGS[dia];
       migrateDayTextToRich(key, d.dias[dia]);
+      const label = dayLabel(dia);
       return `
       <div class="card ${tint}">
         <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
-          <span>${dia.toUpperCase()}</span>
+          <span>${esc(label.toUpperCase())}</span>
           <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
         </div>
-        ${isOpen ? richBoxOnly(key, dia, 'Tareas, notas...') : ''}
+        ${isOpen ? richBoxOnly(key, label, t('ph_dia_notas')) : ''}
       </div>`;
     }).join('')}
   `;
@@ -427,7 +608,7 @@ function renderHabitos(){
       <div class="card">
         <div class="card-b" style="padding-bottom:8px;">
           <div class="row">
-            <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="Nombre del hábito" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
+            <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="${esc(t('ph_nombre_habito'))}" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
             <button class="xbtn" onclick="App.removeItem('habitos','lista','${h.id}')">${ICONS.x}</button>
           </div>
         </div>
@@ -438,24 +619,24 @@ function renderHabitos(){
         </div>
       </div>
     `).join('')}
-    <button class="dashedbtn" onclick="App.addItem('habitos','lista',{nombre:'',marcas:{}})">${ICONS.plus} Agregar hábito</button>
+    <button class="dashedbtn" onclick="App.addItem('habitos','lista',{nombre:'',marcas:{}})">${ICONS.plus} ${esc(t('btn_agregar_habito'))}</button>
   `;
 }
 
 /* ---------- MÁS (menú secundario) ---------- */
 function renderMas(){
   const items = [
-    ['finanzas','Finanzas','Ingresos, gastos y ahorro'],
-    ['proyectos','Proyectos','Uno por cada idea'],
-    ['objetivos','Objetivos','Metas del año'],
-    ['notas','Notas','Espacio libre'],
-    ['compras','Compras','Lista para el mercado'],
-    ['turnos','Turnos','Citas y encuentros'],
-    ['comidas','Comidas','Menú de la semana'],
-    ['sync','Sincronizar','Entre tus dispositivos'],
+    ['finanzas','menu_finanzas','menu_finanzas_sub'],
+    ['proyectos','menu_proyectos','menu_proyectos_sub'],
+    ['objetivos','menu_objetivos','menu_objetivos_sub'],
+    ['notas','menu_notas','menu_notas_sub'],
+    ['compras','menu_compras','menu_compras_sub'],
+    ['turnos','menu_turnos','menu_turnos_sub'],
+    ['comidas','menu_comidas','menu_comidas_sub'],
+    ['sync','menu_sync','menu_sync_sub'],
   ];
-  return `<div class="grid4menu">${items.map(([id,label,sub])=>`
-    <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${label}</b><span>${sub}</span></button>
+  return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
+    <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
   `).join('')}</div>`;
 }
 
@@ -464,32 +645,32 @@ function renderFinanzas(){
   const f = state.finanzas;
   return `
     <div class="grid2">
-      ${cardBox('INGRESOS', `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
-      ${cardBox('GASTOS', `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row')}
+      ${cardBox(t('card_ingresos'), `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
+      ${cardBox(t('card_gastos'), `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row')}
     </div>
-    ${cardBox('AHORRO / META', `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row')}
+    ${cardBox(t('card_ahorro'), `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row')}
 
-    ${cardBox('MOVIMIENTOS', `
+    ${cardBox(t('card_movimientos'), `
       ${f.movimientos.map(m=>`
         <div class="mov-row">
-          <input type="text" placeholder="Fecha" value="${esc(m.fecha)}" oninput="App.setListField('finanzas','movimientos','${m.id}','fecha',this.value)"/>
-          <input type="text" placeholder="Detalle" value="${esc(m.detalle)}" oninput="App.setListField('finanzas','movimientos','${m.id}','detalle',this.value)"/>
-          <input type="text" placeholder="Monto" value="${esc(m.monto)}" oninput="App.setListField('finanzas','movimientos','${m.id}','monto',this.value)"/>
+          <input type="text" placeholder="${esc(t('ph_fecha'))}" value="${esc(m.fecha)}" oninput="App.setListField('finanzas','movimientos','${m.id}','fecha',this.value)"/>
+          <input type="text" placeholder="${esc(t('ph_detalle'))}" value="${esc(m.detalle)}" oninput="App.setListField('finanzas','movimientos','${m.id}','detalle',this.value)"/>
+          <input type="text" placeholder="${esc(t('ph_monto'))}" value="${esc(m.monto)}" oninput="App.setListField('finanzas','movimientos','${m.id}','monto',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('finanzas','movimientos','${m.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
-      <button class="addlink" onclick="App.addItem('finanzas','movimientos',{fecha:'',detalle:'',monto:''})">${ICONS.plus} Agregar movimiento</button>
+      <button class="addlink" onclick="App.addItem('finanzas','movimientos',{fecha:'',detalle:'',monto:''})">${ICONS.plus} ${esc(t('btn_agregar_mov'))}</button>
     `, 'terracota')}
 
-    ${cardBox('PARA RECORDAR', `
+    ${cardBox(t('card_para_recordar'), `
       ${f.recordar.map(r=>`
         <div class="row">
           <button class="chk ${r.done?'done':''}" onclick="App.toggle('finanzas','recordar','${r.id}')">${r.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-          <input type="text" value="${esc(r.text)}" placeholder="Algo para recordar" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
+          <input type="text" value="${esc(r.text)}" placeholder="${esc(t('ph_algo_recordar'))}" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('finanzas','recordar','${r.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
-      <button class="addlink" onclick="App.addItem('finanzas','recordar',{text:'',done:false})">${ICONS.plus} Agregar</button>
+      <button class="addlink" onclick="App.addItem('finanzas','recordar',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar'))}</button>
     `)}
   `;
 }
@@ -503,31 +684,31 @@ function renderProyectos(){
       <div class="card">
         <div class="card-b">
           <div class="row">
-            <input type="text" style="font-weight:700;font-size:15px;" placeholder="Nombre del proyecto" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
+            <input type="text" style="font-weight:700;font-size:15px;" placeholder="${esc(t('ph_nombre_proyecto'))}" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
             <button class="xbtn" onclick="App.removeItem('proyectos','lista','${p.id}')">${ICONS.x}</button>
           </div>
-          <input type="text" placeholder="Fecha objetivo" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
+          <input type="text" placeholder="${esc(t('ph_fecha_objetivo'))}" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
         </div>
       </div>
       <div class="card terracota">
-        <div class="card-h"><span>OBJETIVO / RESULTADO</span></div>
-        ${migrateDayTextToRich('proy_'+p.id+'_obj', p.objetivo) || richBoxOnly('proy_'+p.id+'_obj', p.nombre||'Objetivo del proyecto', '¿Cómo se ve el éxito?')}
+        <div class="card-h"><span>${esc(t('card_objetivo'))}</span></div>
+        ${migrateDayTextToRich('proy_'+p.id+'_obj', p.objetivo) || richBoxOnly('proy_'+p.id+'_obj', p.nombre||t('ph_objetivo_generico'), t('ph_objetivo'))}
       </div>
-      ${cardBox('PRÓXIMOS PASOS', `
+      ${cardBox(t('card_pasos'), `
         ${(p.pasos||[]).map(ps=>`
           <div class="row">
             <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-            <input type="text" value="${esc(ps.text)}" placeholder="Paso siguiente" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
+            <input type="text" value="${esc(ps.text)}" placeholder="${esc(t('ph_paso'))}" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
           </div>
         `).join('')}
-        <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} Agregar paso</button>
+        <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_paso'))}</button>
       `)}
       <div class="card">
-        <div class="card-h"><span>IDEAS, RECURSOS Y NOTAS</span></div>
-        ${migrateDayTextToRich('proy_'+p.id+'_notas', p.notas) || richBoxOnly('proy_'+p.id+'_notas', p.nombre||'Ideas y notas', 'Anotá lo que sirva...')}
+        <div class="card-h"><span>${esc(t('card_ideas'))}</span></div>
+        ${migrateDayTextToRich('proy_'+p.id+'_notas', p.notas) || richBoxOnly('proy_'+p.id+'_notas', p.nombre||t('ph_ideas_generico'), t('ph_ideas'))}
       </div>
     `).join('<div style="height:4px"></div>')}
-    <button class="dashedbtn" onclick="App.addItem('proyectos','lista',{nombre:'',fecha:'',objetivo:'',notas:'',pasos:[]})">${ICONS.plus} Nuevo proyecto</button>
+    <button class="dashedbtn" onclick="App.addItem('proyectos','lista',{nombre:'',fecha:'',objetivo:'',notas:'',pasos:[]})">${ICONS.plus} ${esc(t('btn_nuevo_proyecto'))}</button>
   `;
 }
 
@@ -535,19 +716,19 @@ function renderProyectos(){
 function renderNotasRich(){
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard('NOTAS','r_notas','Texto, imágenes, stickers, dibujo a mano...')}
+    ${richCard(t('title_notas'),'r_notas', state.lang==='en' ? 'Text, images, stickers, hand-drawing...' : 'Texto, imágenes, stickers, dibujo a mano...')}
   `;
 }
 
 /* ---------- OBJETIVOS ---------- */
 function renderObjetivos(){
-  const cats = [['personal','PERSONAL',''],['trabajo','TRABAJO / PROYECTOS','terracota'],['bienestar','BIENESTAR','terracota'],['dinero','DINERO','']];
+  const cats = [['personal','cat_personal',''],['trabajo','cat_trabajo','terracota'],['bienestar','cat_bienestar','terracota'],['dinero','cat_dinero','']];
   const o = state.objetivos;
-  return cats.map(([key,label,tint])=>
-    cardBox(label, `
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Meta</label><input type="text" placeholder="¿Qué querés lograr?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">1er paso</label><input type="text" placeholder="¿Cuál es el primer paso?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Señal</label><input type="text" value="${esc(o[key].fecha)}" placeholder="fecha / señal de avance" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
+  return cats.map(([key,labelKey,tint])=>
+    cardBox(t(labelKey), `
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_meta'))}</label><input type="text" placeholder="${esc(t('ph_meta'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_primer_paso'))}</label><input type="text" placeholder="${esc(t('ph_primer_paso'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_senal'))}</label><input type="text" value="${esc(o[key].fecha)}" placeholder="${esc(t('ph_senal'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
     `, tint)
   ).join('');
 }
@@ -555,49 +736,49 @@ function renderObjetivos(){
 /* ---------- COMPRAS ---------- */
 function renderCompras(){
   const c = state.compras;
-  return cardBox('LISTA DE COMPRAS', `
+  return cardBox(t('card_lista_compras'), `
     ${c.lista.map(item=>`
       <div class="row">
         <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-        <input type="text" value="${esc(item.text)}" placeholder="¿Qué falta comprar?" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
+        <input type="text" value="${esc(item.text)}" placeholder="${esc(t('ph_compra'))}" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
         <button class="xbtn" onclick="App.removeItem('compras','lista','${item.id}')">${ICONS.x}</button>
       </div>
     `).join('')}
-    <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} Agregar</button>
+    <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar'))}</button>
   `, 'terracota');
 }
 
 /* ---------- TURNOS ---------- */
 function renderTurnos(){
-  const t = state.turnos.lista;
+  const turnosList = state.turnos.lista;
   const notifOn = ('Notification' in window) && Notification.permission === 'granted';
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     ${!notifOn ? `
       <button class="notifbanner" onclick="App.enableNotifications()">
-        ${ICONS.bell} Activar recordatorios en este dispositivo
+        ${ICONS.bell} ${esc(t('btn_activar_recordatorios'))}
       </button>
     ` : ''}
-    ${t.map((item)=>{
+    ${turnosList.map((item)=>{
       const key = 'turno_'+item.id;
       migrateDayTextToRich(key, item.notas);
       return `
       <div class="card">
         <div class="card-b">
           <div class="row">
-            <input type="text" style="font-weight:700;font-size:14px;" placeholder="¿Con quién / qué es?" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
+            <input type="text" style="font-weight:700;font-size:14px;" placeholder="${esc(t('ph_turno_titulo'))}" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
             <button class="xbtn" onclick="App.removeItem('turnos','lista','${item.id}')">${ICONS.x}</button>
           </div>
           <div class="row" style="margin-top:6px;">
             <input type="date" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
             <input type="time" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
           </div>
-          <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${item.recordar?'Te voy a avisar':'Avisarme'}</button>
+          <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${esc(item.recordar?t('btn_te_avisare'):t('btn_avisarme'))}</button>
         </div>
-        ${richBoxOnly(key, item.titulo||'Notas del turno', 'Notas...')}
+        ${richBoxOnly(key, item.titulo||t('ph_notas_turno_generico'), t('ph_notas_turno'))}
       </div>
     `;}).join('')}
-    <button class="dashedbtn" onclick="App.addItem('turnos','lista',{titulo:'',fecha:'',hora:'',notas:'',recordar:false,notified:false})">${ICONS.plus} Nuevo turno</button>
+    <button class="dashedbtn" onclick="App.addItem('turnos','lista',{titulo:'',fecha:'',hora:'',notas:'',recordar:false,notified:false})">${ICONS.plus} ${esc(t('btn_nuevo_turno'))}</button>
   `;
 }
 
@@ -610,10 +791,11 @@ function renderComidas(){
       const key = 'comida_'+DIA_SLUGS[dia];
       migrateDayTextToRich(key, d[dia]);
       const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota' : '';
+      const label = dayLabel(dia);
       return `
       <div class="card ${tint}">
-        <div class="card-h"><span>${dia.toUpperCase()}</span></div>
-        ${richBoxOnly(key, dia, '¿Qué vas a comer?')}
+        <div class="card-h"><span>${esc(label.toUpperCase())}</span></div>
+        ${richBoxOnly(key, label, t('ph_comida'))}
       </div>`;
     }).join('')}
   `;
@@ -625,39 +807,39 @@ function renderSync(){
   if (cfg && cfg.code){
     return `
       <div class="card">
-        <div class="card-h">CONECTADO</div>
+        <div class="card-h">${esc(t('card_conectado'))}</div>
         <div class="card-b">
           <p style="font-size:13px;color:var(--sub);line-height:1.5;">
-            Este dispositivo está sincronizando con el código:
+            ${esc(t('txt_sync_con'))}
           </p>
           <p style="font-size:20px;font-weight:700;color:var(--ink);margin:8px 0;">${esc(cfg.code)}</p>
           <p style="font-size:12.5px;color:var(--sub);line-height:1.5;">
-            Ingresá el mismo código y la misma configuración en tu otro dispositivo para que compartan los datos. ${state.syncStatus||''}
+            ${esc(t('txt_sync_instrucciones'))} ${esc(state.syncStatus||'')}
           </p>
         </div>
       </div>
-      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} Desconectar este dispositivo</button>
+      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} ${esc(t('btn_desconectar'))}</button>
     `;
   }
   return `
     <div class="card">
-      <div class="card-h">CONFIGURACIÓN DE FIREBASE</div>
+      <div class="card-h">${esc(t('card_config_firebase'))}</div>
       <div class="card-b">
         <p style="font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:10px;">
-          Creá un proyecto gratis en <b>console.firebase.google.com</b> → Firestore Database → y pegá acá la config web (Configuración del proyecto → tus apps → SDK setup and configuration).
+          ${t('txt_firebase_instrucciones')}
         </p>
         <textarea id="fbConfigInput" rows="6" placeholder='{"apiKey":"...", "authDomain":"...", "projectId":"...", ...}' style="border:1px solid var(--mintLine);border-radius:10px;padding:10px;">${esc(state.syncConfig?.rawConfig||'')}</textarea>
       </div>
     </div>
     <div class="card">
-      <div class="card-h">CÓDIGO DE SINCRONIZACIÓN</div>
+      <div class="card-h">${esc(t('card_codigo_sync'))}</div>
       <div class="card-b">
-        <p style="font-size:12.5px;color:var(--sub);margin-bottom:8px;">Inventá una palabra o frase. Usá la misma en todos tus dispositivos.</p>
-        <input type="text" id="syncCodeInput" placeholder="ej: planner-familia-2026" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;"/>
+        <p style="font-size:12.5px;color:var(--sub);margin-bottom:8px;">${esc(t('txt_codigo_instrucciones'))}</p>
+        <input type="text" id="syncCodeInput" placeholder="${esc(t('ph_codigo_sync'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;"/>
       </div>
     </div>
-    <button class="dashedbtn" onclick="App.connectSync()">${ICONS.cloud} Conectar</button>
-    <p style="font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.5;">Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.</p>
+    <button class="dashedbtn" onclick="App.connectSync()">${ICONS.cloud} ${esc(t('btn_conectar'))}</button>
+    <p style="font-size:11.5px;color:var(--sub);margin-top:10px;line-height:1.5;">${esc(t('txt_sync_privacidad'))}</p>
   `;
 }
 
@@ -1269,7 +1451,7 @@ function renderRichToolbar(){
       <div class="richpanel">
         <div class="richpanel-row">
           <select onmousedown="event.stopPropagation()" onchange="RichText.applyFont(this.value)">
-            <option value="" disabled selected>Elegir fuente</option>
+            <option value="" disabled selected>${esc(t('rich_choose_font'))}</option>
             ${RICH_FONTS.map(f=>`<option value="${f}" style="font-family:${f}">${f.replace(/'/g,'')}</option>`).join('')}
           </select>
           <select onmousedown="event.stopPropagation()" onchange="RichText.applySize(this.value)">
@@ -1281,7 +1463,7 @@ function renderRichToolbar(){
 
     ${richPanel==='stickers' ? `
       <div class="richpanel">
-        <input type="text" placeholder="Buscar o pegar cualquier emoji..." value="${esc(richStickerSearch)}" oninput="RichText.setStickerSearch(this.value)" style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
+        <input type="text" placeholder="${esc(t('rich_search_sticker'))}" value="${esc(richStickerSearch)}" oninput="RichText.setStickerSearch(this.value)" style="width:100%;border:1px solid var(--mintLine);border-radius:10px;padding:8px 10px;font-size:13px;margin-bottom:8px;"/>
         <div class="richstickergrid">
           ${RICH_STICKERS.map(s=>`<button onmousedown="event.preventDefault()" onclick="RichText.insertSticker('${s}')">${s}</button>`).join('')}
         </div>
@@ -1290,19 +1472,19 @@ function renderRichToolbar(){
 
     ${richPanel==='colors' ? `
       <div class="richpanel">
-        <div class="richlabel">${ICONS.palette} Color del texto</div>
+        <div class="richlabel">${ICONS.palette} ${esc(t('rich_color_texto'))}</div>
         <div class="richpanel-row">
           ${RICH_TEXT_COLORS.map(c=>`<button class="richswatch" style="background:${c}" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','${c}')"></button>`).join('')}
           <input type="color" value="${richCustomTextColor}" onmousedown="event.preventDefault()" onchange="RichText.customTextColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
-        <div class="richlabel" style="margin-top:6px;">Resaltador</div>
+        <div class="richlabel" style="margin-top:6px;">${esc(t('rich_resaltador'))}</div>
         <div class="richpanel-row">
           ${RICH_HIGHLIGHT_COLORS.map(c=>`<button class="richswatch square" style="background:${c}" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','${c}')"></button>`).join('')}
           <input type="color" value="${richCustomHighlightColor}" onmousedown="event.preventDefault()" onchange="RichText.customHighlightColor(this.value)" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
         <div class="richpanel-row" style="margin-top:6px;">
-          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#2F5D50')">Texto normal</button>
-          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','transparent')">Quitar resaltado</button>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('foreColor','#2F5D50')">${esc(t('rich_texto_normal'))}</button>
+          <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.command('backColor','transparent')">${esc(t('rich_quitar_resaltado'))}</button>
         </div>
       </div>
     ` : ''}
@@ -1315,30 +1497,29 @@ function renderRichToolbar(){
           <button class="richbtn" onclick="RichText.undoDraw()">${ICONS.undo}</button>
           <button class="richbtn" onclick="RichText.redoDraw()">${ICONS.redo}</button>
           <select onmousedown="event.stopPropagation()" onchange="richPenWidth=Number(this.value)">
-            <option value="2">Fino</option><option value="3" selected>Medio</option><option value="5">Grueso</option><option value="8">Muy grueso</option>
+            <option value="2">${esc(t('rich_fino'))}</option><option value="3" selected>${esc(t('rich_medio'))}</option><option value="5">${esc(t('rich_grueso'))}</option><option value="8">${esc(t('rich_muy_grueso'))}</option>
           </select>
           <input type="color" value="${richPenColor}" onmousedown="event.preventDefault()" onchange="richPenColor=this.value" class="richswatch square" style="padding:0;border:1px solid var(--mintLine);"/>
         </div>
-        <button class="dashedbtn" onclick="RichText.clearDrawing()">Borrar dibujo</button>
-        <button class="dashedbtn" id="richOcrBtn" onclick="RichText.recognizeHandwriting()">${ICONS.sparkle} Convertir lo escrito a texto</button>
-        <p style="font-size:11px;color:var(--sub);margin-top:6px;">Tocá "${richPanel==='pen'?'lápiz':''}" y escribí directo sobre la hoja de abajo. La primera vez que convertís a texto puede tardar unos segundos en cargar el lector.</p>
+        <button class="dashedbtn" onclick="RichText.clearDrawing()">${esc(t('rich_borrar_dibujo'))}</button>
+        <button class="dashedbtn" id="richOcrBtn" onclick="RichText.recognizeHandwriting()">${ICONS.sparkle} ${esc(t('rich_convertir_texto'))}</button>
       </div>
     ` : ''}
 
     ${richPanel==='more' ? `
       <div class="richpanel">
         <div class="richpanel-row">
-          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.cutBox()">${ICONS.scissors} Cortar caja</button>
-          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.copyBox()">${ICONS.copy} Copiar caja</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.cutBox()">${ICONS.scissors} ${esc(t('rich_cortar'))}</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.copyBox()">${ICONS.copy} ${esc(t('rich_copiar'))}</button>
         </div>
         <div class="richpanel-row">
-          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.pasteBox()">${ICONS.clipboard} Pegar</button>
-          <button class="dashedbtn" style="margin-top:0;flex:1;color:#B23B3B;" onclick="RichText.clearBox()">${ICONS.trash} Vaciar</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.pasteBox()">${ICONS.clipboard} ${esc(t('rich_pegar'))}</button>
+          <button class="dashedbtn" style="margin-top:0;flex:1;color:#B23B3B;" onclick="RichText.clearBox()">${ICONS.trash} ${esc(t('rich_vaciar'))}</button>
         </div>
       </div>
     ` : ''}
 
-    <div class="richediting">Editando: <b>${esc(richActiveTitle||'—')}</b></div>
+    <div class="richediting">${esc(t('rich_editing'))} <b>${esc(richActiveTitle||'—')}</b></div>
     <input type="file" id="richFileInput" accept="image/*" style="display:none" onchange="RichText.insertImage(event)"/>
   `;
 }
@@ -1590,19 +1771,19 @@ function renderAsistente(){
   return `
     <div class="chat-wrap">
       <div class="asis-top">
-        <div><h1 style="font-size:24px;">Asistente</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">Pedile una mano para organizarte</p></div>
+        <div><h1 style="font-size:24px;">${esc(t('title_asistente'))}</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">${esc(t('sub_asistente'))}</p></div>
         <button class="gearbtn" onclick="App.openSettings()">${ICONS.gear}</button>
       </div>
       <div class="asistabs">
-        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">Chat</button>
-        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">Volcar pendientes</button>
+        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">${esc(t('tab_chat'))}</button>
+        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">${esc(t('tab_dump'))}</button>
       </div>
       ${asisTab==='chat' ? `
         <div class="chat-msgs" id="chatMsgs">
-          ${state.chat.map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
+          ${(state.chat.length?state.chat:[{role:'bot', text:t('chat_welcome')}]).map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
         </div>
         <div class="chat-input">
-          <input type="text" id="chatInput" placeholder="${state.apiKey?'Escribí tu mensaje...':'Configurá tu API key primero (⚙)'}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
+          <input type="text" id="chatInput" placeholder="${state.apiKey?esc(t('ph_chat_msg')):esc(t('ph_chat_apikey'))}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
           <button class="sendbtn" onclick="App.sendChat()">${ICONS.send}</button>
         </div>
       ` : renderBrainDump()}
@@ -1616,27 +1797,27 @@ function renderBrainDump(){
       <div class="card">
         <div class="card-b" style="display:flex;gap:10px;align-items:flex-start;">
           <span class="notascard-icon" style="margin:0;flex-shrink:0;">${ICONS.sparkle}</span>
-          <p style="font-size:13px;color:var(--sub);margin:0;">Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.</p>
+          <p style="font-size:13px;color:var(--sub);margin:0;">${esc(t('dump_intro'))}</p>
         </div>
       </div>
-      <textarea id="dumpInput" rows="6" placeholder="Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
-      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${dumpLoading?'Organizando…':'Organizar mis pendientes'}</button>
+      <textarea id="dumpInput" rows="6" placeholder="${esc(t('ph_dump'))}" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
+      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${esc(dumpLoading?t('btn_organizando'):t('btn_organizar'))}</button>
 
       ${dumpResult ? `
-        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">Propuesta (${dumpResult.length})</p>
+        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">${esc(t('txt_propuesta'))} (${dumpResult.length})</p>
         ${dumpResult.map((item,i)=>`
           <div class="card">
             <div class="card-b">
               <input type="text" value="${esc(item.text)}" oninput="App.updateDumpItem(${i},this.value)" style="font-weight:600;font-size:14px;"/>
               <div class="dumpchoices">
-                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">A Prioridades</button>
-                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">A Compras</button>
+                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">${esc(t('btn_a_prioridades'))}</button>
+                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">${esc(t('btn_a_compras'))}</button>
                 <button class="xbtn" onclick="App.removeDumpItem(${i})">${ICONS.x}</button>
               </div>
             </div>
           </div>
         `).join('')}
-        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} Agregar todo a mi planner</button>
+        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} ${esc(t('btn_agregar_todo'))}</button>
       ` : ''}
     </div>
   `;
@@ -1649,6 +1830,12 @@ function scrollChatToBottom(){
 
 /* ---------- lógica ---------- */
 const App = {
+  setLang(lang){
+    state.lang = lang;
+    DB.set('lang', lang);
+    document.documentElement.lang = lang;
+    render();
+  },
   goto(tab, masScreen){
     state.tab = tab;
     state.masScreen = (tab==='mas' && masScreen) ? masScreen : null;
@@ -1944,6 +2131,7 @@ function checkReminders(){
 }
 setInterval(checkReminders, 30000);
 
+document.documentElement.lang = state.lang;
 render();
 if (state.syncConfig) Sync.start();
 
