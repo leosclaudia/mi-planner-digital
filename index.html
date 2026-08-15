@@ -333,7 +333,7 @@ function render(){
   if (screenKey === 'asistente') scrollChatToBottom();
   if (expandedBoardKey) attachPizarraEvents();
   if (expandedBoardKey && pzDrawMode) initDrawCanvas();
-  if (screenKey === 'inicio' || screenKey === 'notas' || screenKey === 'semana'){
+  if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
 }
@@ -375,7 +375,7 @@ function renderInicio(){
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     ${richCard('HOY','r_inicio_hoy','¿Qué es lo más importante de hoy?...')}
-    ${cardBox('PRIORIDADES','inicio', `
+    ${cardBox('PRIORIDADES', `
       ${d.prioridades.map(p=>`
         <div class="row">
           <button class="chk ${p.done?'done':''}" onclick="App.toggle('inicio','prioridades','${p.id}')">${p.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
@@ -384,7 +384,7 @@ function renderInicio(){
         </div>
       `).join('')}
       <button class="addlink" onclick="App.addItem('inicio','prioridades',{text:'',done:false})">${ICONS.plus} Agregar prioridad</button>
-    `, 'terracota', null, false)}
+    `, 'terracota')}
     ${richCard('RECORDATORIOS','r_inicio_recordatorios','Cosas para no olvidar...')}
   `;
 }
@@ -464,12 +464,12 @@ function renderFinanzas(){
   const f = state.finanzas;
   return `
     <div class="grid2">
-      ${cardBox('INGRESOS','finanzas', `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
-      ${cardBox('GASTOS','finanzas', `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row', false)}
+      ${cardBox('INGRESOS', `<span>$</span><input type="text" value="${esc(f.ingresos)}" oninput="App.setField('finanzas','ingresos',this.value)"/>`, '', 'dollar-row')}
+      ${cardBox('GASTOS', `<span>$</span><input type="text" value="${esc(f.gastos)}" oninput="App.setField('finanzas','gastos',this.value)"/>`, 'terracota', 'dollar-row')}
     </div>
-    ${cardBox('AHORRO / META','finanzas', `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row', false)}
+    ${cardBox('AHORRO / META', `<span>$</span><input type="text" value="${esc(f.ahorro)}" oninput="App.setField('finanzas','ahorro',this.value)"/>`, '', 'dollar-row')}
 
-    ${cardBox('MOVIMIENTOS','finanzas', `
+    ${cardBox('MOVIMIENTOS', `
       ${f.movimientos.map(m=>`
         <div class="mov-row">
           <input type="text" placeholder="Fecha" value="${esc(m.fecha)}" oninput="App.setListField('finanzas','movimientos','${m.id}','fecha',this.value)"/>
@@ -479,9 +479,9 @@ function renderFinanzas(){
         </div>
       `).join('')}
       <button class="addlink" onclick="App.addItem('finanzas','movimientos',{fecha:'',detalle:'',monto:''})">${ICONS.plus} Agregar movimiento</button>
-    `, 'terracota', null, false)}
+    `, 'terracota')}
 
-    ${cardBox('PARA RECORDAR','finanzas', `
+    ${cardBox('PARA RECORDAR', `
       ${f.recordar.map(r=>`
         <div class="row">
           <button class="chk ${r.done?'done':''}" onclick="App.toggle('finanzas','recordar','${r.id}')">${r.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
@@ -490,7 +490,7 @@ function renderFinanzas(){
         </div>
       `).join('')}
       <button class="addlink" onclick="App.addItem('finanzas','recordar',{text:'',done:false})">${ICONS.plus} Agregar</button>
-    `, '', null, false)}
+    `)}
   `;
 }
 
@@ -498,7 +498,8 @@ function renderFinanzas(){
 function renderProyectos(){
   const lista = state.proyectos.lista;
   return `
-    ${lista.map((p,pIdx)=>`
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+    ${lista.map((p)=>`
       <div class="card">
         <div class="card-b">
           <div class="row">
@@ -508,19 +509,23 @@ function renderProyectos(){
           <input type="text" placeholder="Fecha objetivo" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
         </div>
       </div>
-      <div class="grid2">
-        ${cardBox('OBJETIVO / RESULTADO','proyectos', `<textarea rows="3" placeholder="¿Cómo se ve el éxito?" oninput="App.setListField('proyectos','lista','${p.id}','objetivo',this.value)">${esc(p.objetivo||'')}</textarea>`, 'terracota', null, pIdx===0)}
-        ${cardBox('PRÓXIMOS PASOS','proyectos', `
-          ${(p.pasos||[]).map(ps=>`
-            <div class="row">
-              <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-              <input type="text" value="${esc(ps.text)}" placeholder="Paso siguiente" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
-            </div>
-          `).join('')}
-          <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} Agregar paso</button>
-        `, '', null, false)}
+      <div class="card terracota">
+        <div class="card-h"><span>OBJETIVO / RESULTADO</span></div>
+        ${migrateDayTextToRich('proy_'+p.id+'_obj', p.objetivo) || richBoxOnly('proy_'+p.id+'_obj', p.nombre||'Objetivo del proyecto', '¿Cómo se ve el éxito?')}
       </div>
-      ${cardBox('IDEAS, RECURSOS Y NOTAS','proyectos', `<textarea rows="3" placeholder="Anotá lo que sirva" oninput="App.setListField('proyectos','lista','${p.id}','notas',this.value)">${esc(p.notas||'')}</textarea>`, '', null, false)}
+      ${cardBox('PRÓXIMOS PASOS', `
+        ${(p.pasos||[]).map(ps=>`
+          <div class="row">
+            <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
+            <input type="text" value="${esc(ps.text)}" placeholder="Paso siguiente" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
+          </div>
+        `).join('')}
+        <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} Agregar paso</button>
+      `)}
+      <div class="card">
+        <div class="card-h"><span>IDEAS, RECURSOS Y NOTAS</span></div>
+        ${migrateDayTextToRich('proy_'+p.id+'_notas', p.notas) || richBoxOnly('proy_'+p.id+'_notas', p.nombre||'Ideas y notas', 'Anotá lo que sirva...')}
+      </div>
     `).join('<div style="height:4px"></div>')}
     <button class="dashedbtn" onclick="App.addItem('proyectos','lista',{nombre:'',fecha:'',objetivo:'',notas:'',pasos:[]})">${ICONS.plus} Nuevo proyecto</button>
   `;
@@ -538,19 +543,19 @@ function renderNotasRich(){
 function renderObjetivos(){
   const cats = [['personal','PERSONAL',''],['trabajo','TRABAJO / PROYECTOS','terracota'],['bienestar','BIENESTAR','terracota'],['dinero','DINERO','']];
   const o = state.objetivos;
-  return cats.map(([key,label,tint],idx)=>
-    cardBox(label, 'objetivos', `
+  return cats.map(([key,label,tint])=>
+    cardBox(label, `
       <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Meta</label><input type="text" placeholder="¿Qué querés lograr?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
       <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">1er paso</label><input type="text" placeholder="¿Cuál es el primer paso?" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
       <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">Señal</label><input type="text" value="${esc(o[key].fecha)}" placeholder="fecha / señal de avance" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
-    `, tint, null, idx===0)
+    `, tint)
   ).join('');
 }
 
 /* ---------- COMPRAS ---------- */
 function renderCompras(){
   const c = state.compras;
-  return cardBox('LISTA DE COMPRAS','compras', `
+  return cardBox('LISTA DE COMPRAS', `
     ${c.lista.map(item=>`
       <div class="row">
         <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
@@ -567,42 +572,29 @@ function renderTurnos(){
   const t = state.turnos.lista;
   const notifOn = ('Notification' in window) && Notification.permission === 'granted';
   return `
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
     ${!notifOn ? `
       <button class="notifbanner" onclick="App.enableNotifications()">
         ${ICONS.bell} Activar recordatorios en este dispositivo
       </button>
     ` : ''}
-    ${t.map((item,tIdx)=>{
-      const bKey = 'turnos';
-      const slotKey = 'turnos::'+item.id;
-      const boardOpen = expandedSlot===slotKey;
-      const tBoard = getBoard(bKey);
-      const reallyHasContent = tBoard.elementos.length > 0 || tBoard.drawing;
-      const hasBoardContent = tIdx===0 && reallyHasContent;
+    ${t.map((item)=>{
+      const key = 'turno_'+item.id;
+      migrateDayTextToRich(key, item.notas);
       return `
       <div class="card">
         <div class="card-b">
           <div class="row">
             <input type="text" style="font-weight:700;font-size:14px;" placeholder="¿Con quién / qué es?" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
-            <button class="card-h-btn" onclick="toggleBoard('${bKey}','${slotKey}')">${boardOpen?ICONS.x:ICONS.pencil}</button>
             <button class="xbtn" onclick="App.removeItem('turnos','lista','${item.id}')">${ICONS.x}</button>
           </div>
           <div class="row" style="margin-top:6px;">
             <input type="date" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
             <input type="time" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
           </div>
-          ${(!boardOpen && hasBoardContent) ? `
-            <div class="pzpreview" style="padding:10px 0 0;" onclick="toggleBoard('${bKey}','${slotKey}')">
-              <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
-              <div class="pzpreview-canvas">
-                ${tBoard.drawing ? `<img src="${tBoard.drawing}"/>` : ''}
-                ${tBoard.elementos.map(el=>renderPzPreviewEl(el)).join('')}
-              </div>
-            </div>
-          ` : ''}
-          ${boardOpen ? `<div style="margin-top:8px;">${renderBoard(bKey,{height:'260px'})}</div>` : (!reallyHasContent ? `<textarea rows="2" placeholder="Notas" style="margin-top:8px;" oninput="App.setListField('turnos','lista','${item.id}','notas',this.value)">${esc(item.notas||'')}</textarea>` : '')}
           <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${item.recordar?'Te voy a avisar':'Avisarme'}</button>
         </div>
+        ${richBoxOnly(key, item.titulo||'Notas del turno', 'Notas...')}
       </div>
     `;}).join('')}
     <button class="dashedbtn" onclick="App.addItem('turnos','lista',{titulo:'',fecha:'',hora:'',notas:'',recordar:false,notified:false})">${ICONS.plus} Nuevo turno</button>
@@ -612,13 +604,19 @@ function renderTurnos(){
 /* ---------- COMIDAS ---------- */
 function renderComidas(){
   const d = state.comidas.dias;
-  return DIAS.map((dia,idx)=>
-    cardBox(dia.toUpperCase(), 'comidas',
-      `<input type="text" placeholder="¿Qué vas a comer?" value="${esc(d[dia]||'')}" oninput="App.setComidaField('${dia}',this.value)"/>`,
-      ['Sábado','Domingo'].includes(dia)?'terracota':'',
-      null, idx===0
-    )
-  ).join('');
+  return `
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+    ${DIAS.map((dia)=>{
+      const key = 'comida_'+DIA_SLUGS[dia];
+      migrateDayTextToRich(key, d[dia]);
+      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota' : '';
+      return `
+      <div class="card ${tint}">
+        <div class="card-h"><span>${dia.toUpperCase()}</span></div>
+        ${richBoxOnly(key, dia, '¿Qué vas a comer?')}
+      </div>`;
+    }).join('')}
+  `;
 }
 
 /* ---------- SINCRONIZAR ---------- */
@@ -682,28 +680,13 @@ function toggleBoard(boardKey, slotKey){
   pzSelected = null; pzDrawMode = false; pzStickerOpen = false; pzEditingTextId = null;
   render();
 }
-/* Caja de tarjeta con lápiz: muestra el contenido normal, o el lienzo en el mismo lugar si está expandida */
-function cardBox(title, boardKey, normalHtml, tint, bodyClass, showPreview){
-  if (showPreview === undefined) showPreview = true;
-  const slotKey = boardKey + '::' + title;
-  const isOpen = expandedSlot === slotKey;
-  const cls = 'card-b' + (bodyClass && !isOpen ? ' '+bodyClass : '');
-  const board = getBoard(boardKey);
-  const hasBoardContent = board.elementos.length > 0 || board.drawing;
+/* Caja de tarjeta simple (sin lienzo/pizarra — ese sistema fue reemplazado por el de texto enriquecido) */
+function cardBox(title, content, tint, bodyClass){
+  const cls = 'card-b' + (bodyClass ? ' '+bodyClass : '');
   return `
-    <div class="card${tint?' '+tint:''}${isOpen?' card-expanded':''}">
-      <div class="card-h"><span>${esc(title)}</span><button class="card-h-btn" onclick="event.stopPropagation();toggleBoard('${boardKey}','${slotKey}')">${isOpen?ICONS.x:ICONS.pencil}</button></div>
-      ${(!isOpen && hasBoardContent && showPreview) ? `
-        <div class="pzpreview" onclick="toggleBoard('${boardKey}','${slotKey}')">
-          <span class="pzpreview-tag">${ICONS.pencil} En el lienzo</span>
-          <div class="pzpreview-canvas">
-            ${board.drawing ? `<img src="${board.drawing}"/>` : ''}
-            ${board.elementos.map(el=>renderPzPreviewEl(el)).join('')}
-          </div>
-        </div>
-      ` : ''}
-      ${(!isOpen && !hasBoardContent) ? `<div class="${cls}">${normalHtml}</div>` : ''}
-      ${isOpen ? `<div class="${cls}" style="padding-top:12px;">${renderBoard(boardKey,{height:'300px'})}</div>` : ''}
+    <div class="card${tint?' '+tint:''}">
+      <div class="card-h"><span>${esc(title)}</span></div>
+      <div class="${cls}">${content}</div>
     </div>
   `;
 }
