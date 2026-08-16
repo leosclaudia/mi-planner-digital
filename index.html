@@ -161,6 +161,9 @@
   .semana-nav-mid{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);}
   .semnavbtn{background:var(--card);border:1px solid var(--mintLine);border-radius:10px;width:34px;height:34px;font-size:19px;line-height:1;color:var(--ink);cursor:pointer;flex-shrink:0;}
   .semhoybtn{background:transparent;border:1px solid var(--mintLine);border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--sub);cursor:pointer;}
+  .vista-sel{display:flex;gap:6px;justify-content:center;margin:-6px 0 14px;}
+  .vistabtn{background:var(--card);border:1px solid var(--mintLine);border-radius:999px;padding:5px 14px;font-size:12px;color:var(--sub);cursor:pointer;}
+  .vistabtn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;}
   .card.dia-hoy{border-color:var(--accent);box-shadow:0 0 0 2px rgba(155,122,148,.22);}
   .semana-grid{display:grid;gap:14px;align-items:start;}
   .semana-grid .card{margin-bottom:0;}
@@ -654,8 +657,10 @@ function renderInicio(){
 /* Cada día se guarda por su FECHA real (ej. semana_2026-08-17), no por el nombre del día.
    Así la semana que viene no pisa lo de esta y queda historial. */
 const DIA_SLUGS = {Lunes:'lunes',Martes:'martes','Miércoles':'miercoles',Jueves:'jueves',Viernes:'viernes','Sábado':'sabado',Domingo:'domingo'};
-let semanaOffset = 0;   // 0 = esta semana, -1 = la anterior, 1 = la siguiente
-let openDayIdx = null;  // 0 = lunes ... 6 = domingo
+let semanaOffset = 0;   // 0 = período actual, -1 = el anterior, 1 = el siguiente
+let openDayIdx = null;  // índice del día abierto dentro del rango visible
+/* Cuántos días se muestran a la vez: 7, 14 o 30. Queda guardado en este dispositivo. */
+let vistaDias = DB.get('vistaDias', 7);
 
 function isoFecha(d){
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -667,16 +672,18 @@ function lunesDe(d){
 }
 function lunesVisible(){
   const l = lunesDe(new Date());
-  l.setDate(l.getDate() + semanaOffset*7);
+  /* El salto de las flechas es del tamaño del período que estés viendo:
+     7 días saltan una semana, 30 días saltan un mes. */
+  l.setDate(l.getDate() + semanaOffset*vistaDias);
   return l;
 }
 function diasDeLaSemana(){
   const l = lunesVisible();
-  return Array.from({length:7}, (_,i) => { const d = new Date(l); d.setDate(l.getDate()+i); return d; });
+  return Array.from({length:vistaDias}, (_,i) => { const d = new Date(l); d.setDate(l.getDate()+i); return d; });
 }
 function claveDia(fecha){ return 'semana_' + isoFecha(fecha); }
 function rotuloSemana(){
-  const ds = diasDeLaSemana(), a = ds[0], b = ds[6];
+  const ds = diasDeLaSemana(), a = ds[0], b = ds[ds.length-1];
   const loc = state.lang==='en' ? 'en-US' : 'es-AR';
   const mes = d => d.toLocaleDateString(loc, { month:'short' }).replace('.','');
   const mismoMes = a.getMonth() === b.getMonth();
@@ -684,8 +691,15 @@ function rotuloSemana(){
     ? `${a.getDate()} – ${b.getDate()} ${mes(b)} ${b.getFullYear()}`
     : `${a.getDate()} ${mes(a)} – ${b.getDate()} ${mes(b)} ${b.getFullYear()}`;
 }
-function rotuloDia(fecha, i){
-  return dayLabel(DIAS[i]) + ' ' + fecha.getDate();
+function rotuloDia(fecha){
+  /* Antes salía del índice (que solo servía para semanas de lunes a domingo).
+     Ahora sale de la fecha, así funciona igual con 7, 14 o 30 días. */
+  const nombre = DIAS[(fecha.getDay()+6) % 7];
+  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
+  const mes = fecha.toLocaleDateString(loc, { month:'short' }).replace('.','');
+  return vistaDias > 7
+    ? dayLabel(nombre) + ' ' + fecha.getDate() + ' ' + mes
+    : dayLabel(nombre) + ' ' + fecha.getDate();
 }
 
 /* Traslada lo que estaba guardado por nombre de día (semana_lunes, semana_martes, …)
@@ -731,7 +745,10 @@ function renderSemana(){
         <b>${esc(rotuloSemana())}</b>
         ${semanaOffset !== 0 ? `<button class="semhoybtn" onclick="App.semanaHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
       </div>
-      <button class="semnavbtn" onclick="App.moverSemana(1)" title="Semana siguiente">›</button>
+      <button class="semnavbtn" onclick="App.moverSemana(1)" title="Período siguiente">›</button>
+    </div>
+    <div class="vista-sel">
+      ${[7,14,30].map(n => `<button class="vistabtn ${vistaDias===n?'on':''}" onclick="App.setVistaDias(${n})">${n} ${state.lang==='en'?'days':'días'}</button>`).join('')}
     </div>
     <div class="card">
       <div class="card-b">
@@ -741,11 +758,11 @@ function renderSemana(){
     </div>
     <div class="semana-grid">
     ${ds.map((fecha, i)=>{
-      const tint = i >= 5 ? 'terracota' : '';
+      const tint = (fecha.getDay()===0 || fecha.getDay()===6) ? 'terracota' : '';
       const isOpen = openDayIdx === i;
       const esHoy = isoFecha(fecha) === hoy;
       const key = claveDia(fecha);
-      const label = rotuloDia(fecha, i);
+      const label = rotuloDia(fecha);
       return `
       <div class="card ${tint} ${isOpen?'dia-abierto':''} ${esHoy?'dia-hoy':''}">
         <div class="card-h" style="cursor:pointer" onclick="App.toggleDay(${i})">
@@ -2316,6 +2333,13 @@ const App = {
   toggleDay(i){ openDayIdx = (openDayIdx===i) ? null : i; render(); },
   moverSemana(n){ semanaOffset += n; openDayIdx = null; render(); },
   semanaHoy(){ semanaOffset = 0; openDayIdx = null; render(); },
+  setVistaDias(n){
+    vistaDias = n;
+    DB.set('vistaDias', n);   // no se sincroniza: es una preferencia de este dispositivo
+    semanaOffset = 0;
+    openDayIdx = null;
+    render();
+  },
   setEnfoqueSemana(claveSem, valor){
     if (!state.semana.enfoques) state.semana.enfoques = {};
     state.semana.enfoques[claveSem] = valor;
