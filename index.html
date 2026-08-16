@@ -873,7 +873,12 @@ function renderSync(){
           </p>
         </div>
       </div>
-      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} ${esc(t('btn_desconectar'))}</button>
+      <button class="dashedbtn" onclick="App.subirTodo()">${ICONS.cloud} Subir todo a la nube</button>
+      <p style="font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.5;">
+        Usalo cuando cambiás de código de sincronización: manda todo lo que tenés en este
+        dispositivo al código nuevo. También sirve como copia de respaldo.
+      </p>
+      <button class="dashedbtn" style="margin-top:14px;" onclick="App.disableSync()">${ICONS.x} ${esc(t('btn_desconectar'))}</button>
     `;
   }
   return `
@@ -2189,6 +2194,17 @@ const App = {
     render();
   },
   toggleDay(dia){ openDay = (openDay===dia) ? null : dia; render(); },
+
+  /* Fuerza la subida de TODO lo que hay en este dispositivo al código actual.
+     Necesario al cambiar de código: la nube nueva arranca vacía y el push normal
+     solo se dispara cuando algo cambia. */
+  subirTodo(){
+    if (!Sync.db){ alert('Todavía no está conectado a la nube. Esperá unos segundos y probá de nuevo.'); return; }
+    let n = 0;
+    SYNC_KEYS.forEach(k => { if (state[k] !== undefined){ Sync.push(k); n++; } });
+    Object.keys(state.richContent || {}).forEach(k => { Sync.push('rich_'+k); n++; });
+    alert('Subiendo ' + n + ' secciones a la nube. Esperá unos segundos y fijate que diga "Última sincronización".');
+  },
 
   /* Panel de diagnóstico: muestra en pantalla dónde se corta la cadena
      pantalla -> memoria -> navegador -> nube, para no seguir adivinando. */
