@@ -2566,6 +2566,15 @@ const Sync = {
           if (remote && remote.value !== undefined){
             state[k] = remote.value;
             DB.set(k, state[k]);
+            /* getRich()/richBoxOnly leen de state.richContent[...], que se cachea en memoria
+               apenas se abre un día por primera vez. Si no refrescamos también esa caché acá,
+               un día que ya se haya abierto (como Lunes, que se abre solo al entrar) se queda
+               mostrando y guardando la versión vieja, aunque llegue una más nueva de la nube. */
+            if (k.indexOf('rich_') === 0){
+              const richKey = k.slice(5);
+              if (!state.richContent) state.richContent = {};
+              state.richContent[richKey] = remote.value;
+            }
           }
         });
         this.applyingRemote = false;
