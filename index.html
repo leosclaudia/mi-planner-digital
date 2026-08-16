@@ -151,7 +151,8 @@
   .richink{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
   .richink.active{z-index:20;cursor:crosshair;}
   .richink:not(.active){pointer-events:none;z-index:0;}
-  .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);}
+  .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
+  .richtext img.rt-img-selected{border:2px solid var(--accent, #79B553);box-shadow:0 0 0 3px rgba(121,181,83,.25);}
   .pzel.selected{outline:1.5px dashed var(--accent);}
   .pzel img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;}
   .pzel .pztext{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;color:var(--ink);outline:none;padding:2px;overflow:hidden;font-family:'Poppins',sans-serif;}
@@ -1502,6 +1503,7 @@ let richStickerSearch = '';
 let richDrawHistory = {}, richDrawFuture = {};
 let richCopied = '';
 let richCustomTextColor = '#7A3B3B', richCustomHighlightColor = '#FFF59D';
+let richSelectedImage = null;
 
 function richCard(title, key, placeholder, tint, printKey){
   const data = getRich(key);
@@ -1522,6 +1524,7 @@ function richBoxOnly(key, title, placeholder){
       <div class="richbox">
         <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
              onfocus="RichText.setActive('${key}','${esc(title)}')"
+             onclick="RichText.deselectImage()"
              oninput="RichText.persist('${key}')">${data.html}</div>
         <canvas class="richink" id="richink-${key}" data-key="${key}"></canvas>
       </div>
@@ -1562,6 +1565,15 @@ function renderRichToolbar(){
         <button class="richbtn ${richPanel==='more'?'active':''}" onclick="RichText.togglePanel('more')">${ICONS.more}</button>
       </div>
     </div>
+
+    ${richSelectedImage ? `
+      <div class="richpanel" style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--sub);">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
+        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Move up':'Subir'}</button>
+        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Move down':'Bajar'}</button>
+        <button class="dashedbtn" style="margin-top:0;color:#B23B3B;" onmousedown="event.preventDefault()" onclick="RichText.deleteSelectedImage()">${ICONS.trash} ${state.lang==='en'?'Delete':'Eliminar'}</button>
+      </div>
+    ` : ''}
 
     ${richPanel==='fonts' ? `
       <div class="richpanel">
@@ -1771,7 +1783,7 @@ const RichText = {
       const reader = new FileReader();
       reader.onload = (e) => {
         RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF"/>`);
+        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
         RichText.persist(richActive);
       };
       reader.readAsDataURL(file);
@@ -1788,13 +1800,47 @@ const RichText = {
         c.getContext('2d').drawImage(img,0,0,w,h);
         const dataUrl = c.toDataURL('image/jpeg', 0.75);
         RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${dataUrl}" alt="Imagen"/>`);
+        document.execCommand('insertHTML', false, `<img src="${dataUrl}" alt="Imagen" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
         RichText.persist(richActive);
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
     evt.target.value = '';
+  },
+  selectImage(evt, img){
+    if (evt) evt.stopPropagation();
+    document.querySelectorAll('.rt-img-selected').forEach(el => el.classList.remove('rt-img-selected'));
+    img.classList.add('rt-img-selected');
+    richSelectedImage = img;
+    refreshRichToolbar();
+  },
+  deselectImage(){
+    if (richSelectedImage){
+      richSelectedImage.classList.remove('rt-img-selected');
+      richSelectedImage = null;
+      refreshRichToolbar();
+    }
+  },
+  moveImageUp(){
+    const img = richSelectedImage;
+    if (!img) return;
+    const prev = img.previousSibling;
+    if (prev){ img.parentNode.insertBefore(img, prev); this.persist(richActive); }
+  },
+  moveImageDown(){
+    const img = richSelectedImage;
+    if (!img) return;
+    const next = img.nextSibling;
+    if (next){ img.parentNode.insertBefore(next, img); this.persist(richActive); }
+  },
+  deleteSelectedImage(){
+    const img = richSelectedImage;
+    if (!img) return;
+    img.remove();
+    richSelectedImage = null;
+    this.persist(richActive);
+    refreshRichToolbar();
   },
   cutBox(){
     const el = document.getElementById('richtext-'+richActive);
