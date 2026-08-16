@@ -73,37 +73,12 @@
   .tab.active{color:var(--ink);font-weight:600;}
   .tab svg{width:20px;height:20px;}
   .tab span{font-size:10px;}
-  .day-card summary{list-style:none;cursor:pointer;}
-  .day-card summary::-webkit-details-marker{display:none;}
   .habit-days{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;}
+  .habit-day.esHoy{border-color:var(--ink);border-width:2px;font-weight:700;color:var(--ink);}
   .habit-day{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid var(--mintLine);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--sub);background:none;cursor:pointer;}
   .habit-day.on{background:var(--accent);color:#fff;border-color:var(--accent);}
   .habit-name{width:100%;font-weight:600;font-size:14px;border:none;background:transparent;outline:none;color:var(--ink);}
-  .chat-wrap{flex:1;display:flex;flex-direction:column;height:100%;}
-  .chat-msgs{flex:1;overflow-y:auto;padding:8px 20px 12px;display:flex;flex-direction:column;gap:10px;}
-  .msg{max-width:80%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.5;}
-  .msg.user{align-self:flex-end;background:var(--ink);color:#fff;}
-  .msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--mintLine);}
-  .chat-input{display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--mintLine);background:var(--bg);}
-  .chat-input input{flex:1;background:var(--card);border:1px solid var(--mintLine);border-radius:24px;padding:10px 16px;font-size:13.5px;}
-  .sendbtn,.gearbtn{background:var(--accent);border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
-  .gearbtn{background:none;border:1px solid var(--mintLine);color:var(--ink);}
-  .sendbtn svg,.gearbtn svg{width:16px;height:16px;}
   .menuitem{}
-  .asis-top{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px 6px;}
-  .asistabs{display:flex;gap:8px;padding:8px 20px 4px;}
-  .asistab{background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;}
-  .asistab.active{background:var(--ink);border-color:var(--ink);color:#fff;}
-  .dump-scroll{flex:1;overflow-y:auto;padding:12px 20px 20px;}
-  .dumpchoices{display:flex;align-items:center;gap:6px;margin-top:8px;}
-  .dumpchoice{background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:16px;cursor:pointer;}
-  .dumpchoice.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .modal-bg{position:fixed;inset:0;background:rgba(30,33,29,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;}
-  .modal{background:var(--card);border-radius:18px;padding:20px;max-width:340px;width:100%;}
-  .modal h3{font-size:16px;margin-bottom:8px;}
-  .modal p{font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:12px;}
-  .modal input{border:1px solid var(--mintLine);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px;}
-  .modal .actions{display:flex;gap:8px;justify-content:flex-end;}
   .btn{border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;}
   .btn.primary{background:var(--ink);color:#fff;}
   .btn.ghost{background:none;color:var(--sub);}
@@ -124,18 +99,6 @@
   .bellbtn{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;margin-top:10px;cursor:pointer;}
   .bellbtn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 
-  .pztools{display:flex;gap:8px;padding:0 20px 12px;flex-wrap:wrap;}
-  .pztool{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--mintLine);color:var(--ink);font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:20px;cursor:pointer;}
-  .pzcanvas-wrap{padding:0 20px 12px;}
-  .pzcanvas{position:relative;width:100%;height:56vh;background:var(--card);border:1px solid var(--mintLine);border-radius:16px;overflow:hidden;touch-action:none;}
-  .pzel{position:absolute;box-sizing:border-box;cursor:grab;user-select:none;-webkit-user-select:none;}
-  .pzpreview{padding:10px 16px 0;cursor:pointer;}
-  .pzpreview-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.03em;}
-  .pzpreview-tag svg{width:11px;height:11px;}
-  .pzpreview-canvas{position:relative;width:100%;height:90px;background:#FAF8F3;border:1px dashed var(--mintLine);border-radius:12px;margin-top:6px;overflow:hidden;}
-  .pzpreview-canvas .pzel{pointer-events:none;}
-  .pzpreview-canvas .pzel img{width:100%;height:100%;object-fit:contain;}
-  .pzpreview-canvas .pztext{display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;}
 
   /* ---------- sistema de texto enriquecido (Notas, Inicio) ---------- */
   .richtoolbar{position:sticky;top:0;z-index:40;background:var(--bg);padding:10px 20px 8px;margin:0 -20px 6px;border-bottom:1px solid var(--mintLine);}
@@ -168,6 +131,39 @@
     font-size:14px;cursor:pointer;flex-shrink:0;}
   .fechapick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0;}
   .movepick{width:26px;height:26px;font-size:13px;}
+  .ordbtns{display:flex;gap:0;flex-shrink:0;}
+  .ordbtns button{background:none;border:none;font-size:12px;cursor:pointer;padding:2px 3px;line-height:1;}
+  .ordbtns button:disabled{opacity:.2;cursor:default;}
+  .limpiarbtn{width:100%;margin-top:10px;background:none;border:1px dashed var(--mintLine);border-radius:12px;
+    padding:8px;font-size:12.5px;color:var(--sub);cursor:pointer;}
+  .habitnum{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;
+    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .habitmover{display:flex;gap:1px;flex-shrink:0;}
+  .habitmover button{background:none;border:none;font-size:13px;cursor:pointer;padding:2px 3px;line-height:1;}
+  .habitmover button:disabled{opacity:.22;cursor:default;}
+  .habitcard{transition:opacity .15s;}
+  .habitcard.arrastrando{opacity:.4;}
+  .habitcard.sobre{outline:2px dashed var(--accent);outline-offset:2px;}
+  .notas-grid{display:grid;gap:12px;align-items:start;}
+  @media (min-width:620px){ .notas-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  @media (min-width:1000px){ .notas-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
+  .notas-grid .card{margin-bottom:0;}
+  .notacard{transition:opacity .15s,transform .15s;}
+  .notacard.arrastrando{opacity:.4;}
+  .notacard.sobre{outline:2px dashed var(--accent);outline-offset:2px;}
+  .notamover{display:flex;align-items:center;justify-content:space-between;gap:6px;
+    padding:6px 12px 10px;border-top:1px solid var(--mintLine);}
+  .notamover button{background:none;border:none;font-size:15px;cursor:pointer;padding:2px 8px;line-height:1;}
+  .notamover button:disabled{opacity:.22;cursor:default;}
+  .notagarra{color:var(--sub);font-size:15px;letter-spacing:1px;cursor:grab;}
+  .avisoguardado{position:fixed;left:50%;bottom:78px;transform:translateX(-50%) translateY(8px);
+    background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:7px 15px;border-radius:999px;
+    opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:8000;}
+  .avisoguardado.visible{opacity:.94;transform:translateX(-50%) translateY(0);}
+  .resultado{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;background:var(--card);
+    border:1px solid var(--mintLine);border-radius:14px;padding:11px 13px;margin-bottom:9px;cursor:pointer;}
+  .res-zona{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--sub);}
+  .res-frag{font-size:13px;line-height:1.5;color:var(--ink);}
   .vista-sel{display:flex;gap:6px;justify-content:center;margin:-6px 0 14px;}
   .vistabtn{background:var(--card);border:1px solid var(--mintLine);border-radius:999px;padding:5px 14px;font-size:12px;color:var(--sub);cursor:pointer;}
   .vistabtn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;}
@@ -198,36 +194,13 @@
   .imgviewer button{position:absolute;top:14px;right:16px;background:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;}
   .richtext img.rt-img-selected{border:2px solid var(--accent, #79B553);box-shadow:0 0 0 3px rgba(121,181,83,.25);}
   .pzel.selected{outline:1.5px dashed var(--accent);}
-  .pzel img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;}
-  .pzel .pztext{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;color:var(--ink);outline:none;padding:2px;overflow:hidden;font-family:'Poppins',sans-serif;}
-  .pzhandle{position:absolute;width:16px;height:16px;background:var(--accent);border:2px solid #fff;border-radius:50%;z-index:5;}
-  .pzhandle.nw{top:-8px;left:-8px;cursor:nwse-resize;}
   .pzhandle.ne{top:-8px;right:-8px;cursor:nesw-resize;}
   .pzhandle.sw{bottom:-8px;left:-8px;cursor:nesw-resize;}
   .pzhandle.se{bottom:-8px;right:-8px;cursor:nwse-resize;}
-  .pzbar{position:sticky;bottom:0;display:flex;justify-content:center;gap:6px;padding:10px 16px;background:var(--card);border-top:1px solid var(--mintLine);margin:0 -20px;}
-  .pzbarbtn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--ink);font-size:10px;padding:4px 10px;cursor:pointer;}
-  .stickerpop{position:absolute;z-index:20;background:var(--card);border:1px solid var(--mintLine);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.12);left:20px;right:20px;top:60px;max-height:60vh;overflow-y:auto;}
-  .stickerpop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-  .stickerpop-grid button{background:var(--mint);border:none;border-radius:10px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
-  .stickerpop-custom{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--mintLine);}
-  .stickerpop-custom input{flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:9px 10px;font-size:15px;}
 
-  .pztools{flex-wrap:wrap;}
   .pztool.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .pzdrawing{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
-  .pzdrawcanvas{position:absolute;inset:0;width:100%;height:100%;z-index:60;touch-action:none;}
-  .pzdrawtools{display:flex;align-items:center;gap:8px;padding:0 20px 10px;flex-wrap:wrap;}
-  .pzswatch{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
-  .pzcolorpicker{width:26px;height:26px;border-radius:50%;border:2px solid var(--mintLine);padding:0;cursor:pointer;flex-shrink:0;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);-webkit-appearance:none;appearance:none;overflow:hidden;}
-  .pzcolorpicker::-webkit-color-swatch-wrapper{padding:2px;}
-  .pzcolorpicker::-webkit-color-swatch{border:none;border-radius:50%;}
   .pzswatch.active{border-color:var(--ink);}
-  .pzdrawtools input[type=range]{flex:1;min-width:60px;accent-color:var(--accent);}
-  .pzbar{flex-wrap:wrap;}
   .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
-  .card-h-btn svg{width:14px;height:14px;}
   .langtoggle{flex-shrink:0;display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--mintLine);border-radius:20px;padding:3px;gap:2px;margin-top:2px;}
   .langtoggle-seg{border:none;background:none;color:var(--sub);font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:6px 13px;border-radius:16px;cursor:pointer;}
   .langtoggle-seg.active{background:var(--ink);color:#fff;}
@@ -236,6 +209,10 @@
   .printbtn svg{width:16px;height:16px;}
   .card-h-printbtn{background:none;border:none;color:inherit;opacity:.6;cursor:pointer;padding:2px;display:flex;align-items:center;}
   .card-h-printbtn svg{width:15px;height:15px;}
+  /* La flechita que abre/cierra cada día nunca había tenido regla propia: heredaba un tamaño
+     al azar. Ahora queda igual que el resto de los íconos del encabezado. */
+  .daychevron{opacity:.6;}
+  .daychevron svg{width:15px;height:15px;}
   .card-h-printbtn:hover{opacity:1;}
 
   /* ---------- vista de impresión / exportación ---------- */
@@ -290,7 +267,7 @@ const uid = () => Math.random().toString(36).slice(2,9);
 /* ---------- traducciones ---------- */
 const I18N = {
   es: {
-    tab_inicio:'Inicio', tab_semana:'Semana', tab_habitos:'Hábitos', tab_asistente:'Asistente', tab_mas:'Más',
+    tab_inicio:'Inicio', tab_semana:'Semana', tab_habitos:'Hábitos', tab_mas:'Más',
     title_inicio:'Inicio', sub_inicio:'Un espacio simple para ordenar lo importante',
     title_semana:'Semana', sub_semana:'Tocá un día para abrirlo',
     title_habitos:'Hábitos', sub_habitos:'Marcá cada día sin buscar perfección',
@@ -299,7 +276,6 @@ const I18N = {
     title_proyectos:'Proyectos', sub_proyectos:'Uno por cada idea que querés llevar a la práctica',
     title_notas:'Notas', sub_notas:'Escribí, dibujá o pegá lo que quieras',
     title_objetivos:'Objetivos', sub_objetivos:'Elegí pocas metas, claras y posibles',
-    title_asistente:'Asistente', sub_asistente:'Pedile una mano para organizarte',
     title_compras:'Compras', sub_compras:'Lo que tenés que comprar',
     title_turnos:'Turnos', sub_turnos:'Citas, clases y encuentros',
     title_comidas:'Comidas', sub_comidas:'Un menú simple para la semana',
@@ -308,7 +284,6 @@ const I18N = {
     menu_finanzas:'Finanzas', menu_finanzas_sub:'Ingresos, gastos y ahorro',
     menu_proyectos:'Proyectos', menu_proyectos_sub:'Uno por cada idea',
     menu_objetivos:'Objetivos', menu_objetivos_sub:'Metas del año',
-    menu_notas:'Notas', menu_notas_sub:'Espacio libre',
     menu_compras:'Compras', menu_compras_sub:'Lista para el mercado',
     menu_turnos:'Turnos', menu_turnos_sub:'Citas y encuentros',
     menu_comidas:'Comidas', menu_comidas_sub:'Menú de la semana',
@@ -349,25 +324,17 @@ const I18N = {
     txt_codigo_instrucciones:'Inventá una palabra o frase. Usá la misma en todos tus dispositivos.',
     ph_codigo_sync:'ej: planner-familia-2026',
     btn_conectar:'Conectar', txt_sync_privacidad:'Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.',
-    tab_chat:'Chat', tab_dump:'Volcar pendientes',
-    ph_chat_msg:'Escribí tu mensaje...', ph_chat_apikey:'Configurá tu API key primero (⚙)',
-    dump_intro:'Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.',
-    ph_dump:'Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta',
-    btn_organizar:'Organizar mis pendientes', btn_organizando:'Organizando…',
-    txt_propuesta:'Propuesta', btn_a_prioridades:'A Prioridades', btn_a_compras:'A Compras',
-    btn_agregar_todo:'Agregar todo a mi planner',
     rich_editing:'Editando:', rich_choose_font:'Elegir fuente', rich_search_sticker:'Buscar o pegar cualquier emoji...',
     rich_color_texto:'Color del texto', rich_resaltador:'Resaltador',
     rich_texto_normal:'Texto normal', rich_quitar_resaltado:'Quitar resaltado',
     rich_fino:'Fino', rich_medio:'Medio', rich_grueso:'Grueso', rich_muy_grueso:'Muy grueso',
     rich_borrar_dibujo:'Borrar dibujo', rich_convertir_texto:'Convertir lo escrito a texto',
     rich_cortar:'Cortar caja', rich_copiar:'Copiar caja', rich_pegar:'Pegar', rich_vaciar:'Vaciar',
-    chat_welcome:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.',
     btn_print:'Imprimir / Exportar PDF',
     lang_toggle:'English',
   },
   en: {
-    tab_inicio:'Home', tab_semana:'Week', tab_habitos:'Habits', tab_asistente:'Assistant', tab_mas:'More',
+    tab_inicio:'Home', tab_semana:'Week', tab_habitos:'Habits', tab_mas:'More',
     title_inicio:'Home', sub_inicio:'A simple space to sort out what matters',
     title_semana:'Week', sub_semana:'Tap a day to open it',
     title_habitos:'Habits', sub_habitos:'Check off each day, no need for perfection',
@@ -376,7 +343,6 @@ const I18N = {
     title_proyectos:'Projects', sub_proyectos:'One for each idea you want to put into action',
     title_notas:'Notes', sub_notas:'Write, draw, or paste whatever you want',
     title_objetivos:'Goals', sub_objetivos:'Choose a few goals, clear and achievable',
-    title_asistente:'Assistant', sub_asistente:'Ask for a hand getting organized',
     title_compras:'Shopping', sub_compras:'What you need to buy',
     title_turnos:'Appointments', sub_turnos:'Appointments, classes and meetings',
     title_comidas:'Meals', sub_comidas:'A simple menu for the week',
@@ -385,7 +351,6 @@ const I18N = {
     menu_finanzas:'Finances', menu_finanzas_sub:'Income, expenses and savings',
     menu_proyectos:'Projects', menu_proyectos_sub:'One for each idea',
     menu_objetivos:'Goals', menu_objetivos_sub:'This year\'s goals',
-    menu_notas:'Notes', menu_notas_sub:'Free space',
     menu_compras:'Shopping', menu_compras_sub:'Grocery list',
     menu_turnos:'Appointments', menu_turnos_sub:'Appointments and meetings',
     menu_comidas:'Meals', menu_comidas_sub:'Weekly menu',
@@ -426,20 +391,12 @@ const I18N = {
     txt_codigo_instrucciones:'Make up a word or phrase. Use the same one on all your devices.',
     ph_codigo_sync:'e.g: family-planner-2026',
     btn_conectar:'Connect', txt_sync_privacidad:'None of this goes through our servers: it\'s saved directly to your own Firebase project, under your own account.',
-    tab_chat:'Chat', tab_dump:'Brain dump',
-    ph_chat_msg:'Type your message...', ph_chat_apikey:'Set up your API key first (⚙)',
-    dump_intro:'Write down everything on your mind, in any order. The assistant splits it into separate items and suggests whether they go to today\'s Priorities or the Shopping list. You can adjust everything before saving.',
-    ph_dump:'E.g: call the accountant, buy tomatoes and bread, water the garden, reply to client email',
-    btn_organizar:'Organize my to-dos', btn_organizando:'Organizing…',
-    txt_propuesta:'Proposal', btn_a_prioridades:'To Priorities', btn_a_compras:'To Shopping',
-    btn_agregar_todo:'Add everything to my planner',
     rich_editing:'Editing:', rich_choose_font:'Choose font', rich_search_sticker:'Search or paste any emoji...',
     rich_color_texto:'Text color', rich_resaltador:'Highlighter',
     rich_texto_normal:'Normal text', rich_quitar_resaltado:'Remove highlight',
     rich_fino:'Thin', rich_medio:'Medium', rich_grueso:'Thick', rich_muy_grueso:'Extra thick',
     rich_borrar_dibujo:'Clear drawing', rich_convertir_texto:'Convert handwriting to text',
     rich_cortar:'Cut box', rich_copiar:'Copy box', rich_pegar:'Paste', rich_vaciar:'Clear',
-    chat_welcome:'Hi! I\'m your planner assistant. Tell me what\'s going on and I\'ll help you get organized.',
     btn_print:'Print / Export PDF',
     lang_toggle:'Español',
   }
@@ -452,27 +409,22 @@ function t(key){
 function dayLabel(dia){ return t('dia_'+(DIA_SLUGS[dia]||'')); }
 
 
-/* Poné true para volver a mostrar la pestaña del Asistente (chat con Gemini). */
-const MOSTRAR_ASISTENTE = false;
 
 /* ---------- estado ---------- */
 let state = {
-  tab: 'portada',            // portada | inicio | semana | habitos | asistente | mas
+  tab: 'portada',            // portada | inicio | semana | habitos | mas
   masScreen: null,          // finanzas | proyectos | notas | objetivos
   inicio: DB.get('inicio', { hoy:'', prioridades:[{id:uid(),text:'',done:false}], recordatorios:'' }),
   semana: DB.get('semana', { enfoque:'', dias:{} }),
   habitos: DB.get('habitos', { lista:[{id:uid(),nombre:'',marcas:{}}] }),
   finanzas: DB.get('finanzas', { ingresos:'', gastos:'', ahorro:'', movimientos:[], recordar:[{id:uid(),text:'',done:false}] }),
   proyectos: DB.get('proyectos', { lista:[] }),
-  objetivos: DB.get('objetivos', {
-    personal:{meta:'',paso:'',fecha:''}, trabajo:{meta:'',paso:'',fecha:''},
-    bienestar:{meta:'',paso:'',fecha:''}, dinero:{meta:'',paso:'',fecha:''}
-  }),
+  objetivos: DB.get('objetivos', { lista: [] }),   // migrarObjetivosALista() siembra las 4 originales
+  /* Cada nota es una ficha con título y fecha; el contenido va aparte, en rich_nota_<id>. */
+  notas: DB.get('notas', { lista:[] }),
   compras: DB.get('compras', { lista:[{id:uid(),text:'',done:false}] }),
   turnos: DB.get('turnos', { lista:[] }),
   comidas: DB.get('comidas', { dias:{} }),
-  chat: [],
-  apiKey: DB.get('apiKey', ''),
   syncConfig: DB.get('syncConfig', null),
   syncStatus: '',
   boards: {},
@@ -493,9 +445,9 @@ const ICONS = {
   grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
   x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-  send:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
   gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   chevron:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>',
   cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
   clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
   plate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg>',
@@ -529,7 +481,6 @@ const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Doming
 /* ---------- utilidades de render ---------- */
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-function chkSvg(done){ return done ? ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>','').replace('stroke="currentColor"','stroke="white"') : ''; }
 
 /* ---------- render principal ---------- */
 function renderLangToggle(extraClass){
@@ -552,13 +503,12 @@ function render(){
     proyectos:[t('title_proyectos'), t('sub_proyectos')],
     notas:[t('title_notas'), t('sub_notas')],
     objetivos:[t('title_objetivos'), t('sub_objetivos')],
-    asistente:[t('title_asistente'), t('sub_asistente')],
     compras:[t('title_compras'), t('sub_compras')],
     turnos:[t('title_turnos'), t('sub_turnos')],
     comidas:[t('title_comidas'), t('sub_comidas')],
     sync:[t('title_sync'), t('sub_sync')],
+    buscar:['Buscar', 'Encontrá cualquier cosa que hayas escrito'],
   };
-  if (!MOSTRAR_ASISTENTE && state.tab === 'asistente') state.tab = 'inicio';
   let screenKey = state.tab === 'mas' && state.masScreen ? state.masScreen : state.tab;
 
   if (screenKey === 'portada'){
@@ -574,10 +524,7 @@ function render(){
 
   let contentHtml = '';
   let headerHtml = '';
-  if (screenKey === 'asistente'){
-    headerHtml = '';
-    contentHtml = renderAsistente();
-  } else {
+  {
     const langBtn = screenKey==='inicio' ? renderLangToggle() : '';
     const printBtn = (screenKey!=='mas' && screenKey!=='sync') ? `<button class="printbtn" onclick="App.printSection('${screenKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
     headerHtml = `<header class="top">${backRow}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">${printBtn}${langBtn}</div></div><div class="rule"></div></header>`;
@@ -593,6 +540,7 @@ function render(){
     else if (screenKey==='comidas') contentHtml = renderComidas();
     else if (screenKey==='sync') contentHtml = renderSync();
     else if (screenKey==='notas') contentHtml = renderNotasRich();
+    else if (screenKey==='buscar') contentHtml = renderBuscar();
   }
 
   app.innerHTML = `
@@ -600,9 +548,6 @@ function render(){
     <main id="main">${contentHtml}</main>
     ${renderTabBar()}
   `;
-  if (screenKey === 'asistente') scrollChatToBottom();
-  if (expandedBoardKey) attachPizarraEvents();
-  if (expandedBoardKey && pzDrawMode) initDrawCanvas();
   if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
@@ -630,9 +575,9 @@ function renderPortada(){
 function renderTabBar(){
   const tabs = [
     ['inicio', ICONS.home, t('tab_inicio')],
+    ['notas', ICONS.note, t('title_notas')],
     ['semana', ICONS.calendar, t('tab_semana')],
     ['habitos', ICONS.check, t('tab_habitos')],
-    ...(MOSTRAR_ASISTENTE ? [['asistente', ICONS.sparkle, t('tab_asistente')]] : []),
     ['mas', ICONS.grid, t('tab_mas')],
   ];
   return `<div class="tabbar">${tabs.map(([id,icon,label])=>`
@@ -780,7 +725,7 @@ function renderSemana(){
           <span>${esc(label.toUpperCase())}</span>
           <span style="display:flex;align-items:center;gap:6px;">
             ${isOpen ? `<span class="fechapick movepick" title="Mover esta nota a otra fecha" onclick="event.stopPropagation()">↪<input type="date" onclick="event.stopPropagation()" onchange="App.moverNota('${isoFecha(fecha)}', this.value)"/></span>` : ''}
-            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${i}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
+            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('dia_${isoFecha(fecha)}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
             <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
           </span>
         </div>
@@ -792,20 +737,80 @@ function renderSemana(){
 }
 
 /* ---------- HÁBITOS ---------- */
+/* Mes que se está mirando en Hábitos. 0 = este mes, -1 = el anterior. */
+let habitosOffset = 0;
+let habitoArrastrado = null;   // índice del hábito que se está arrastrando
+function mesVisible(){
+  const h = new Date();
+  return new Date(h.getFullYear(), h.getMonth() + habitosOffset, 1);
+}
+function rotuloMes(){
+  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
+  const m = mesVisible().toLocaleDateString(loc, { month:'long', year:'numeric' });
+  return m.charAt(0).toUpperCase() + m.slice(1);
+}
+
+/* Antes las marcas se guardaban por número de día suelto (1..31), sin mes: al cambiar de
+   mes aparecían tildados los días del mes anterior y al tocarlos se sobrescribían.
+   Ahora la clave es la fecha completa. Esto traslada lo viejo al mes en curso, una sola vez. */
+function migrarHabitosAMeses(){
+  if (DB.get('habitosPorFechas', false)) return;
+  const h = new Date(), y = h.getFullYear(), m = h.getMonth();
+  (state.habitos.lista || []).forEach(hab => {
+    const nuevas = {};
+    Object.keys(hab.marcas || {}).forEach(k => {
+      if (/^\d{1,2}$/.test(k)){
+        if (hab.marcas[k]) nuevas[isoFecha(new Date(y, m, Number(k)))] = true;
+      } else {
+        nuevas[k] = hab.marcas[k];
+      }
+    });
+    hab.marcas = nuevas;
+  });
+  DB.set('habitos', state.habitos);
+  DB.set('habitosPorFechas', true);
+}
+
 function renderHabitos(){
-  const dias31 = Array.from({length:31},(_,i)=>i+1);
+  migrarHabitosAMeses();
+  const base = mesVisible();
+  const y = base.getFullYear(), m = base.getMonth();
+  const cantidad = new Date(y, m+1, 0).getDate();       // días que tiene ese mes
+  const dias = Array.from({length:cantidad}, (_,i) => new Date(y, m, i+1));
+  const hoyIso = isoFecha(new Date());
   return `
-    ${state.habitos.lista.map(h=>`
-      <div class="card">
+    <div class="semana-nav">
+      <button class="semnavbtn" onclick="App.moverMes(-1)" title="Mes anterior">‹</button>
+      <div class="semana-nav-mid">
+        <b>${esc(rotuloMes())}</b>
+        ${habitosOffset !== 0 ? `<button class="semhoybtn" onclick="App.mesHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
+      </div>
+      <button class="semnavbtn" onclick="App.moverMes(1)" title="Mes siguiente">›</button>
+    </div>
+    ${state.habitos.lista.length > 1 ? `<p style="font-size:11.5px;color:var(--sub);text-align:center;margin:-4px 0 12px;">
+      El número es la prioridad. Movelos con las flechitas o arrastrándolos.
+    </p>` : ''}
+    ${state.habitos.lista.map((h,i)=>`
+      <div class="card habitcard" draggable="true"
+           ondragstart="App.habitoDragStart(event,${i})"
+           ondragover="App.habitoDragOver(event)"
+           ondragleave="this.classList.remove('sobre')"
+           ondrop="App.habitoDrop(event,${i})"
+           ondragend="App.habitoDragEnd(event)">
         <div class="card-b" style="padding-bottom:8px;">
-          <div class="row">
+          <div class="row" style="align-items:center;">
+            <span class="habitnum" title="Prioridad">${i+1}</span>
             <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="${esc(t('ph_nombre_habito'))}" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
+            <span class="habitmover">
+              <button title="Subir" onclick="App.moverHabito(${i},-1)" ${i===0?'disabled':''}>⬆️</button>
+              <button title="Bajar" onclick="App.moverHabito(${i},1)" ${i===state.habitos.lista.length-1?'disabled':''}>⬇️</button>
+            </span>
             <button class="xbtn" onclick="App.removeItem('habitos','lista','${h.id}')">${ICONS.x}</button>
           </div>
         </div>
         <div class="card-b" style="padding-top:0;">
           <div class="habit-days">
-            ${dias31.map(n=>`<button class="habit-day ${h.marcas[n]?'on':''}" onclick="App.toggleHabitDay('${h.id}',${n})">${n}</button>`).join('')}
+            ${dias.map(f=>{ const iso = isoFecha(f); return `<button class="habit-day ${h.marcas[iso]?'on':''} ${iso===hoyIso?'esHoy':''}" onclick="App.toggleHabitDay('${h.id}','${iso}')">${f.getDate()}</button>`; }).join('')}
           </div>
         </div>
       </div>
@@ -820,13 +825,13 @@ function renderMas(){
     ['finanzas','menu_finanzas','menu_finanzas_sub'],
     ['proyectos','menu_proyectos','menu_proyectos_sub'],
     ['objetivos','menu_objetivos','menu_objetivos_sub'],
-    ['notas','menu_notas','menu_notas_sub'],
     ['compras','menu_compras','menu_compras_sub'],
     ['turnos','menu_turnos','menu_turnos_sub'],
     ['comidas','menu_comidas','menu_comidas_sub'],
     ['sync','menu_sync','menu_sync_sub'],
   ];
-  return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
+  const buscarBtn = `<button class="dashedbtn" style="margin:0 0 14px;" onclick="App.goto('mas','buscar')">🔎 Buscar en todo el planner</button>`;
+  return `${buscarBtn}<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
     <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
   `).join('')}</div>
   <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>
@@ -884,11 +889,16 @@ function renderProyectos(){
   const lista = state.proyectos.lista;
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${lista.map((p)=>`
+    ${lista.map((p,i)=>`
       <div class="card">
         <div class="card-b">
           <div class="row">
+            <span class="habitnum" title="Orden">${i+1}</span>
             <input type="text" style="font-weight:700;font-size:15px;" placeholder="${esc(t('ph_nombre_proyecto'))}" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
+            <span class="ordbtns">
+              <button title="Subir" onclick="App.moverEnLista('proyectos','lista','${p.id}',-1)" ${i===0?'disabled':''}>⬆️</button>
+              <button title="Bajar" onclick="App.moverEnLista('proyectos','lista','${p.id}',1)" ${i===lista.length-1?'disabled':''}>⬇️</button>
+            </span>
             <button class="xbtn" onclick="App.removeItem('proyectos','lista','${p.id}')">${ICONS.x}</button>
           </div>
           <input type="text" placeholder="${esc(t('ph_fecha_objetivo'))}" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
@@ -906,6 +916,9 @@ function renderProyectos(){
           </div>
         `).join('')}
         <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_paso'))}</button>
+        ${(p.pasos||[]).some(x=>x.done) ? `<button class="limpiarbtn" onclick="App.borrarPasosTildados('${p.id}')">
+          🧹 Borrar los ${(p.pasos||[]).filter(x=>x.done).length} pasos tildados
+        </button>` : ''}
       `)}
       <div class="card">
         <div class="card-h"><span>${esc(t('card_ideas'))}</span></div>
@@ -917,44 +930,200 @@ function renderProyectos(){
 }
 
 /* Notas usa el sistema de texto enriquecido — una sola caja para escribir, dibujar, stickers e imágenes */
+/* Cartelito de "Guardado" que aparece un segundo cuando algo se graba.
+   La app siempre guardó sola, pero no se veía, y daba la sensación de que no lo hacía. */
+let avisoTimer = null;
+function avisoGuardado(){
+  let el = document.getElementById('avisoGuardado');
+  if (!el){
+    el = document.createElement('div');
+    el.id = 'avisoGuardado';
+    el.className = 'avisoguardado';
+    el.textContent = '✓ Guardado';
+    document.body.appendChild(el);
+  }
+  el.classList.add('visible');
+  clearTimeout(avisoTimer);
+  avisoTimer = setTimeout(() => el.classList.remove('visible'), 1400);
+}
+
+/* ---------- NOTAS ---------- */
+let notaAbierta = null;
+let notaArrastrada = null;   // índice de la nota que se está arrastrando
+
+/* Antes las Notas eran un único recuadro sin fin (r_notas): todo se apilaba en la misma
+   hoja, sin título ni fecha, y no había forma de separar una nota de otra ni de borrarlas.
+   Esto convierte lo que ya estaba escrito en la primera nota de la lista, una sola vez. */
+function migrarNotasAFichas(){
+  if (DB.get('notasEnFichas', false)) return;
+  const viejo = DB.get('rich_r_notas', null);
+  if (viejo && (viejo.html || viejo.drawing)){
+    const id = uid();
+    state.notas.lista.push({ id, titulo:'Mis notas', fecha: isoFecha(new Date()) });
+    state.richContent = state.richContent || {};
+    state.richContent['nota_'+id] = viejo;
+    DB.set('rich_nota_'+id, viejo);
+    DB.set('notas', state.notas);
+  }
+  DB.set('notasEnFichas', true);
+}
+
 function renderNotasRich(){
+  migrarNotasAFichas();
+
+  if (notaAbierta){
+    const n = state.notas.lista.find(x => x.id === notaAbierta);
+    if (!n){ notaAbierta = null; return renderNotasRich(); }
+    const key = 'nota_' + n.id;
+    return `
+      <div class="backrow" onclick="App.cerrarNota()">${ICONS.chevron} Todas las notas</div>
+      <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+      <div class="card">
+        <div class="card-b">
+          <input type="text" value="${esc(n.titulo)}" placeholder="Título de la nota"
+            style="font-weight:700;font-size:15px;border-bottom:1px solid var(--mintLine);padding-bottom:7px;"
+            oninput="App.setNotaCampo('${n.id}','titulo',this.value)"/>
+          <div class="row" style="margin-top:10px;align-items:center;">
+            <input type="date" value="${esc(n.fecha||'')}"
+              style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;font-size:13px;"
+              oninput="App.setNotaCampo('${n.id}','fecha',this.value)"/>
+            <button class="xbtn" title="Eliminar nota" onclick="App.borrarNota('${n.id}')">${ICONS.x}</button>
+          </div>
+        </div>
+        ${richBoxOnly(key, n.titulo || 'Nota', 'Texto, imágenes, stickers, dibujo a mano…')}
+      </div>
+      <p style="font-size:11.5px;color:var(--sub);text-align:center;margin-top:6px;">
+        Se guarda solo mientras escribís.
+      </p>
+    `;
+  }
+
+  /* El orden lo manda la posición en la lista, no la fecha: así se pueden acomodar a mano. */
+  const lista = state.notas.lista;
   return `
-    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${richCard(t('title_notas'),'r_notas', state.lang==='en' ? 'Text, images, stickers, hand-drawing...' : 'Texto, imágenes, stickers, dibujo a mano...', '', 'notas')}
+    <button class="dashedbtn" style="margin:0 0 14px;" onclick="App.nuevaNota()">${ICONS.plus} Nota nueva</button>
+    ${lista.length === 0
+      ? `<p style="font-size:13px;color:var(--sub);text-align:center;margin-top:20px;line-height:1.6;">
+           Todavía no tenés notas.<br>Tocá “Nota nueva” para empezar.
+         </p>`
+      : `${lista.length > 1 ? `<p style="font-size:11.5px;color:var(--sub);text-align:center;margin:-6px 0 12px;">
+           Arrastrá los recuadros para reordenarlos, o usá las flechitas.
+         </p>` : ''}
+         <div class="notas-grid">
+         ${lista.map((n, i) => {
+          const txt = soloTexto(getRich('nota_'+n.id).html);
+          const tieneDibujo = !!getRich('nota_'+n.id).drawing;
+          const vista = txt ? txt.slice(0,110) + (txt.length>110?'…':'') : (tieneDibujo ? '(dibujo)' : '(vacía)');
+          return `
+          <div class="card notacard" draggable="true" data-idx="${i}"
+               ondragstart="App.notaDragStart(event,${i})"
+               ondragover="App.notaDragOver(event)"
+               ondragleave="this.classList.remove('sobre')"
+               ondrop="App.notaDrop(event,${i})"
+               ondragend="App.notaDragEnd(event)">
+            <div class="card-b" style="cursor:pointer;" onclick="App.abrirNota('${n.id}')">
+              <div class="row" style="align-items:flex-start;">
+                <div style="flex:1;min-width:0;">
+                  <b style="font-size:14px;color:var(--ink);">${esc(n.titulo || 'Sin título')}</b>
+                  <div style="font-size:11px;color:var(--sub);margin-top:2px;">${esc(n.fecha ? fechaLinda(n.fecha) : 'sin fecha')}</div>
+                  <div style="font-size:12.5px;color:var(--sub);margin-top:6px;line-height:1.5;">${esc(vista)}</div>
+                </div>
+                <button class="xbtn" title="Eliminar" onclick="event.stopPropagation();App.borrarNota('${n.id}')">${ICONS.x}</button>
+              </div>
+            </div>
+            <div class="notamover">
+              <button title="Mover antes" onclick="event.stopPropagation();App.moverNotaOrden(${i},-1)" ${i===0?'disabled':''}>⬅️</button>
+              <span class="notagarra" title="Arrastrar">⠿</span>
+              <button title="Mover después" onclick="event.stopPropagation();App.moverNotaOrden(${i},1)" ${i===lista.length-1?'disabled':''}>➡️</button>
+            </div>
+          </div>`;
+        }).join('')}
+         </div>`}
   `;
 }
 
 /* ---------- OBJETIVOS ---------- */
+/* Objetivos pasó de ser 4 categorías fijas (personal/trabajo/bienestar/dinero) a una lista
+   a la que se le pueden agregar y sacar categorías propias. Las 4 originales quedan con su
+   'clave' para que sigan traduciéndose al cambiar de idioma; las nuevas guardan su nombre. */
+function migrarObjetivosALista(){
+  const actual = state.objetivos || {};
+  /* 'sembrado' marca que las 4 categorías originales ya se crearon. Sin esa marca, una lista
+     vacía se confundiría con "recién instalado" y volverían a aparecer las que borraste. */
+  if (Array.isArray(actual.lista) && actual.sembrado) return;
+  const viejos = actual;
+  const lista = ['personal','trabajo','bienestar','dinero'].map(clave => {
+    const o = viejos[clave] || {};
+    return { id: uid(), clave, nombre:'', meta:o.meta||'', paso:o.paso||'', fecha:o.fecha||'' };
+  });
+  state.objetivos = { lista: (Array.isArray(actual.lista) && actual.lista.length) ? actual.lista : lista, sembrado: true };
+  DB.set('objetivos', state.objetivos);
+}
+function nombreObjetivo(o){ return o.clave ? t('cat_'+o.clave) : (o.nombre || ''); }
+
 function renderObjetivos(){
-  const cats = [['personal','cat_personal',''],['trabajo','cat_trabajo','terracota'],['bienestar','cat_bienestar','terracota'],['dinero','cat_dinero','']];
-  const o = state.objetivos;
-  return cats.map(([key,labelKey,tint])=>
-    cardBox(t(labelKey), `
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_meta'))}</label><input type="text" placeholder="${esc(t('ph_meta'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_primer_paso'))}</label><input type="text" placeholder="${esc(t('ph_primer_paso'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_senal'))}</label><input type="text" value="${esc(o[key].fecha)}" placeholder="${esc(t('ph_senal'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
-    `, tint)
-  ).join('');
+  migrarObjetivosALista();
+  const lista = state.objetivos.lista;
+  return lista.map((o,i)=>
+    cardBox(`${esc(nombreObjetivo(o))}`, `
+      <div class="row" style="margin-bottom:8px;align-items:center;">
+        ${o.clave ? '' : `<input type="text" value="${esc(o.nombre)}" placeholder="Nombre de la categoría" style="font-weight:700;font-size:13px;border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setObjetivo('${o.id}','nombre',this.value)"/>`}
+        <span class="ordbtns" style="margin-left:auto;">
+          <button title="Subir" onclick="App.moverEnLista('objetivos','lista','${o.id}',-1)" ${i===0?'disabled':''}>⬆️</button>
+          <button title="Bajar" onclick="App.moverEnLista('objetivos','lista','${o.id}',1)" ${i===lista.length-1?'disabled':''}>⬇️</button>
+        </span>
+        <button class="xbtn" title="Eliminar categoría" onclick="App.borrarObjetivo('${o.id}')">${ICONS.x}</button>
+      </div>
+      `+`
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_meta'))}</label><input type="text" placeholder="${esc(t('ph_meta'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o.meta)}" oninput="App.setObjetivo('${o.id}','meta',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_primer_paso'))}</label><input type="text" placeholder="${esc(t('ph_primer_paso'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o.paso)}" oninput="App.setObjetivo('${o.id}','paso',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_senal'))}</label><input type="text" value="${esc(o.fecha)}" placeholder="${esc(t('ph_senal'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setObjetivo('${o.id}','fecha',this.value)"/></div>
+    `, (i % 2 === 1) ? 'terracota' : '')
+  ).join('') + `
+    <button class="dashedbtn" onclick="App.agregarObjetivo()">${ICONS.plus} Agregar una categoría</button>`;
 }
 
 /* ---------- COMPRAS ---------- */
 function renderCompras(){
   const c = state.compras;
   return cardBox(t('card_lista_compras'), `
-    ${c.lista.map(item=>`
+    ${c.lista.map((item,i)=>`
       <div class="row">
         <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
         <input type="text" value="${esc(item.text)}" placeholder="${esc(t('ph_compra'))}" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
+        <span class="ordbtns">
+          <button title="Subir" onclick="App.moverEnLista('compras','lista','${item.id}',-1)" ${i===0?'disabled':''}>⬆️</button>
+          <button title="Bajar" onclick="App.moverEnLista('compras','lista','${item.id}',1)" ${i===c.lista.length-1?'disabled':''}>⬇️</button>
+        </span>
         <button class="xbtn" onclick="App.removeItem('compras','lista','${item.id}')">${ICONS.x}</button>
       </div>
     `).join('')}
     <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar'))}</button>
+    ${c.lista.some(x=>x.done) ? `<button class="limpiarbtn" onclick="App.borrarTildados('compras','lista')">
+      🧹 Borrar los ${c.lista.filter(x=>x.done).length} tildados
+    </button>` : ''}
   `, 'terracota');
 }
 
 /* ---------- TURNOS ---------- */
+let verVencidos = false;   // si se muestran los turnos que ya pasaron
 function renderTurnos(){
-  const turnosList = state.turnos.lista;
+  /* Antes salían en el orden en que se habían cargado: el turno de pasado mañana podía
+     quedar debajo de uno de dentro de dos meses. Ahora van por fecha y hora, y los que
+     ya pasaron se van al final en vez de estorbar arriba. */
+  const ahora = isoFecha(new Date());
+  const vencidos = state.turnos.lista.filter(x => x.fecha && x.fecha < ahora);
+  const vigentes = state.turnos.lista.filter(x => !(x.fecha && x.fecha < ahora));
+  /* Los vencidos quedan plegados: siguen guardados, pero no estorban arriba de la lista. */
+  const visibles = verVencidos ? state.turnos.lista : vigentes;
+  const turnosList = visibles.slice().sort((a,b) => {
+    const fa = (a.fecha||'9999-99-99') + ' ' + (a.hora||'99:99');
+    const fb = (b.fecha||'9999-99-99') + ' ' + (b.hora||'99:99');
+    const pa = (a.fecha && a.fecha < ahora) ? 1 : 0;
+    const pb = (b.fecha && b.fecha < ahora) ? 1 : 0;
+    if (pa !== pb) return pa - pb;
+    return fa.localeCompare(fb);
+  });
   const notifOn = ('Notification' in window) && Notification.permission === 'granted';
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
@@ -963,11 +1132,20 @@ function renderTurnos(){
         ${ICONS.bell} ${esc(t('btn_activar_recordatorios'))}
       </button>
     ` : ''}
+    ${vencidos.length ? `
+      <button class="limpiarbtn" style="margin-top:0;margin-bottom:12px;" onclick="App.toggleVencidos()">
+        ${verVencidos ? '▾' : '▸'} ${vencidos.length} turno${vencidos.length===1?'':'s'} que ya ${vencidos.length===1?'pasó':'pasaron'}
+      </button>
+      ${verVencidos ? `<button class="limpiarbtn" style="margin-top:0;margin-bottom:12px;" onclick="App.borrarVencidos()">
+        🧹 Borrar los ${vencidos.length} vencidos
+      </button>` : ''}
+    ` : ''}
     ${turnosList.map((item)=>{
       const key = 'turno_'+item.id;
       migrateDayTextToRich(key, item.notas);
+      const pasado = item.fecha && item.fecha < ahora;
       return `
-      <div class="card">
+      <div class="card" style="${pasado?'opacity:.55;':''}">
         <div class="card-b">
           <div class="row">
             <input type="text" style="font-weight:700;font-size:14px;" placeholder="${esc(t('ph_turno_titulo'))}" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
@@ -987,21 +1165,199 @@ function renderTurnos(){
 }
 
 /* ---------- COMIDAS ---------- */
+/* Semana que se está mirando en Comidas (independiente de la de la pantalla Semana). */
+let comidasOffset = 0;
+function semanaComidas(){
+  const l = lunesDe(new Date());
+  l.setDate(l.getDate() + comidasOffset*7);
+  return Array.from({length:7}, (_,i) => { const d = new Date(l); d.setDate(l.getDate()+i); return d; });
+}
+function rotuloComidas(){
+  const ds = semanaComidas(), a = ds[0], b = ds[6];
+  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
+  const mes = d => d.toLocaleDateString(loc, { month:'short' }).replace('.','');
+  return a.getMonth() === b.getMonth()
+    ? `${a.getDate()} – ${b.getDate()} ${mes(b)}`
+    : `${a.getDate()} ${mes(a)} – ${b.getDate()} ${mes(b)}`;
+}
+
+/* Igual que pasaba con la Semana: los menús se guardaban por nombre de día fijo
+   (comida_lunes, comida_martes…) y se pisaban todas las semanas. Ahora van por fecha.
+   Esto traslada lo que ya estaba escrito a la semana en curso, una sola vez. */
+function migrarComidasAFechas(){
+  if (DB.get('comidasPorFechas', false)) return;
+  const l = lunesDe(new Date());
+  DIAS.forEach((dia, i) => {
+    const viejo = DB.get('rich_comida_' + DIA_SLUGS[dia], null);
+    if (!viejo || (!viejo.html && !viejo.drawing)) return;
+    const f = new Date(l); f.setDate(l.getDate()+i);
+    const nuevaClave = 'comida_' + isoFecha(f);
+    if (DB.get('rich_' + nuevaClave, null)) return;   // ya hay algo ahí: no lo tocamos
+    if (!state.richContent) state.richContent = {};
+    state.richContent[nuevaClave] = viejo;
+    DB.set('rich_' + nuevaClave, viejo);
+  });
+  DB.set('comidasPorFechas', true);
+}
+
 function renderComidas(){
-  const d = state.comidas.dias;
+  migrarComidasAFechas();
+  const ds = semanaComidas();
+  const hoy = isoFecha(new Date());
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${DIAS.map((dia)=>{
-      const key = 'comida_'+DIA_SLUGS[dia];
-      migrateDayTextToRich(key, d[dia]);
-      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota' : '';
-      const label = dayLabel(dia);
+    <div class="semana-nav">
+      <button class="semnavbtn" onclick="App.moverComidas(-1)" title="Semana anterior">‹</button>
+      <div class="semana-nav-mid">
+        <b>${esc(rotuloComidas())}</b>
+        ${comidasOffset !== 0 ? `<button class="semhoybtn" onclick="App.comidasHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
+      </div>
+      <button class="semnavbtn" onclick="App.moverComidas(1)" title="Semana siguiente">›</button>
+    </div>
+    <div class="semana-grid">
+    ${ds.map((fecha)=>{
+      const key = 'comida_' + isoFecha(fecha);
+      const tint = (fecha.getDay()===0 || fecha.getDay()===6) ? 'terracota' : '';
+      const esHoy = isoFecha(fecha) === hoy;
+      const label = rotuloDia(fecha);
       return `
-      <div class="card ${tint}">
+      <div class="card ${tint} ${esHoy?'dia-hoy':''}">
         <div class="card-h"><span>${esc(label.toUpperCase())}</span></div>
         ${richBoxOnly(key, label, t('ph_comida'))}
       </div>`;
     }).join('')}
+    </div>
+  `;
+}
+
+/* ---------- BUSCAR ---------- */
+let buscarTexto = '';
+
+/* Convierte el HTML de una nota en texto plano, para poder buscar adentro
+   sin que las etiquetas ensucien el resultado. */
+function soloTexto(html){
+  const d = document.createElement('div');
+  d.innerHTML = html || '';
+  return (d.textContent || '').replace(/\s+/g, ' ').trim();
+}
+function sinTildes(x){
+  return (x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+function fechaLinda(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  if (!y) return iso;
+  const f = new Date(y, m-1, d);
+  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
+  const dia = DIAS[(f.getDay()+6) % 7];
+  const mes = f.toLocaleDateString(loc, { month:'short' }).replace('.','');
+  return dayLabel(dia) + ' ' + d + ' ' + mes + ' ' + y;
+}
+
+/* Devuelve, para cada clave guardada, dónde vive y cómo se llama, para poder
+   mostrar el resultado y llevar a la persona hasta ahí. */
+function ubicacionDe(clave){
+  if (clave.indexOf('semana_') === 0){
+    const iso = clave.slice(7);
+    return { zona:'Semana', titulo: fechaLinda(iso), ir: `App.buscarIrASemana('${iso}')` };
+  }
+  if (clave.indexOf('comida_') === 0){
+    const iso = clave.slice(7);
+    return { zona:'Comidas', titulo: fechaLinda(iso), ir: `App.buscarIrAComidas('${iso}')` };
+  }
+  if (clave.indexOf('turno_') === 0){
+    const id = clave.slice(6);
+    const it = (state.turnos.lista || []).find(x => x.id === id);
+    return { zona:'Turnos', titulo: (it && it.titulo) || 'Turno', ir: `App.goto('mas','turnos')` };
+  }
+  if (clave.indexOf('r_inicio_') === 0) return { zona:'Inicio', titulo:'Notas de hoy', ir:`App.goto('inicio')` };
+  if (clave.indexOf('nota_') === 0){
+    const id = clave.slice(5);
+    const n = (state.notas.lista || []).find(x => x.id === id);
+    if (n) return { zona:'Notas', titulo: (n.titulo || 'Sin título'), ir:`App.abrirNotaDesdeBuscar('${id}')` };
+  }
+  if (clave.indexOf('notas') === 0 || clave.indexOf('r_notas') === 0)
+    return { zona:'Notas', titulo:'Notas', ir:`App.goto('mas','notas')` };
+  if (clave.indexOf('proyecto_') === 0) return { zona:'Proyectos', titulo:'Proyecto', ir:`App.goto('mas','proyectos')` };
+  return { zona:'Otros', titulo: clave, ir:`App.goto('mas', null)` };
+}
+
+function buscarResultados(q){
+  const aguja = sinTildes(q);
+  if (aguja.length < 2) return [];
+  const out = [];
+
+  /* 1) notas con formato (días, comidas, turnos, notas sueltas) */
+  const vistas = {};
+  const revisar = (clave, obj) => {
+    if (!obj || vistas[clave]) return;
+    vistas[clave] = true;
+    const txt = soloTexto(obj.html);
+    if (!txt) return;
+    const pos = sinTildes(txt).indexOf(aguja);
+    if (pos === -1) return;
+    const desde = Math.max(0, pos - 40);
+    const frag = (desde > 0 ? '…' : '') + txt.slice(desde, pos + q.length + 90) + (txt.length > pos + q.length + 90 ? '…' : '');
+    out.push(Object.assign({ fragmento: frag }, ubicacionDe(clave)));
+  };
+  Object.keys(state.richContent || {}).forEach(k => revisar(k, state.richContent[k]));
+  try{
+    for (let i = 0; i < localStorage.length; i++){
+      const lk = localStorage.key(i);
+      if (lk && lk.indexOf('planner:rich_') === 0){
+        const clave = lk.slice(13);
+        if (!vistas[clave]) revisar(clave, DB.get('rich_' + clave, null));
+      }
+    }
+  }catch(e){}
+
+  /* 2) campos de texto sueltos de las otras secciones */
+  const sueltos = [
+    ['Inicio', 'Hoy', state.inicio.hoy, `App.goto('inicio')`],
+    ['Inicio', 'Recordatorios', state.inicio.recordatorios, `App.goto('inicio')`],
+  ];
+  (state.inicio.prioridades || []).forEach(p => sueltos.push(['Inicio','Prioridad',p.text,`App.goto('inicio')`]));
+  (state.compras.lista || []).forEach(c => sueltos.push(['Compras','Lista',c.text,`App.goto('mas','compras')`]));
+  (state.habitos.lista || []).forEach(h => sueltos.push(['Hábitos','Hábito',h.nombre,`App.goto('habitos')`]));
+  (state.proyectos.lista || []).forEach(p => sueltos.push(['Proyectos', p.nombre||'Proyecto', p.nombre, `App.goto('mas','proyectos')`]));
+  (state.turnos.lista || []).forEach(x => sueltos.push(['Turnos', x.titulo||'Turno', x.titulo, `App.goto('mas','turnos')`]));
+  Object.keys(state.semana.enfoques || {}).forEach(k =>
+    sueltos.push(['Semana', 'Enfoque · ' + fechaLinda(k), state.semana.enfoques[k], `App.buscarIrASemana('${k}')`]));
+  ((state.objetivos && state.objetivos.lista) || []).forEach(o => {
+    sueltos.push(['Objetivos', nombreObjetivo(o) || 'Categoría', [o.meta, o.paso].filter(Boolean).join(' · '), `App.goto('mas','objetivos')`]);
+  });
+
+  sueltos.forEach(([zona, titulo, texto, ir]) => {
+    if (!texto) return;
+    if (sinTildes(texto).indexOf(aguja) === -1) return;
+    out.push({ zona, titulo, fragmento: texto.slice(0, 140), ir });
+  });
+
+  return out;
+}
+
+function renderBuscar(){
+  const res = buscarResultados(buscarTexto);
+  const corta = buscarTexto.trim().length < 2;
+  return `
+    <div class="card">
+      <div class="card-b">
+        <input type="text" id="buscarInput" value="${esc(buscarTexto)}" placeholder="Escribí una palabra…"
+          style="font-size:15px;border-bottom:1px solid var(--mintLine);padding-bottom:8px;"
+          oninput="App.setBuscar(this.value)"/>
+      </div>
+    </div>
+    ${corta
+      ? `<p style="font-size:12.5px;color:var(--sub);text-align:center;margin-top:18px;line-height:1.6;">
+           Buscá en los días, las comidas, los turnos, las notas y las listas.<br>Escribí al menos dos letras.
+         </p>`
+      : res.length === 0
+        ? `<p style="font-size:13px;color:var(--sub);text-align:center;margin-top:18px;">Sin resultados para “${esc(buscarTexto)}”.</p>`
+        : `<p style="font-size:12px;color:var(--sub);margin:2px 0 10px;">${res.length} resultado${res.length===1?'':'s'}</p>
+           ${res.map(r => `
+             <button class="resultado" onclick="${r.ir}">
+               <span class="res-zona">${esc(r.zona)} · ${esc(r.titulo)}</span>
+               <span class="res-frag">${esc(r.fragmento)}</span>
+             </button>`).join('')}`}
   `;
 }
 
@@ -1053,24 +1409,10 @@ function renderSync(){
 }
 
 /* ---------- PIZARRA / LIENZO REUTILIZABLE ---------- */
-const STICKERS = ['🌿','🌱','🍅','🌻','☀️','🧺','📌','✨','💚','🍋','🪴','📷','🌼','🍄','💧','🐝',
-  '📝','✅','⭐','❤️','🔥','☕','🍞','🥕','🥬','🐞','🦋','🌈','🎯','📅','⏰','🎁',
-  '💰','📚','🧡','💛','💙','🧸','🐐','🐓','🍯','🌾','🚜','🏡','🪣','🌤️','🌙','✏️'];
-const PZ_COLORS = ['#2F5D50','#D98F75','#79B553','#3B4A9C','#000000','#FFFFFF'];
-const FONT_FAMILIES = ["'Inter',sans-serif", "'Lora',serif", "'Georgia',serif", "'Courier New',monospace", "'Comic Sans MS',cursive", "'Trebuchet MS',sans-serif"];
-let pzDrawMode = false, pzDrawColor = '#2F5D50', pzDrawSize = 6, pzErasing = false;
-let pzSelected = null, pzStickerOpen = false, pzJustAddedText = false, pzEditingTextId = null;
-let pzCurrentBoard = 'pizarra';
-let expandedBoardKey = null;
-
-let expandedSlot = null;
-function toggleBoard(boardKey, slotKey){
-  slotKey = slotKey || boardKey;
-  if (expandedSlot === slotKey){ expandedBoardKey = null; expandedSlot = null; }
-  else { expandedBoardKey = boardKey; expandedSlot = slotKey; }
-  pzSelected = null; pzDrawMode = false; pzStickerOpen = false; pzEditingTextId = null;
-  render();
-}
+/* El sistema de Pizarra/tableros (lienzo con stickers arrastrables) fue reemplazado por el
+   de texto enriquecido que usan hoy todas las cajas. Quedaba entero en el archivo pero sin
+   ninguna forma de llegar a él desde la app: se sacó por completo.
+   Lo único que se conserva de ese bloque es cardBox, que sí usa media aplicación. */
 /* Caja de tarjeta simple (sin lienzo/pizarra — ese sistema fue reemplazado por el de texto enriquecido) */
 function cardBox(title, content, tint, bodyClass, printKey){
   const cls = 'card-b' + (bodyClass ? ' '+bodyClass : '');
@@ -1082,507 +1424,6 @@ function cardBox(title, content, tint, bodyClass, printKey){
     </div>
   `;
 }
-
-function renderPzPreviewEl(el){
-  const style = `left:${el.x}%;top:${el.y}%;width:${el.w}%;height:${el.h}%;z-index:${el.z};`;
-  if (el.type === 'image') return `<div class="pzel" style="${style}"><img src="${el.src}"/></div>`;
-  if (el.type === 'sticker') return `<div class="pzel" style="${style}"><div class="pztext" style="font-size:${Math.max(10,el.h*1.6)}px;">${el.text}</div></div>`;
-  return `<div class="pzel" style="${style}"><div class="pztext" style="font-size:${Math.max(8,(el.fontSize||14)*0.55)}px;color:${el.color||'#2F5D50'};font-weight:${el.bold?'700':'400'};font-style:${el.italic?'italic':'normal'};text-align:${el.align||'center'};">${esc(el.text)}</div></div>`;
-}
-
-function renderBoard(boardKey, opts){
-  opts = opts || {};
-  pzCurrentBoard = boardKey;
-  const board = getBoard(boardKey);
-  const els = [...board.elementos].sort((a,b)=>a.z-b.z);
-  const sel = pzSelected;
-  return `
-    <div class="pztools">
-      <button class="pztool" onclick="document.getElementById('pzFileInput').click()">${ICONS.image} Imagen</button>
-      <button class="pztool" onclick="Pizarra.toggleStickers()">${ICONS.sticker} Sticker</button>
-      <button class="pztool" onclick="Pizarra.addText()">${ICONS.type} Texto</button>
-      <button class="pztool ${pzDrawMode?'active':''}" onclick="Pizarra.toggleDraw()">${ICONS.pencil} Lápiz</button>
-      ${Pizarra.clipboard ? `<button class="pztool" onclick="Pizarra.paste()">${ICONS.clipboard} Pegar</button>` : ''}
-      <input type="file" id="pzFileInput" accept="image/*" style="display:none" onchange="Pizarra.handleFile(event)"/>
-    </div>
-    ${pzDrawMode ? `
-      <div class="pzdrawtools">
-        ${PZ_COLORS.map(c=>`<button class="pzswatch ${(!pzErasing && pzDrawColor===c)?'active':''}" style="background:${c};${c==='#FFFFFF'?'border-color:var(--mintLine)':''}" onclick="Pizarra.setColor('${c}')"></button>`).join('')}
-        <input type="color" class="pzcolorpicker" value="${pzDrawColor}" oninput="Pizarra.setColor(this.value)" title="Cualquier color"/>
-        <input type="range" min="2" max="26" value="${pzDrawSize}" oninput="Pizarra.setSize(this.value)"/>
-        <button class="pztool pzeraser ${pzErasing?'active':''}" onclick="Pizarra.toggleEraser()">${ICONS.eraser}</button>
-        <button class="pztool" onclick="Pizarra.clearDrawing()">Limpiar</button>
-      </div>
-      <div class="pzdrawtools" style="padding-top:0;">
-        <button class="pztool pzrecognize" onclick="Pizarra.recognizeHandwriting()">${ICONS.sparkle} Convertir a texto</button>
-        <button class="pztool" onclick="Pizarra.exitDraw()">Listo</button>
-      </div>
-    ` : ''}
-    <div class="pzcanvas-wrap" style="position:relative;">
-      ${pzStickerOpen ? `
-        <div class="stickerpop">
-          <div class="stickerpop-grid">
-            ${STICKERS.map(s=>`<button onclick="Pizarra.addSticker('${s}')">${s}</button>`).join('')}
-          </div>
-          <div class="stickerpop-custom">
-            <input type="text" id="customEmojiInput" placeholder="Pegá cualquier emoji del teclado" maxlength="8"/>
-            <button class="pztool" onclick="Pizarra.addCustomEmoji()">Agregar</button>
-          </div>
-        </div>
-      `:''}
-      <div class="pzcanvas" id="pzCanvas" style="${opts.height?`height:${opts.height};`:''}">
-        ${board.drawing ? `<img class="pzdrawing" src="${board.drawing}"/>` : ''}
-        ${!pzDrawMode ? els.map(el => renderPzEl(el, el.id===sel)).join('') : ''}
-        ${pzDrawMode ? `<canvas id="pzDrawCanvas" class="pzdrawcanvas"></canvas>` : ''}
-      </div>
-    </div>
-    ${(sel && !pzDrawMode) ? renderSelectionBar(board, sel) : (!pzDrawMode ? `<p style="padding:0 20px;font-size:11.5px;color:var(--sub);">Tocá un elemento para moverlo. Arrastrá una esquina para el tamaño. El lápiz dibuja libremente sobre la hoja.</p>` : '')}
-  `;
-}
-
-function renderSelectionBar(board, sel){
-  const el = board.elementos.find(e=>e.id===sel);
-  if (!el) return '';
-  if (el.type === 'text' && pzEditingTextId === sel){
-    return `
-      <div class="pzdrawtools">
-        <button class="pztool ${el.bold?'active':''}" onclick="Pizarra.toggleTextStyle('bold')"><b>B</b></button>
-        <button class="pztool ${el.italic?'active':''}" onclick="Pizarra.toggleTextStyle('italic')"><i>I</i></button>
-        <button class="pztool ${el.underline?'active':''}" onclick="Pizarra.toggleTextStyle('underline')"><u>S</u></button>
-        <button class="pztool" onclick="Pizarra.resizeText(-2)">A-</button>
-        <button class="pztool" onclick="Pizarra.resizeText(2)">A+</button>
-      </div>
-      <div class="pzdrawtools" style="flex-wrap:nowrap;overflow-x:auto;">
-        ${FONT_FAMILIES.map((f,fi)=>`<button class="pztool fontbtn ${(el.font||FONT_FAMILIES[0])===f?'active':''}" style="font-family:${f};flex-shrink:0;" onclick="Pizarra.setTextFont(${fi})">Aa</button>`).join('')}
-      </div>
-      <div class="pzdrawtools">
-        <button class="pztool ${(el.align||'center')==='left'?'active':''}" onclick="Pizarra.setTextAlign('left')">${ICONS.alignLeft}</button>
-        <button class="pztool ${(el.align||'center')==='center'?'active':''}" onclick="Pizarra.setTextAlign('center')">${ICONS.alignCenter}</button>
-        <button class="pztool ${(el.align||'center')==='right'?'active':''}" onclick="Pizarra.setTextAlign('right')">${ICONS.alignRight}</button>
-        ${PZ_COLORS.filter(c=>c!=='#FFFFFF').map(c=>`<button class="pzswatch ${el.color===c?'active':''}" style="background:${c}" onclick="Pizarra.setTextColor('${c}')"></button>`).join('')}
-      </div>
-      <div class="pzbar">
-        <button class="pzbarbtn" onclick="Pizarra.stopEditingText()">${ICONS.check}Listo</button>
-      </div>
-    `;
-  }
-  return `
-    <div class="pzbar">
-      <button class="pzbarbtn" onclick="Pizarra.copy()">${ICONS.copy}Copiar</button>
-      <button class="pzbarbtn" onclick="Pizarra.cut()">${ICONS.scissors}Cortar</button>
-      ${el.type==='text' ? `<button class="pzbarbtn" onclick="Pizarra.editText()">${ICONS.pencil}Editar</button>` : ''}
-      <button class="pzbarbtn" onclick="Pizarra.layer(1)">${ICONS.layerUp}Adelante</button>
-      <button class="pzbarbtn" onclick="Pizarra.layer(-1)">${ICONS.layerDown}Atrás</button>
-      <button class="pzbarbtn" onclick="Pizarra.remove()">${ICONS.trash}Eliminar</button>
-      <button class="pzbarbtn" onclick="Pizarra.select(null)">${ICONS.x}Cerrar</button>
-    </div>
-  `;
-}
-
-function renderPzEl(el, isSelected){
-  const style = `left:${el.x}%;top:${el.y}%;width:${el.w}%;height:${el.h}%;z-index:${el.z};`;
-  let inner = '';
-  if (el.type === 'image') inner = `<img src="${el.src}" draggable="false"/>`;
-  else if (el.type === 'sticker') inner = `<div class="pztext" style="font-size:${Math.max(20,el.h*3)}px;">${el.text}</div>`;
-  else if (el.type === 'text') inner = `<div class="pztext" contenteditable="${pzEditingTextId===el.id?'true':'false'}" data-id="${el.id}" style="font-family:${el.font||FONT_FAMILIES[0]};font-size:${el.fontSize||14}px;color:${el.color||'#2F5D50'};font-weight:${el.bold?'700':'400'};font-style:${el.italic?'italic':'normal'};text-decoration:${el.underline?'underline':'none'};text-align:${el.align||'center'};">${esc(el.text)}</div>`;
-  return `
-    <div class="pzel ${isSelected?'selected':''}" data-id="${el.id}" style="${style}">
-      ${inner}
-      ${isSelected ? `
-        <div class="pzhandle nw" data-dir="nw"></div>
-        <div class="pzhandle ne" data-dir="ne"></div>
-        <div class="pzhandle sw" data-dir="sw"></div>
-        <div class="pzhandle se" data-dir="se"></div>
-      ` : ''}
-    </div>
-  `;
-}
-
-const Pizarra = {
-  board(){ return getBoard(pzCurrentBoard); },
-  save(){ DB.set('board_'+pzCurrentBoard, this.board()); },
-  addElement(partial){
-    const b = this.board();
-    const base = { id:uid(), x:30, y:30, w:30, h:20, z:(b.elementos.length+1) };
-    b.elementos.push(Object.assign(base, partial));
-    this.save();
-    pzSelected = base.id;
-    pzStickerOpen = false;
-    render();
-  },
-  toggleStickers(){ pzStickerOpen = !pzStickerOpen; render(); },
-  addSticker(emoji){ this.addElement({ type:'sticker', text:emoji, w:16, h:10 }); },
-  addCustomEmoji(){
-    const input = document.getElementById('customEmojiInput');
-    const val = input ? input.value.trim() : '';
-    if (!val){ if(input) input.focus(); return; }
-    this.addElement({ type:'sticker', text:val, w:16, h:10 });
-  },
-  addText(){ pzJustAddedText = true; this.addElement({ type:'text', text:'Escribí algo', w:40, h:12, fontSize:14, color:'#2F5D50', bold:false, italic:false, underline:false, align:'center' }); },
-  editText(){ pzEditingTextId = pzSelected; render(); },
-  stopEditingText(){
-    const editable = document.querySelector('[contenteditable="true"]');
-    if (editable){
-      const el = this.board().elementos.find(x=>x.id===pzEditingTextId);
-      if (el) el.text = editable.innerText;
-    }
-    pzEditingTextId = null;
-    this.save();
-    render();
-  },
-  _selText(){ return this.board().elementos.find(x=>x.id===pzSelected); },
-  toggleTextStyle(prop){
-    const el = this._selText();
-    if (!el) return;
-    el[prop] = !el[prop];
-    this.save();
-    render();
-  },
-  resizeText(delta){
-    const el = this._selText();
-    if (!el) return;
-    el.fontSize = Math.max(10, Math.min(48, (el.fontSize||14) + delta));
-    this.save();
-    render();
-  },
-  setTextAlign(align){
-    const el = this._selText();
-    if (!el) return;
-    el.align = align;
-    this.save();
-    render();
-  },
-  setTextColor(color){
-    const el = this._selText();
-    if (!el) return;
-    el.color = color;
-    this.save();
-    render();
-  },
-  setTextFont(fontIndex){
-    const el = this._selText();
-    if (!el) return;
-    el.font = FONT_FAMILIES[fontIndex] || FONT_FAMILIES[0];
-    this.save();
-    render();
-  },
-  handleFile(evt){
-    const file = evt.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const img = new Image();
-      img.onload = () => {
-        const maxDim = 700;
-        let w = img.width, h = img.height;
-        if (w > maxDim || h > maxDim){
-          const ratio = Math.min(maxDim/w, maxDim/h);
-          w = Math.round(w*ratio); h = Math.round(h*ratio);
-        }
-        const c = document.createElement('canvas');
-        c.width = w; c.height = h;
-        c.getContext('2d').drawImage(img, 0, 0, w, h);
-        const dataUrl = c.toDataURL('image/jpeg', 0.72);
-        const canvasEl = document.getElementById('pzCanvas');
-        const rect = canvasEl ? canvasEl.getBoundingClientRect() : {width:300,height:300};
-        const wPct = Math.min(60, (w / rect.width) * 100 * 0.6);
-        const hPct = wPct * (h/w) * (rect.width/rect.height);
-        Pizarra.addElement({ type:'image', src:dataUrl, w:wPct||35, h:Math.min(60,hPct)||25 });
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-    evt.target.value = '';
-  },
-  select(id){ pzSelected = id; pzStickerOpen=false; pzEditingTextId=null; render(); },
-  clipboard: null,
-  copy(){
-    const el = this.board().elementos.find(e=>e.id===pzSelected);
-    if (el) this.clipboard = Object.assign({}, el);
-  },
-  cut(){
-    const el = this.board().elementos.find(e=>e.id===pzSelected);
-    if (!el) return;
-    this.clipboard = Object.assign({}, el);
-    this.board().elementos = this.board().elementos.filter(e=>e.id!==pzSelected);
-    pzSelected = null;
-    this.save();
-    render();
-  },
-  paste(){
-    if (!this.clipboard) return;
-    const b = this.board();
-    const copy = Object.assign({}, this.clipboard, { id:uid(), x:Math.min(80,this.clipboard.x+4), y:Math.min(80,this.clipboard.y+4), z:b.elementos.length+1 });
-    b.elementos.push(copy);
-    pzSelected = copy.id;
-    this.save();
-    render();
-  },
-  layer(dir){
-    const el = this.board().elementos.find(e=>e.id===pzSelected);
-    if (!el) return;
-    el.z += dir * 10;
-    this.save();
-    render();
-  },
-  remove(){
-    const b = this.board();
-    b.elementos = b.elementos.filter(e=>e.id!==pzSelected);
-    pzSelected = null;
-    this.save();
-    render();
-  },
-  commit(){ this.save(); render(); },
-
-  /* --- dibujo libre --- */
-  toggleDraw(){
-    pzDrawMode = !pzDrawMode;
-    pzSelected = null;
-    render();
-  },
-  setColor(c){ pzDrawColor = c; pzErasing = false; this._refreshDrawToolbar(); },
-  setSize(v){ pzDrawSize = Number(v); },
-  toggleEraser(){ pzErasing = !pzErasing; this._refreshDrawToolbar(); },
-  _refreshDrawToolbar(){
-    document.querySelectorAll('.pzswatch').forEach((b,i)=>b.classList.toggle('active', !pzErasing && PZ_COLORS[i]===pzDrawColor));
-    const eraserBtn = document.querySelector('.pzeraser');
-    if (eraserBtn) eraserBtn.classList.toggle('active', pzErasing);
-  },
-  clearDrawing(){
-    const canvas = document.getElementById('pzDrawCanvas');
-    if (canvas){ const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); }
-    this.board().drawing = null;
-  },
-  _blankRef(canvas){
-    const blank = document.createElement('canvas');
-    blank.width = canvas.width; blank.height = canvas.height;
-    const bctx = blank.getContext('2d');
-    bctx.fillStyle = '#FFFFFF';
-    bctx.fillRect(0, 0, blank.width, blank.height);
-    return blank;
-  },
-  exitDraw(){
-    const canvas = document.getElementById('pzDrawCanvas');
-    if (canvas){
-      const isBlank = canvas.toDataURL() === this._blankRef(canvas).toDataURL();
-      this.board().drawing = isBlank ? null : canvas.toDataURL('image/png');
-    }
-    this.save();
-    pzDrawMode = false;
-    render();
-  },
-
-  _prepareDrawingForOcr(source){
-    const sctx = source.getContext('2d');
-    if (!sctx) return null;
-    const pixels = sctx.getImageData(0, 0, source.width, source.height);
-    let minX=source.width, minY=source.height, maxX=-1, maxY=-1;
-    for (let y=0; y<source.height; y++){
-      for (let x=0; x<source.width; x++){
-        const a = pixels.data[(y*source.width+x)*4+3];
-        if (a > 20){ if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y; }
-      }
-    }
-    if (maxX < minX || maxY < minY) return null;
-    const margin = 35;
-    minX = Math.max(0, minX-margin); minY = Math.max(0, minY-margin);
-    maxX = Math.min(source.width-1, maxX+margin); maxY = Math.min(source.height-1, maxY+margin);
-    const w = maxX-minX+1, h = maxY-minY+1;
-    const crop = document.createElement('canvas'); crop.width=w; crop.height=h;
-    const cctx = crop.getContext('2d');
-    cctx.fillStyle = '#fff'; cctx.fillRect(0,0,w,h);
-    cctx.drawImage(source, minX, minY, w, h, 0, 0, w, h);
-    const img = cctx.getImageData(0,0,w,h);
-    for (let i=0; i<img.data.length; i+=4){
-      const brightness = (img.data[i]+img.data[i+1]+img.data[i+2])/3;
-      const ink = brightness < 245;
-      img.data[i]=ink?0:255; img.data[i+1]=ink?0:255; img.data[i+2]=ink?0:255; img.data[i+3]=255;
-    }
-    cctx.putImageData(img, 0, 0);
-    const scale = 3;
-    const out = document.createElement('canvas'); out.width=w*scale; out.height=h*scale;
-    const octx = out.getContext('2d');
-    octx.fillStyle='#fff'; octx.fillRect(0,0,out.width,out.height);
-    octx.imageSmoothingEnabled = false;
-    octx.drawImage(crop, 0, 0, out.width, out.height);
-    return out;
-  },
-
-  async recognizeHandwriting(){
-    const canvas = document.getElementById('pzDrawCanvas');
-    if (!canvas) return;
-    const prepared = this._prepareDrawingForOcr(canvas);
-    if (!prepared){
-      alert('Todavía no escribiste nada en la hoja.');
-      return;
-    }
-    const btn = document.querySelector('.pzrecognize');
-    const originalLabel = btn ? btn.innerHTML : '';
-    if (btn) btn.innerHTML = 'Reconociendo…';
-    try{
-      const mod = await import('https://cdn.jsdelivr.net/npm/tesseract.js@6/+esm');
-      const worker = await mod.createWorker('spa');
-      await worker.setParameters({ tessedit_pageseg_mode: mod.PSM.SINGLE_BLOCK });
-      const result = await worker.recognize(prepared.toDataURL('image/png'));
-      await worker.terminate();
-      const text = String(result?.data?.text || '').replace(/\s+/g,' ').trim();
-      if (text){
-        pzDrawMode = false;
-        this.addElement({ type:'text', text, w:55, h:14, fontSize:14, color:'#2F5D50' });
-      } else {
-        alert('No pude reconocer esa escritura. Probá con letras un poco más separadas y claras.');
-      }
-    }catch(e){
-      console.warn('Reconocimiento de escritura: error', e);
-      alert('No se pudo cargar el reconocedor. Revisá tu conexión a internet y probá de nuevo.');
-    } finally {
-      if (btn && document.body.contains(btn)) btn.innerHTML = originalLabel;
-    }
-  }
-};
-
-function initDrawCanvas(){
-  const canvas = document.getElementById('pzDrawCanvas');
-  const wrap = document.getElementById('pzCanvas');
-  if (!canvas || !wrap) return;
-  const rect = wrap.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
-  ctx.fillStyle = '#FFFFFF';
-  ctx.fillRect(0, 0, rect.width, rect.height);
-  const drawingData = Pizarra.board().drawing;
-  if (drawingData){
-    const img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
-    img.src = drawingData;
-  }
-  let drawing = false;
-  const pos = (e) => {
-    const r = canvas.getBoundingClientRect();
-    return { x: e.clientX - r.left, y: e.clientY - r.top };
-  };
-  canvas.addEventListener('pointerdown', (e) => {
-    drawing = true;
-    canvas.setPointerCapture(e.pointerId);
-    const p = pos(e);
-    ctx.beginPath(); ctx.moveTo(p.x, p.y);
-  });
-  canvas.addEventListener('pointermove', (e) => {
-    if (!drawing) return;
-    const p = pos(e);
-    ctx.globalCompositeOperation = pzErasing ? 'destination-out' : 'source-over';
-    ctx.strokeStyle = pzDrawColor;
-    ctx.lineWidth = pzDrawSize;
-    ctx.lineTo(p.x, p.y);
-    ctx.stroke();
-  });
-  const endStroke = () => { drawing = false; };
-  canvas.addEventListener('pointerup', endStroke);
-  canvas.addEventListener('pointerleave', endStroke);
-}
-
-function attachPizarraEvents(){
-  const canvas = document.getElementById('pzCanvas');
-  if (!canvas) return;
-
-  canvas.addEventListener('pointerdown', (e) => {
-    if (e.target === canvas) Pizarra.select(null);
-  });
-
-  canvas.querySelectorAll('.pzel').forEach(elDiv => {
-    const id = elDiv.dataset.id;
-
-    elDiv.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.pzhandle')) return;
-      if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') { e.stopPropagation(); return; }
-      e.stopPropagation();
-      if (pzSelected !== id){ Pizarra.select(id); return; }
-      const el = Pizarra.board().elementos.find(x=>x.id===id);
-      const rect = canvas.getBoundingClientRect();
-      const startX = e.clientX, startY = e.clientY;
-      const startXPct = el.x, startYPct = el.y;
-      let moved = false;
-      elDiv.setPointerCapture(e.pointerId);
-      const onMove = (ev) => {
-        const dx = ((ev.clientX - startX) / rect.width) * 100;
-        const dy = ((ev.clientY - startY) / rect.height) * 100;
-        if (Math.abs(dx)>0.3 || Math.abs(dy)>0.3) moved = true;
-        el.x = Math.max(0, Math.min(100-el.w, startXPct + dx));
-        el.y = Math.max(0, Math.min(100-el.h, startYPct + dy));
-        elDiv.style.left = el.x+'%';
-        elDiv.style.top = el.y+'%';
-      };
-      const onUp = () => {
-        elDiv.removeEventListener('pointermove', onMove);
-        elDiv.removeEventListener('pointerup', onUp);
-        if (moved) Pizarra.commit();
-      };
-      elDiv.addEventListener('pointermove', onMove);
-      elDiv.addEventListener('pointerup', onUp);
-    });
-
-    elDiv.querySelectorAll('.pzhandle').forEach(handle => {
-      handle.addEventListener('pointerdown', (e) => {
-        e.stopPropagation();
-        const dir = handle.dataset.dir;
-        const el = Pizarra.board().elementos.find(x=>x.id===id);
-        const rect = canvas.getBoundingClientRect();
-        const startX = e.clientX, startY = e.clientY;
-        const start = { x:el.x, y:el.y, w:el.w, h:el.h };
-        handle.setPointerCapture(e.pointerId);
-        const onMove = (ev) => {
-          const dx = ((ev.clientX - startX) / rect.width) * 100;
-          const dy = ((ev.clientY - startY) / rect.height) * 100;
-          if (dir.includes('e')) el.w = Math.max(6, Math.min(100-start.x, start.w + dx));
-          if (dir.includes('s')) el.h = Math.max(6, Math.min(100-start.y, start.h + dy));
-          if (dir.includes('w')){ const nw = Math.max(6, start.w - dx); el.x = start.x + (start.w - nw); el.w = nw; }
-          if (dir.includes('n')){ const nh = Math.max(6, start.h - dy); el.y = start.y + (start.h - nh); el.h = nh; }
-          elDiv.style.left = el.x+'%'; elDiv.style.top = el.y+'%';
-          elDiv.style.width = el.w+'%'; elDiv.style.height = el.h+'%';
-        };
-        const onUp = () => {
-          handle.removeEventListener('pointermove', onMove);
-          handle.removeEventListener('pointerup', onUp);
-          Pizarra.commit();
-        };
-        handle.addEventListener('pointermove', onMove);
-        handle.addEventListener('pointerup', onUp);
-      });
-    });
-
-    const editable = elDiv.querySelector('[contenteditable]');
-    if (editable){
-      editable.addEventListener('blur', () => {
-        const savedText = editable.innerText;
-        setTimeout(() => {
-          const el = Pizarra.board().elementos.find(x=>x.id===id);
-          if (el){ el.text = savedText; Pizarra.save(); }
-          if (pzEditingTextId === id) pzEditingTextId = null;
-          render();
-        }, 0);
-      });
-      if (pzJustAddedText && id === pzSelected){
-        pzJustAddedText = false;
-        pzEditingTextId = id;
-        editable.setAttribute('contenteditable','true');
-        setTimeout(() => {
-          editable.focus();
-          const range = document.createRange();
-          range.selectNodeContents(editable);
-          const sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-        }, 0);
-      }
-    }
-  });
-}
-
 
 /* ---------- SISTEMA DE TEXTO ENRIQUECIDO (una sola caja, tocar y escribir) ---------- */
 const RICH_STICKERS_KW = [
@@ -1874,6 +1715,7 @@ const RichText = {
     if (!el) return;
     getRich(key).html = el.innerHTML;
     saveRich(key);
+    avisoGuardado();
   },
   focusActive(){
     /* Si richActive quedó apuntando a una caja que ya no está en pantalla (o nunca se tocó),
@@ -2264,70 +2106,6 @@ function initRichInk(key){
   canvas.dataset.inited = '1';
 }
 
-/* ---------- ASISTENTE ---------- */
-let asisTab = 'chat';
-let dumpResult = null, dumpLoading = false;
-
-function renderAsistente(){
-  return `
-    <div class="chat-wrap">
-      <div class="asis-top">
-        <div><h1 style="font-size:24px;">${esc(t('title_asistente'))}</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">${esc(t('sub_asistente'))}</p></div>
-        <button class="gearbtn" onclick="App.openSettings()">${ICONS.gear}</button>
-      </div>
-      <div class="asistabs">
-        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">${esc(t('tab_chat'))}</button>
-        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">${esc(t('tab_dump'))}</button>
-      </div>
-      ${asisTab==='chat' ? `
-        <div class="chat-msgs" id="chatMsgs">
-          ${(state.chat.length?state.chat:[{role:'bot', text:t('chat_welcome')}]).map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
-        </div>
-        <div class="chat-input">
-          <input type="text" id="chatInput" placeholder="${state.apiKey?esc(t('ph_chat_msg')):esc(t('ph_chat_apikey'))}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
-          <button class="sendbtn" onclick="App.sendChat()">${ICONS.send}</button>
-        </div>
-      ` : renderBrainDump()}
-    </div>
-  `;
-}
-
-function renderBrainDump(){
-  return `
-    <div class="dump-scroll">
-      <div class="card">
-        <div class="card-b" style="display:flex;gap:10px;align-items:flex-start;">
-          <span class="notascard-icon" style="margin:0;flex-shrink:0;">${ICONS.sparkle}</span>
-          <p style="font-size:13px;color:var(--sub);margin:0;">${esc(t('dump_intro'))}</p>
-        </div>
-      </div>
-      <textarea id="dumpInput" rows="6" placeholder="${esc(t('ph_dump'))}" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
-      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${esc(dumpLoading?t('btn_organizando'):t('btn_organizar'))}</button>
-
-      ${dumpResult ? `
-        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">${esc(t('txt_propuesta'))} (${dumpResult.length})</p>
-        ${dumpResult.map((item,i)=>`
-          <div class="card">
-            <div class="card-b">
-              <input type="text" value="${esc(item.text)}" oninput="App.updateDumpItem(${i},this.value)" style="font-weight:600;font-size:14px;"/>
-              <div class="dumpchoices">
-                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">${esc(t('btn_a_prioridades'))}</button>
-                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">${esc(t('btn_a_compras'))}</button>
-                <button class="xbtn" onclick="App.removeDumpItem(${i})">${ICONS.x}</button>
-              </div>
-            </div>
-          </div>
-        `).join('')}
-        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} ${esc(t('btn_agregar_todo'))}</button>
-      ` : ''}
-    </div>
-  `;
-}
-
-function scrollChatToBottom(){
-  const el = document.getElementById('chatMsgs');
-  if (el) el.scrollTop = el.scrollHeight;
-}
 
 /* ---------- lógica ---------- */
 const App = {
@@ -2338,6 +2116,9 @@ const App = {
     render();
   },
   goto(tab, masScreen){
+    /* Si nos vamos de Notas, cerramos la nota abierta: si no, al volver aparecía
+       la nota de adentro en vez de la lista, y parecía que se había perdido el resto. */
+    if (tab !== 'notas' && !(tab === 'mas' && masScreen === 'notas')) notaAbierta = null;
     state.tab = tab;
     state.masScreen = (tab==='mas' && masScreen) ? masScreen : null;
     render();
@@ -2405,7 +2186,10 @@ const App = {
   /* --- copia de seguridad --- */
   /* Claves guardadas que forman parte del planner (excluye configuración y marcas internas). */
   clavesDelPlanner(){
-    const fuera = ['apiKey','syncConfig','migratedToDocs','pendienteSubirTodo'];
+    /* Marcas internas de este dispositivo (claves de migración y preferencias de vista):
+       no son datos del planner, no se exportan ni se suben. */
+    const fuera = ['syncConfig','migratedToDocs','pendienteSubirTodo',
+                   'semanaPorFechas','habitosPorFechas','comidasPorFechas','notasEnFichas','vistaDias'];
     const out = [];
     for (let i=0;i<localStorage.length;i++){
       const k = localStorage.key(i);
@@ -2535,10 +2319,218 @@ const App = {
     state[section][listKey] = state[section][listKey].filter(x=>x.id!==id);
     DB.set(section, state[section]); render();
   },
-  toggleHabitDay(id, n){
+  toggleHabitDay(id, iso){
     const h = state.habitos.lista.find(x=>x.id===id);
-    if (h){ h.marcas[n] = !h.marcas[n]; DB.set('habitos', state.habitos); render(); }
+    if (h){ h.marcas[iso] = !h.marcas[iso]; DB.set('habitos', state.habitos); render(); }
   },
+  moverMes(n){ habitosOffset += n; render(); },
+
+  /* Reordenar hábitos: el orden de la lista es la prioridad que se ve numerada. */
+  /* Reordenar cualquier lista simple (compras, proyectos…) por el id del ítem. */
+  moverEnLista(section, listKey, id, delta){
+    const l = state[section][listKey];
+    const i = l.findIndex(x => x.id === id);
+    const j = i + delta;
+    if (i < 0 || j < 0 || j >= l.length) return;
+    const [it] = l.splice(i, 1);
+    l.splice(j, 0, it);
+    DB.set(section, state[section]);
+    avisoGuardado();
+    render();
+  },
+  /* Saca de una vez todo lo tildado, en vez de ir borrando uno por uno. */
+  borrarTildados(section, listKey){
+    const l = state[section][listKey] || [];
+    const n = l.filter(x => x.done).length;
+    if (!n) return;
+    if (!confirm('¿Borrar ' + n + (n === 1 ? ' ítem tildado?' : ' ítems tildados?') + '\n\nEsto no se puede deshacer.')) return;
+    state[section][listKey] = l.filter(x => !x.done);
+    DB.set(section, state[section]);
+    avisoGuardado();
+    render();
+  },
+  borrarPasosTildados(proyectoId){
+    const p = state.proyectos.lista.find(x => x.id === proyectoId);
+    if (!p || !p.pasos) return;
+    const n = p.pasos.filter(x => x.done).length;
+    if (!n) return;
+    if (!confirm('¿Borrar ' + n + (n === 1 ? ' paso tildado?' : ' pasos tildados?') + '\n\nEsto no se puede deshacer.')) return;
+    p.pasos = p.pasos.filter(x => !x.done);
+    DB.set('proyectos', state.proyectos);
+    avisoGuardado();
+    render();
+  },
+  toggleVencidos(){ verVencidos = !verVencidos; render(); },
+  borrarVencidos(){
+    const hoy = isoFecha(new Date());
+    const n = state.turnos.lista.filter(x => x.fecha && x.fecha < hoy).length;
+    if (!n) return;
+    if (!confirm('¿Borrar ' + n + (n === 1 ? ' turno que ya pasó?' : ' turnos que ya pasaron?') + '\n\nEsto no se puede deshacer.')) return;
+    /* Vaciamos también sus notas para no dejar contenido huérfano ocupando lugar. */
+    state.turnos.lista.filter(x => x.fecha && x.fecha < hoy).forEach(x => {
+      const vacio = { html:'', drawing:null };
+      if (state.richContent) state.richContent['turno_'+x.id] = vacio;
+      DB.set('rich_turno_'+x.id, vacio);
+    });
+    state.turnos.lista = state.turnos.lista.filter(x => !(x.fecha && x.fecha < hoy));
+    DB.set('turnos', state.turnos);
+    avisoGuardado();
+    render();
+  },
+
+  /* --- objetivos --- */
+  setObjetivo(id, campo, valor){
+    const o = state.objetivos.lista.find(x => x.id === id);
+    if (!o) return;
+    o[campo] = valor;
+    DB.set('objetivos', state.objetivos);
+    avisoGuardado();
+  },
+  agregarObjetivo(){
+    state.objetivos.lista.push({ id: uid(), clave: null, nombre:'', meta:'', paso:'', fecha:'' });
+    DB.set('objetivos', state.objetivos);
+    render();
+  },
+  borrarObjetivo(id){
+    const o = state.objetivos.lista.find(x => x.id === id);
+    if (!o) return;
+    if (!confirm('¿Eliminar la categoría “' + (nombreObjetivo(o) || 'sin nombre') + '”?\n\nSe pierde lo que hayas escrito adentro.')) return;
+    state.objetivos.lista = state.objetivos.lista.filter(x => x.id !== id);
+    DB.set('objetivos', state.objetivos);
+    avisoGuardado();
+    render();
+  },
+  moverHabito(i, delta){
+    const j = i + delta, l = state.habitos.lista;
+    if (j < 0 || j >= l.length) return;
+    const [h] = l.splice(i, 1);
+    l.splice(j, 0, h);
+    DB.set('habitos', state.habitos);
+    avisoGuardado();
+    render();
+  },
+  habitoDragStart(ev, i){
+    habitoArrastrado = i;
+    ev.dataTransfer.effectAllowed = 'move';
+    try{ ev.dataTransfer.setData('text/plain', String(i)); }catch(e){}
+    ev.currentTarget.classList.add('arrastrando');
+  },
+  habitoDragOver(ev){
+    if (habitoArrastrado === null) return;
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = 'move';
+    ev.currentTarget.classList.add('sobre');
+  },
+  habitoDrop(ev, destino){
+    ev.preventDefault();
+    ev.currentTarget.classList.remove('sobre');
+    if (habitoArrastrado === null || habitoArrastrado === destino) return;
+    const l = state.habitos.lista;
+    const [h] = l.splice(habitoArrastrado, 1);
+    l.splice(destino, 0, h);
+    habitoArrastrado = null;
+    DB.set('habitos', state.habitos);
+    avisoGuardado();
+    render();
+  },
+  habitoDragEnd(ev){
+    habitoArrastrado = null;
+    ev.currentTarget.classList.remove('arrastrando');
+    document.querySelectorAll('.habitcard.sobre').forEach(el => el.classList.remove('sobre'));
+  },
+  moverComidas(n){ comidasOffset += n; render(); },
+
+  /* --- notas --- */
+  nuevaNota(){
+    const n = { id: uid(), titulo:'', fecha: isoFecha(new Date()) };
+    state.notas.lista.push(n);
+    DB.set('notas', state.notas);
+    notaAbierta = n.id;
+    render();
+    const inp = document.querySelector('.card-b input[type=text]');
+    if (inp) inp.focus();
+  },
+  abrirNota(id){ notaAbierta = id; richActive = null; render(); },
+
+  /* Reordenar notas. Las flechas funcionan en cualquier lado; arrastrar, en pantallas
+     con mouse. Las dos cosas hacen lo mismo: mover la nota dentro de la lista. */
+  moverNotaOrden(i, delta){
+    const j = i + delta;
+    const l = state.notas.lista;
+    if (j < 0 || j >= l.length) return;
+    const [n] = l.splice(i, 1);
+    l.splice(j, 0, n);
+    DB.set('notas', state.notas);
+    avisoGuardado();
+    render();
+  },
+  notaDragStart(ev, i){
+    notaArrastrada = i;
+    ev.dataTransfer.effectAllowed = 'move';
+    try{ ev.dataTransfer.setData('text/plain', String(i)); }catch(e){}
+    ev.currentTarget.classList.add('arrastrando');
+  },
+  notaDragOver(ev){
+    if (notaArrastrada === null) return;
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = 'move';
+    ev.currentTarget.classList.add('sobre');
+  },
+  notaDrop(ev, destino){
+    ev.preventDefault();
+    ev.currentTarget.classList.remove('sobre');
+    if (notaArrastrada === null || notaArrastrada === destino) return;
+    const l = state.notas.lista;
+    const [n] = l.splice(notaArrastrada, 1);
+    l.splice(destino, 0, n);
+    notaArrastrada = null;
+    DB.set('notas', state.notas);
+    avisoGuardado();
+    render();
+  },
+  notaDragEnd(ev){
+    notaArrastrada = null;
+    ev.currentTarget.classList.remove('arrastrando');
+    document.querySelectorAll('.notacard.sobre').forEach(el => el.classList.remove('sobre'));
+  },
+  cerrarNota(){ notaAbierta = null; richActive = null; render(); },
+  setNotaCampo(id, campo, valor){
+    const n = state.notas.lista.find(x => x.id === id);
+    if (!n) return;
+    n[campo] = valor;
+    DB.set('notas', state.notas);
+    avisoGuardado();
+  },
+  borrarNota(id){
+    const n = state.notas.lista.find(x => x.id === id);
+    if (!n) return;
+    if (!confirm('¿Eliminar la nota “' + (n.titulo || 'Sin título') + '”?\n\nEsto no se puede deshacer.')) return;
+    state.notas.lista = state.notas.lista.filter(x => x.id !== id);
+    DB.set('notas', state.notas);
+    /* Vaciamos también el contenido para que no quede ocupando lugar ni aparezca en el buscador. */
+    const vacio = { html:'', drawing:null };
+    if (state.richContent) state.richContent['nota_'+id] = vacio;
+    DB.set('rich_nota_'+id, vacio);
+    notaAbierta = null;
+    render();
+  },
+  setBuscar(v){
+    buscarTexto = v;
+    render();
+    /* render() rehace el HTML, así que hay que devolverle el foco y el cursor al final. */
+    const el = document.getElementById('buscarInput');
+    if (el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
+  },
+  buscarIrASemana(iso){ this.goto('semana'); this.irAFecha(iso); },
+  abrirNotaDesdeBuscar(id){ notaAbierta = id; this.goto('mas','notas'); },
+  buscarIrAComidas(iso){
+    const [y,m,d] = iso.split('-').map(Number);
+    const destino = lunesDe(new Date(y, m-1, d));
+    comidasOffset = Math.round((destino - lunesDe(new Date())) / 604800000);
+    this.goto('mas','comidas');
+  },
+  comidasHoy(){ comidasOffset = 0; render(); },
+  mesHoy(){ habitosOffset = 0; render(); },
   setNestedSimple(section, key, field, value){
     state[section][key][field] = value;
     DB.set(section, state[section]);
@@ -2558,114 +2550,6 @@ const App = {
     parent[listKey] = parent[listKey] || [];
     parent[listKey].push(Object.assign({id:uid()}, blank));
     DB.set(section, state[section]); render();
-  },
-
-  /* --- asistente / API key --- */
-  openSettings(){
-    const wrap = document.createElement('div');
-    wrap.className = 'modal-bg';
-    wrap.innerHTML = `
-      <div class="modal">
-        <h3>Conectar el asistente</h3>
-        <p>Pegá tu API key de Gemini para que el asistente pueda responderte. Se guarda solo en este dispositivo (localStorage), nunca se envía a ningún otro lado más que a Google.<br><br>Conseguí una gratis en <b>aistudio.google.com/apikey</b>.</p>
-        <input type="text" id="apiKeyInput" placeholder="AIza..." value="${esc(state.apiKey)}"/>
-        <div class="actions">
-          <button class="btn ghost" onclick="this.closest('.modal-bg').remove()">Cancelar</button>
-          <button class="btn primary" onclick="App.saveKey()">Guardar</button>
-        </div>
-      </div>`;
-    document.body.appendChild(wrap);
-  },
-  saveKey(){
-    const val = document.getElementById('apiKeyInput').value.trim();
-    state.apiKey = val;
-    DB.set('apiKey', val);
-    document.querySelector('.modal-bg').remove();
-    render();
-  },
-  async sendChat(){
-    const input = document.getElementById('chatInput');
-    const text = input.value.trim();
-    if (!text) return;
-    if (!state.apiKey){ App.openSettings(); return; }
-    state.chat.push({role:'user', text});
-    input.value = '';
-    render();
-    state.chat.push({role:'bot', text:'…'});
-    render();
-    try{
-      const contents = state.chat.filter(m=>m.text!=='…').map(m=>({
-        role: m.role==='user' ? 'user' : 'model',
-        parts: [{text:m.text}]
-      }));
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${state.apiKey}`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          systemInstruction: { parts: [{text:"Sos el asistente de 'Mi Planner Digital'. Hablás en español rioplatense (voseo), tono cálido y breve. Ayudás a definir el enfoque de la semana, bajar metas a un primer paso concreto, u organizar prioridades. Respuestas cortas (2-4 líneas), sin relleno."}] },
-          contents
-        })
-      });
-      const data = await res.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('') || 'No pude generar una respuesta, ¿probamos de nuevo?';
-      state.chat.pop();
-      state.chat.push({role:'bot', text:reply});
-    }catch(e){
-      state.chat.pop();
-      state.chat.push({role:'bot', text:'Hubo un problema de conexión. Revisá tu API key o probá de nuevo.'});
-    }
-    render();
-  },
-
-  setAsisTab(tab){ asisTab = tab; render(); },
-
-  async runBrainDump(){
-    const input = document.getElementById('dumpInput');
-    const raw = input ? input.value.trim() : '';
-    if (!raw) return;
-    if (!state.apiKey){ App.openSettings(); return; }
-    dumpLoading = true;
-    render();
-    try{
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${state.apiKey}`, {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({
-          systemInstruction: { parts: [{text:"Separás una lista desordenada de pendientes en ítems sueltos. Para cada ítem decidís si es algo para comprar (destino 'compras') o cualquier otra tarea/pendiente (destino 'prioridades'). Respondé ÚNICAMENTE con un JSON válido: un array de objetos {\"text\":\"...\", \"destino\":\"prioridades\"|\"compras\"}. Sin texto extra, sin markdown, sin comillas triples."}] },
-          contents: [{ role:'user', parts:[{text: raw}] }]
-        })
-      });
-      const data = await res.json();
-      if (data?.error) throw new Error(data.error.message || 'error');
-      let text = (data?.candidates?.[0]?.content?.parts||[]).map(p=>p.text).join('').trim();
-      text = text.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
-      const parsed = JSON.parse(text);
-      dumpResult = parsed.filter(x=>x && x.text).map(x=>({ text:x.text, destino: x.destino==='compras'?'compras':'prioridades' }));
-    }catch(e){
-      console.warn('Volcar pendientes: error', e);
-      alert('No pude organizar la lista. Revisá tu conexión o tu API key, y probá de nuevo.');
-    }
-    dumpLoading = false;
-    render();
-  },
-  updateDumpItem(i, val){ if (dumpResult && dumpResult[i]) dumpResult[i].text = val; },
-  setDumpDestino(i, destino){ if (dumpResult && dumpResult[i]){ dumpResult[i].destino = destino; render(); } },
-  removeDumpItem(i){ if (dumpResult){ dumpResult.splice(i,1); render(); } },
-  acceptBrainDump(){
-    if (!dumpResult || !dumpResult.length) return;
-    dumpResult.forEach(item=>{
-      if (item.destino === 'compras'){
-        state.compras.lista.push({ id:uid(), text:item.text, done:false });
-      } else {
-        state.inicio.prioridades.push({ id:uid(), text:item.text, done:false });
-      }
-    });
-    DB.set('compras', state.compras);
-    DB.set('inicio', state.inicio);
-    dumpResult = null;
-    const input2 = document.getElementById('dumpInput');
-    if (input2) input2.value = '';
-    render();
   },
 
   /* --- notificaciones locales (sin backend) --- */
@@ -2803,8 +2687,13 @@ const PRINT_BUILDERS = {
     let html = `<section class="p-section"><h2>${esc(t('title_habitos'))}</h2>`;
     const habitos = state.habitos.lista.filter(h=>h.nombre);
     if (habitos.length){
+      /* Antes sumaba las marcas de todos los meses juntos, así que el número no
+         correspondía al mes que se estaba mirando. */
+      const base = mesVisible();
+      const prefijo = base.getFullYear() + '-' + String(base.getMonth()+1).padStart(2,'0');
+      html += `<p class="p-sub">${esc(rotuloMes())}</p>`;
       html += `<ul>${habitos.map(h=>{
-        const marcados = Object.keys(h.marcas||{}).filter(k=>h.marcas[k]).length;
+        const marcados = Object.keys(h.marcas||{}).filter(k=>h.marcas[k] && k.indexOf(prefijo) === 0).length;
         return `<li>${esc(h.nombre)} — ${marcados} ${state.lang==='en'?'days checked':'días marcados'}</li>`;
       }).join('')}</ul>`;
     } else html += pEmpty();
@@ -2840,9 +2729,9 @@ const PRINT_BUILDERS = {
   },
   objetivos(){
     let html = `<section class="p-section"><h2>${esc(t('title_objetivos'))}</h2>`;
-    [['personal','cat_personal'],['trabajo','cat_trabajo'],['bienestar','cat_bienestar'],['dinero','cat_dinero']].forEach(([key,labelKey])=>{
-      const o = state.objetivos[key];
-      html += `<h3>${esc(t(labelKey))}</h3><p class="p-sub"><b>${esc(t('lbl_meta'))}:</b> ${esc(o.meta||'—')} &nbsp; <b>${esc(t('lbl_primer_paso'))}:</b> ${esc(o.paso||'—')} &nbsp; <b>${esc(t('lbl_senal'))}:</b> ${esc(o.fecha||'—')}</p>`;
+    migrarObjetivosALista();
+    state.objetivos.lista.forEach(o => {
+      html += `<h3>${esc(nombreObjetivo(o) || '—')}</h3><p class="p-sub"><b>${esc(t('lbl_meta'))}:</b> ${esc(o.meta||'—')} &nbsp; <b>${esc(t('lbl_primer_paso'))}:</b> ${esc(o.paso||'—')} &nbsp; <b>${esc(t('lbl_senal'))}:</b> ${esc(o.fecha||'—')}</p>`;
     });
     return html + `</section>`;
   },
@@ -2864,20 +2753,31 @@ const PRINT_BUILDERS = {
   },
   comidas(){
     let html = `<section class="p-section"><h2>${esc(t('title_comidas'))}</h2>`;
-    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('comida_'+DIA_SLUGS[dia])}`; });
+    /* Comidas pasó a guardarse por fecha; con las claves viejas se imprimía todo vacío. */
+    html += `<p class="p-sub">${esc(rotuloComidas())}</p>`;
+    semanaComidas().forEach(f => { html += `<h3>${esc(rotuloDia(f))}</h3>${pRichBlock('comida_'+isoFecha(f))}`; });
     return html + `</section>`;
   },
   notas(){
-    return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pRichBlock('r_notas')}</section>`;
+    const l = state.notas.lista || [];
+    if (!l.length) return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pEmpty()}</section>`;
+    let html = `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>`;
+    l.forEach(n => {
+      const fecha = n.fecha ? ' — ' + fechaLinda(n.fecha) : '';
+      html += `<h3>${esc((n.titulo || 'Sin título') + fecha)}</h3>${pRichBlock('nota_'+n.id)}`;
+    });
+    return html + `</section>`;
   }
 };
-/* Constructores de impresión para cada día individual de Semana */
-DIAS.forEach((dia,i)=>{
-  PRINT_BUILDERS['semana_dia_'+i] = function(){
-    const f = diasDeLaSemana()[i];
-    return `<section class="p-section"><h2>${esc(rotuloDia(f,i).toUpperCase())}</h2>${pRichBlock(claveDia(f))}</section>`;
-  };
-});
+/* Impresión de un día suelto de Semana.
+   Antes había un constructor fijo por índice (0..6), armado con DIAS: al mirar 14 o 30 días,
+   el botón de imprimir de cualquier día del 8 en adelante llamaba a algo que no existía.
+   Ahora la clave lleva la fecha, así que funciona con cualquier vista. */
+function buildPrintDiaHTML(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  const f = new Date(y, m-1, d);
+  return `<section class="p-section"><h2>${esc(rotuloDia(f).toUpperCase())}</h2>${pRichBlock('semana_'+iso)}</section>`;
+}
 const PRINT_ORDER = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
 
 function printCover(){
@@ -2893,6 +2793,10 @@ function buildPrintHTML(){
 
 /* Arma el documento de UNA sola sección, para el botón de imprimir de cada pantalla */
 function buildPrintSectionHTML(screenKey){
+  /* Días sueltos de Semana: la clave trae la fecha (dia_2026-08-17). */
+  if (screenKey && screenKey.indexOf('dia_') === 0 && screenKey.length === 14){
+    return `<div class="p-doc">${printCover()}${buildPrintDiaHTML(screenKey.slice(4))}</div>`;
+  }
   const builder = PRINT_BUILDERS[screenKey];
   if (!builder) return buildPrintHTML();
   return `<div class="p-doc">${printCover()}${builder()}</div>`;
@@ -2902,8 +2806,11 @@ function buildPrintSectionHTML(screenKey){
 /* CADA clave (cada día, cada sección) se guarda en SU PROPIO documento de Firestore,
    en vez de compartir un único documento entre todos. Así cada uno tiene su propio
    límite de 1MB, y una foto en "Lunes" no compite por espacio con "Martes" o "Viernes". */
-const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
-function isSyncKey(k){ return SYNC_KEYS.includes(k) || k.indexOf('rich_') === 0; }
+const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
+/* 'board_*' se mantiene por compatibilidad: son tableros de la versión vieja que pueden
+   seguir guardados en algún dispositivo. Se sincronizan para no perderlos, aunque la app
+   ya no los muestre. */
+function isSyncKey(k){ return SYNC_KEYS.includes(k) || k.indexOf('rich_') === 0 || k.indexOf('board_') === 0; }
 /* 'migratedToDocs' es una marca local del navegador, no un dato del planner: nunca se sube. */
 
 const Sync = {
@@ -2998,6 +2905,12 @@ const Sync = {
               if (!state.richContent) state.richContent = {};
               state.richContent[richKey] = remote.value;
             }
+            /* Misma lógica para los tableros: getBoard() cachea en state.boards, así que
+               sin esto el tablero abierto seguiría mostrando la versión vieja. */
+            if (k.indexOf('board_') === 0){
+              if (!state.boards) state.boards = {};
+              state.boards[k.slice(6)] = remote.value;
+            }
           }
         });
         this.applyingRemote = false;
@@ -3035,6 +2948,13 @@ const Sync = {
       const rk = key.slice(5);
       value = (state.richContent && state.richContent[rk] !== undefined)
         ? state.richContent[rk]
+        : DB.get(key, undefined);
+    } else if (key.indexOf('board_') === 0){
+      /* Los tableros viven en state.boards, que getBoard() cachea recién al abrirlos.
+         Si todavía no se abrió en esta sesión, lo leemos del navegador. */
+      const bk = key.slice(6);
+      value = (state.boards && state.boards[bk] !== undefined)
+        ? state.boards[bk]
         : DB.get(key, undefined);
     } else {
       value = (state[key] !== undefined) ? state[key] : DB.get(key, undefined);
