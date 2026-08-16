@@ -1930,7 +1930,26 @@ function buildPrintSectionHTML(screenKey){
 }
 
 /* ---------- módulo de sincronización ---------- */
+/* claves "de arriba" del state (viven directo en state[clave]) */
 const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
+/* claves que NUNCA se sincronizan: configuración propia de este dispositivo, no contenido */
+const SYNC_EXCLUDE = ['syncConfig','apiKey','lang'];
+
+/* recorre TODO lo guardado en este dispositivo (incluye las cajas de texto enriquecido:
+   rich_r_inicio_hoy, rich_semana_lunes, rich_r_notas, rich_turno_<id>, etc.) para que
+   la sincronización no se quede afuera de nada, sea lo que sea que se agregue a futuro */
+function syncableKeys(){
+  const keys = [];
+  for (let i=0; i<localStorage.length; i++){
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith('planner:')) continue;
+    const short = k.slice('planner:'.length);
+    if (SYNC_EXCLUDE.includes(short)) continue;
+    keys.push(short);
+  }
+  return keys;
+}
+
 const Sync = {
   db: null,
   unsub: null,
@@ -1961,7 +1980,16 @@ const Sync = {
         if (!doc.exists) return;
         const remote = doc.data();
         this.applyingRemote = true;
-        SYNC_KEYS.forEach(k => { if (remote[k] !== undefined){ state[k] = remote[k]; DB.set(k, state[k]); } });
+        Object.keys(remote).forEach(k => {
+          if (SYNC_EXCLUDE.includes(k)) return;
+          DB.set(k, remote[k]);
+          if (SYNC_KEYS.includes(k)){
+            state[k] = remote[k];
+          } else if (k.startsWith('rich_')){
+            if (!state.richContent) state.richContent = {};
+            state.richContent[k.slice('rich_'.length)] = remote[k];
+          }
+        });
         this.applyingRemote = false;
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
         render();
@@ -1984,7 +2012,7 @@ const Sync = {
     clearTimeout(this.pushTimer);
     this.pushTimer = setTimeout(() => {
       const payload = {};
-      SYNC_KEYS.forEach(k => payload[k] = state[k]);
+      syncableKeys().forEach(k => { const v = DB.get(k, null); if (v !== null) payload[k] = v; });
       this.db.collection('planners').doc(state.syncConfig.code).set(payload, {merge:true}).catch(()=>{});
     }, 500);
   }
@@ -1992,7 +2020,7 @@ const Sync = {
 
 /* engancha cada guardado local con un push a Firebase, si está conectado */
 const _dbSet = DB.set.bind(DB);
-DB.set = (key, value) => { _dbSet(key, value); if (SYNC_KEYS.includes(key)) Sync.push(); };
+DB.set = (key, value) => { _dbSet(key, value); if (!SYNC_EXCLUDE.includes(key)) Sync.push(); };
 
 /* revisa recordatorios de turnos cada 30s (mientras la app está abierta) */
 function checkReminders(){
