@@ -1936,6 +1936,7 @@ const Sync = {
   unsub: null,
   applyingRemote: false,
   pushTimer: null,
+  hasReceivedInitial: false,
   loadScript(src){
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -1946,6 +1947,7 @@ const Sync = {
   },
   async start(){
     if (!state.syncConfig) return;
+    this.hasReceivedInitial = false;
     try{
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
@@ -1953,6 +1955,9 @@ const Sync = {
       this.db = firebase.firestore();
       const ref = this.db.collection('planners').doc(state.syncConfig.code);
       this.unsub = ref.onSnapshot(doc => {
+        /* importante: hasta no recibir esto una vez (aunque el documento esté vacío), este dispositivo
+           no manda nada a la nube — así evitamos que un dispositivo nuevo sin datos borre lo que ya había */
+        this.hasReceivedInitial = true;
         if (!doc.exists) return;
         const remote = doc.data();
         this.applyingRemote = true;
@@ -1972,9 +1977,10 @@ const Sync = {
   stop(){
     if (this.unsub) this.unsub();
     this.db = null;
+    this.hasReceivedInitial = false;
   },
   push(){
-    if (!this.db || this.applyingRemote) return;
+    if (!this.db || this.applyingRemote || !this.hasReceivedInitial) return;
     clearTimeout(this.pushTimer);
     this.pushTimer = setTimeout(() => {
       const payload = {};
