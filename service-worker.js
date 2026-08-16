@@ -1,4 +1,4 @@
-const CACHE = 'planner-v3';
+const CACHE = 'planner-v4';   /* subir este número en cada publicación fuerza a los dispositivos a tomar la versión nueva sin tener que hacer Ctrl+F5 */
 const ASSETS = [
   './index.html',
   './manifest.json',
