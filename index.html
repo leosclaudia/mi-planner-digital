@@ -152,7 +152,13 @@
   .richink{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
   .richink.active{z-index:20;cursor:crosshair;}
   .richink:not(.active){pointer-events:none;z-index:0;}
-  .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
+  /* Las fotos verticales estiraban la tarjeta del día a lo largo y tapaban el texto.
+     Ahora se muestran chicas (miniatura); con el botón "Ver grande" se abren a pantalla completa. */
+  .richtext img{max-width:70%;max-height:180px;width:auto;height:auto;object-fit:contain;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
+  .richtext img.rt-img-big{max-width:100%;max-height:none;}
+  .imgviewer{position:fixed;inset:0;background:rgba(30,25,22,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;}
+  .imgviewer img{max-width:100%;max-height:86vh;border-radius:10px;}
+  .imgviewer button{position:absolute;top:14px;right:16px;background:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;}
   .richtext img.rt-img-selected{border:2px solid var(--accent, #79B553);box-shadow:0 0 0 3px rgba(121,181,83,.25);}
   .pzel.selected{outline:1.5px dashed var(--accent);}
   .pzel img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;}
@@ -1574,6 +1580,8 @@ function renderRichToolbar(){
     ${richSelectedImage ? `
       <div class="richpanel" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;">
         <span style="font-size:11px;color:var(--sub);width:100%;">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.viewImageFull()">🔍 ${state.lang==='en'?'View big':'Ver grande'}</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.toggleImageSize()">↔️ ${state.lang==='en'?'Size':'Tamaño'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Up':'Subir'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Down':'Bajar'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut':'Cortar'}</button>
@@ -1791,39 +1799,63 @@ const RichText = {
   },
   customTextColor(v){ richCustomTextColor = v; this.command('foreColor', v); },
   customHighlightColor(v){ richCustomHighlightColor = v; this.command('backColor', v); },
+  /* Inserta HTML en la caja activa SIN usar execCommand.
+     execCommand('insertHTML') depende de que el cursor siga adentro del recuadro; al abrir
+     el selector de archivos del celular se pierde esa selección y la imagen terminaba
+     insertándose en la nada. Acá la metemos directo en el DOM, que siempre funciona. */
+  insertHtmlInActive(html){
+    this.focusActive();
+    const target = richActive ? document.getElementById('richtext-'+richActive) : null;
+    if (!target){
+      alert('No encontré en qué nota insertar. Tocá primero dentro del recuadro del día y volvé a intentar.');
+      return false;
+    }
+    const frag = document.createRange().createContextualFragment(html);
+    const sel = window.getSelection();
+    let range = null;
+    if (sel && sel.rangeCount){
+      const r = sel.getRangeAt(0);
+      if (target.contains(r.commonAncestorContainer)) range = r;
+    }
+    if (range){ range.deleteContents(); range.insertNode(frag); }
+    else { target.appendChild(frag); }
+    this.persist(richActive);
+    return true;
+  },
   insertImage(evt){
     const file = evt.target.files[0];
     if (!file) return;
     if (file.type === 'image/gif'){
       /* los GIF se insertan tal cual, sin recomprimir, para no perder la animación */
-      if (file.size > 3*1024*1024){
+      if (file.size > 1.5*1024*1024){
         const ok = confirm(state.lang==='en'
-          ? 'This GIF is quite heavy and could fill up storage quickly. Insert it anyway?'
-          : 'Este GIF pesa bastante y puede llenar rápido el espacio guardado en el navegador. ¿Lo insertás igual?');
+          ? 'This GIF is quite heavy and may fail to sync. Insert it anyway?'
+          : 'Este GIF pesa bastante y puede fallar al sincronizar. ¿Lo insertás igual?');
         if (!ok) return;
       }
       const reader = new FileReader();
       reader.onload = (e) => {
-        RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
-        RichText.persist(richActive);
+        RichText.insertHtmlInActive(`<img src="${e.target.result}" alt="GIF" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
       };
       reader.readAsDataURL(file);
+      evt.target.value = '';
       return;
     }
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        const maxDim = 900;
+        /* Antes: 900px y calidad 0.75, que daba fotos de 300-500 KB en base64.
+           Firestore rechaza cualquier documento de más de 1 MB, así que la nota del día
+           con foto no se llegaba a subir nunca y al recargar volvía la versión vieja sin imagen.
+           Con 640px y calidad 0.6 una foto queda en torno a 50-80 KB. */
+        const maxDim = 640;
         let w = img.width, h = img.height;
         if (w > maxDim || h > maxDim){ const r = Math.min(maxDim/w, maxDim/h); w=Math.round(w*r); h=Math.round(h*r); }
         const c = document.createElement('canvas'); c.width=w; c.height=h;
         c.getContext('2d').drawImage(img,0,0,w,h);
-        const dataUrl = c.toDataURL('image/jpeg', 0.75);
-        RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${dataUrl}" alt="Imagen" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
-        RichText.persist(richActive);
+        const dataUrl = c.toDataURL('image/jpeg', 0.6);
+        RichText.insertHtmlInActive(`<img src="${dataUrl}" alt="Imagen" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
       };
       img.src = e.target.result;
     };
@@ -1881,9 +1913,30 @@ const RichText = {
     refreshRichToolbar();
   },
   pasteImageFromClipboard(){
-    if (!richImageClipboard || !richActive) return;
-    this.focusActive();
-    document.execCommand('insertHTML', false, richImageClipboard);
+    if (!richImageClipboard) return;
+    this.insertHtmlInActive(richImageClipboard);
+    richImageClipboard = null;
+    refreshRichToolbar();
+  },
+  /* Abre la imagen seleccionada a pantalla completa, para poder mirarla sin
+     que ocupe media pantalla dentro de la nota. */
+  viewImageFull(){
+    const img = richSelectedImage;
+    if (!img) return;
+    const ov = document.createElement('div');
+    ov.className = 'imgviewer';
+    ov.innerHTML = '<button>Cerrar</button>';
+    const big = document.createElement('img');
+    big.src = img.src;
+    ov.appendChild(big);
+    ov.onclick = () => ov.remove();
+    document.body.appendChild(ov);
+  },
+  /* Alterna entre miniatura (por defecto) e imagen grande dentro de la nota. */
+  toggleImageSize(){
+    const img = richSelectedImage;
+    if (!img) return;
+    img.classList.toggle('rt-img-big');
     this.persist(richActive);
     refreshRichToolbar();
   },
@@ -2626,7 +2679,11 @@ const Sync = {
           render();
         })
         .catch(err => {
-          state.syncStatus = 'No se pudo guardar "' + key + '": ' + (err && err.message ? err.message : err);
+          const msg = (err && err.message) ? err.message : String(err);
+          state.syncStatus = 'No se pudo guardar "' + key + '": ' + msg;
+          /* Antes esto solo se veía si entrabas a la pantalla de Sincronización, así que
+             una nota que no se subía parecía "borrarse sola" al recargar. Ahora avisa. */
+          alert('La nube rechazó el guardado de "' + key + '".\n\n' + msg + '\n\nSi menciona el tamaño del documento, la nota tiene demasiadas imágenes o muy pesadas.');
           render();
         });
     }, 500);
