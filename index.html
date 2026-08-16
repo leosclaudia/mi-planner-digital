@@ -48,6 +48,7 @@
   .addlink{background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 0;white-space:nowrap;}
   .addlink svg{flex-shrink:0;width:14px;height:14px;}
   .dashedbtn{width:100%;padding:12px;border-radius:16px;border:1px dashed var(--mintLine);background:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-top:2px;}
+  .richimgbtn{width:auto;padding:6px 10px;border-radius:10px;border:1px solid var(--mintLine);background:#fff;color:var(--accent);font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
   .grid2 .card-expanded{grid-column:1 / -1;}
   .grid4menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
@@ -1568,18 +1569,18 @@ function renderRichToolbar(){
     </div>
 
     ${richSelectedImage ? `
-      <div class="richpanel" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <span style="font-size:12px;color:var(--sub);">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
-        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Move up':'Subir'}</button>
-        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Move down':'Bajar'}</button>
-        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut (move to another day/section)':'Cortar (mover a otro día/sección)'}</button>
-        <button class="dashedbtn" style="margin-top:0;color:#B23B3B;" onmousedown="event.preventDefault()" onclick="RichText.deleteSelectedImage()">${ICONS.trash} ${state.lang==='en'?'Delete':'Eliminar'}</button>
+      <div class="richpanel" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;">
+        <span style="font-size:11px;color:var(--sub);width:100%;">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Up':'Subir'}</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Down':'Bajar'}</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut':'Cortar'}</button>
+        <button class="richimgbtn" style="color:#B23B3B;border-color:#e2b3b3;" onmousedown="event.preventDefault()" onclick="RichText.deleteSelectedImage()">${ICONS.trash} ${state.lang==='en'?'Delete':'Eliminar'}</button>
       </div>
     ` : ''}
     ${(!richSelectedImage && richImageClipboard) ? `
-      <div class="richpanel" style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:12px;color:var(--sub);">${state.lang==='en'?'You have a cut image ready:':'Tenés una imagen cortada, lista para pegar:'}</span>
-        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.pasteImageFromClipboard()">${ICONS.clipboard} ${state.lang==='en'?'Paste image here':'Pegar imagen acá'}</button>
+      <div class="richpanel" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;">
+        <span style="font-size:11px;color:var(--sub);">${state.lang==='en'?'Cut image ready:':'Imagen cortada, lista:'}</span>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.pasteImageFromClipboard()">${ICONS.clipboard} ${state.lang==='en'?'Paste here':'Pegar acá'}</button>
       </div>
     ` : ''}
 
@@ -2590,7 +2591,15 @@ const Sync = {
     clearTimeout(this.pushTimers[key]);
     this.pushTimers[key] = setTimeout(() => {
       const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
-      dataCol.doc(key).set({ value: state[key] }, { merge: true }).catch(()=>{});
+      dataCol.doc(key).set({ value: state[key] }, { merge: true })
+        .then(() => {
+          state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
+          render();
+        })
+        .catch(err => {
+          state.syncStatus = 'No se pudo guardar "' + key + '": ' + (err && err.message ? err.message : err);
+          render();
+        });
     }, 500);
   }
 };
