@@ -2598,7 +2598,14 @@ const Sync = {
     clearTimeout(this.pushTimers[key]);
     this.pushTimers[key] = setTimeout(() => {
       const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
-      dataCol.doc(key).set({ value: state[key] }, { merge: true })
+      /* Para las claves de texto enriquecido (imágenes incluidas), el contenido real y actualizado
+         vive en state.richContent[...], no en state[key] directamente — ahí es donde hay que leerlo
+         antes de subirlo, o se termina mandando una copia vieja o vacía. */
+      const value = (key.indexOf('rich_') === 0)
+        ? (state.richContent ? state.richContent[key.slice(5)] : undefined)
+        : state[key];
+      if (value === undefined) return;
+      dataCol.doc(key).set({ value }, { merge: true })
         .then(() => {
           state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
           render();
