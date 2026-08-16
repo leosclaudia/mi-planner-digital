@@ -650,6 +650,7 @@ function renderSemana(){
         ${isOpen ? richBoxOnly(key, label, t('ph_dia_notas')) : ''}
       </div>`;
     }).join('')}
+    <button class="dashedbtn" style="margin-top:14px;" onclick="App.diagnostico()">🩺 Diagnóstico</button>
   `;
 }
 
@@ -2187,6 +2188,42 @@ const App = {
     render();
   },
   toggleDay(dia){ openDay = (openDay===dia) ? null : dia; render(); },
+
+  /* Panel de diagnóstico: muestra en pantalla dónde se corta la cadena
+     pantalla -> memoria -> navegador -> nube, para no seguir adivinando. */
+  diagnostico(){
+    const L = [];
+    const key = 'semana_lunes';
+    const countImgs = (h) => ((h||'').match(/<img/g) || []).length;
+    const el = document.getElementById('richtext-'+key);
+    const mem = (state.richContent && state.richContent[key]) ? state.richContent[key].html : null;
+    const local = localStorage.getItem('planner:rich_'+key);
+
+    L.push('CAJA ACTIVA: ' + (richActive || '(ninguna)'));
+    L.push('');
+    L.push('1) EN PANTALLA (Lunes): ' + (el ? countImgs(el.innerHTML) + ' imagen(es), ' + el.innerHTML.length + ' car.' : 'el recuadro no está abierto'));
+    L.push('2) EN MEMORIA: ' + (mem !== null && mem !== undefined ? countImgs(mem) + ' imagen(es), ' + mem.length + ' car.' : 'VACÍO'));
+    L.push('3) EN EL NAVEGADOR: ' + (local ? countImgs(local) + ' imagen(es), ' + local.length + ' car.' : 'NO GUARDADO'));
+
+    let total = 0;
+    try{ for (let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); total += k.length + (localStorage.getItem(k)||'').length; } }catch(e){}
+    L.push('   espacio usado en total: ' + Math.round(total/1024) + ' KB (el tope suele ser ~5000 KB)');
+    L.push('');
+    L.push('4) SINCRONIZACIÓN configurada: ' + (state.syncConfig ? 'SÍ — código "' + state.syncConfig.code + '"' : 'NO — nunca se conectó a Firebase'));
+    L.push('   conectada ahora: ' + (Sync.db ? 'sí' : 'no'));
+    L.push('   estado: ' + (state.syncStatus || '(sin datos todavía)'));
+
+    const ov = document.createElement('div');
+    ov.className = 'imgviewer';
+    ov.style.alignItems = 'flex-start';
+    ov.innerHTML = '<button>Cerrar</button>';
+    const pre = document.createElement('pre');
+    pre.textContent = L.join('\n');
+    pre.style.cssText = 'background:#fff;color:#333;padding:18px 14px;border-radius:12px;font-size:12px;line-height:1.55;white-space:pre-wrap;word-break:break-word;max-width:100%;max-height:80vh;overflow:auto;margin-top:52px;font-family:monospace;';
+    ov.appendChild(pre);
+    ov.onclick = (e) => { if (e.target !== pre) ov.remove(); };
+    document.body.appendChild(ov);
+  },
 
   setField(section, field, value){
     state[section][field] = value;
