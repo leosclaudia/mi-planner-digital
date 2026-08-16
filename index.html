@@ -49,6 +49,7 @@
   .addlink svg{flex-shrink:0;width:14px;height:14px;}
   .dashedbtn{width:100%;padding:12px;border-radius:16px;border:1px dashed var(--mintLine);background:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-top:2px;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .grid2 .card-expanded{grid-column:1 / -1;}
   .grid4menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
   .menuitem{background:var(--card);border:1px solid var(--mintLine);border-radius:16px;padding:18px 14px;text-align:left;cursor:pointer;}
   .menuitem b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px;}
@@ -114,6 +115,18 @@
   .bellbtn{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:12px;font-weight:600;padding:7px 12px;border-radius:20px;margin-top:10px;cursor:pointer;}
   .bellbtn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 
+  .pztools{display:flex;gap:8px;padding:0 20px 12px;flex-wrap:wrap;}
+  .pztool{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--mintLine);color:var(--ink);font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:20px;cursor:pointer;}
+  .pzcanvas-wrap{padding:0 20px 12px;}
+  .pzcanvas{position:relative;width:100%;height:56vh;background:var(--card);border:1px solid var(--mintLine);border-radius:16px;overflow:hidden;touch-action:none;}
+  .pzel{position:absolute;box-sizing:border-box;cursor:grab;user-select:none;-webkit-user-select:none;}
+  .pzpreview{padding:10px 16px 0;cursor:pointer;}
+  .pzpreview-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.03em;}
+  .pzpreview-tag svg{width:11px;height:11px;}
+  .pzpreview-canvas{position:relative;width:100%;height:90px;background:#FAF8F3;border:1px dashed var(--mintLine);border-radius:12px;margin-top:6px;overflow:hidden;}
+  .pzpreview-canvas .pzel{pointer-events:none;}
+  .pzpreview-canvas .pzel img{width:100%;height:100%;object-fit:contain;}
+  .pzpreview-canvas .pztext{display:flex;align-items:center;justify-content:center;width:100%;height:100%;overflow:hidden;}
 
   /* ---------- sistema de texto enriquecido (Notas, Inicio) ---------- */
   .richtoolbar{position:sticky;top:0;z-index:40;background:var(--bg);padding:10px 20px 8px;margin:0 -20px 6px;border-bottom:1px solid var(--mintLine);}
@@ -139,7 +152,34 @@
   .richink.active{z-index:20;cursor:crosshair;}
   .richink:not(.active){pointer-events:none;z-index:0;}
   .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);}
+  .pzel.selected{outline:1.5px dashed var(--accent);}
+  .pzel img{width:100%;height:100%;object-fit:contain;pointer-events:none;display:block;}
+  .pzel .pztext{width:100%;height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;color:var(--ink);outline:none;padding:2px;overflow:hidden;font-family:'Poppins',sans-serif;}
+  .pzhandle{position:absolute;width:16px;height:16px;background:var(--accent);border:2px solid #fff;border-radius:50%;z-index:5;}
+  .pzhandle.nw{top:-8px;left:-8px;cursor:nwse-resize;}
+  .pzhandle.ne{top:-8px;right:-8px;cursor:nesw-resize;}
+  .pzhandle.sw{bottom:-8px;left:-8px;cursor:nesw-resize;}
+  .pzhandle.se{bottom:-8px;right:-8px;cursor:nwse-resize;}
+  .pzbar{position:sticky;bottom:0;display:flex;justify-content:center;gap:6px;padding:10px 16px;background:var(--card);border-top:1px solid var(--mintLine);margin:0 -20px;}
+  .pzbarbtn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;color:var(--ink);font-size:10px;padding:4px 10px;cursor:pointer;}
+  .stickerpop{position:absolute;z-index:20;background:var(--card);border:1px solid var(--mintLine);border-radius:16px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.12);left:20px;right:20px;top:60px;max-height:60vh;overflow-y:auto;}
+  .stickerpop-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .stickerpop-grid button{background:var(--mint);border:none;border-radius:10px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;}
+  .stickerpop-custom{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--mintLine);}
+  .stickerpop-custom input{flex:1;border:1px solid var(--mintLine);border-radius:10px;padding:9px 10px;font-size:15px;}
 
+  .pztools{flex-wrap:wrap;}
+  .pztool.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .pzdrawing{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;pointer-events:none;}
+  .pzdrawcanvas{position:absolute;inset:0;width:100%;height:100%;z-index:60;touch-action:none;}
+  .pzdrawtools{display:flex;align-items:center;gap:8px;padding:0 20px 10px;flex-wrap:wrap;}
+  .pzswatch{width:26px;height:26px;border-radius:50%;border:2px solid transparent;cursor:pointer;flex-shrink:0;}
+  .pzcolorpicker{width:26px;height:26px;border-radius:50%;border:2px solid var(--mintLine);padding:0;cursor:pointer;flex-shrink:0;background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);-webkit-appearance:none;appearance:none;overflow:hidden;}
+  .pzcolorpicker::-webkit-color-swatch-wrapper{padding:2px;}
+  .pzcolorpicker::-webkit-color-swatch{border:none;border-radius:50%;}
+  .pzswatch.active{border-color:var(--ink);}
+  .pzdrawtools input[type=range]{flex:1;min-width:60px;accent-color:var(--accent);}
+  .pzbar{flex-wrap:wrap;}
   .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
   .card-h-btn svg{width:14px;height:14px;}
@@ -274,12 +314,6 @@ const I18N = {
     rich_cortar:'Cortar caja', rich_copiar:'Copiar caja', rich_pegar:'Pegar', rich_vaciar:'Vaciar',
     chat_welcome:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.',
     btn_print:'Imprimir / Exportar PDF',
-    btn_backup_download:'Descargar copia de seguridad',
-    btn_backup_restore:'Restaurar desde un archivo',
-    txt_backup_hint:'Guardá este archivo de vez en cuando (ej: en Google Drive) por si algún día perdés los datos del navegador.',
-    txt_backup_confirm:'Esto va a reemplazar todo lo que tenés ahora en la app por el contenido del archivo. ¿Continuar?',
-    txt_backup_done:'Listo, se restauró tu copia de seguridad. La app se va a recargar.',
-    txt_backup_error:'Ese archivo no parece una copia de seguridad válida de Mi Planner Digital.',
     lang_toggle:'English',
   },
   en: {
@@ -357,12 +391,6 @@ const I18N = {
     rich_cortar:'Cut box', rich_copiar:'Copy box', rich_pegar:'Paste', rich_vaciar:'Clear',
     chat_welcome:'Hi! I\'m your planner assistant. Tell me what\'s going on and I\'ll help you get organized.',
     btn_print:'Print / Export PDF',
-    btn_backup_download:'Download backup',
-    btn_backup_restore:'Restore from a file',
-    txt_backup_hint:'Save this file every once in a while (e.g. to Google Drive) in case you ever lose your browser data.',
-    txt_backup_confirm:'This will replace everything currently in the app with the content of this file. Continue?',
-    txt_backup_done:'Done, your backup was restored. The app will reload now.',
-    txt_backup_error:'That file does not look like a valid Mi Planner Digital backup.',
     lang_toggle:'Español',
   }
 };
@@ -399,6 +427,10 @@ let state = {
 };
 
 /* tableros dinámicos: uno por cada caja, se crean solos la primera vez que se abren */
+function getBoard(key){
+  if (!state.boards[key]) state.boards[key] = DB.get('board_'+key, { elementos: [], drawing: null });
+  return state.boards[key];
+}
 
 const ICONS = {
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>',
@@ -436,9 +468,7 @@ const ICONS = {
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8M3 10l4-4M3 10l4 4"/></svg>',
   redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>',
   globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  printer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
-  download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>',
-  upload:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5"/><path d="M4 19h16"/></svg>'
+  printer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
 };
 
 const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -517,6 +547,8 @@ function render(){
     ${renderTabBar()}
   `;
   if (screenKey === 'asistente') scrollChatToBottom();
+  if (expandedBoardKey) attachPizarraEvents();
+  if (expandedBoardKey && pzDrawMode) initDrawCanvas();
   if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
@@ -646,11 +678,7 @@ function renderMas(){
   return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
     <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
   `).join('')}</div>
-  <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>
-  <button class="dashedbtn" onclick="App.exportBackup()">${ICONS.download} ${esc(t('btn_backup_download'))}</button>
-  <button class="dashedbtn" onclick="document.getElementById('backupFileInput').click()">${ICONS.upload} ${esc(t('btn_backup_restore'))}</button>
-  <input type="file" id="backupFileInput" accept="application/json,.json" style="display:none" onchange="App.importBackup(event)"/>
-  <p style="font-size:11px;color:var(--sub);text-align:center;margin-top:8px;line-height:1.5;">${esc(t('txt_backup_hint'))}</p>`;
+  <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>`;
 }
 
 /* ---------- FINANZAS ---------- */
@@ -856,6 +884,26 @@ function renderSync(){
   `;
 }
 
+/* ---------- PIZARRA / LIENZO REUTILIZABLE ---------- */
+const STICKERS = ['🌿','🌱','🍅','🌻','☀️','🧺','📌','✨','💚','🍋','🪴','📷','🌼','🍄','💧','🐝',
+  '📝','✅','⭐','❤️','🔥','☕','🍞','🥕','🥬','🐞','🦋','🌈','🎯','📅','⏰','🎁',
+  '💰','📚','🧡','💛','💙','🧸','🐐','🐓','🍯','🌾','🚜','🏡','🪣','🌤️','🌙','✏️'];
+const PZ_COLORS = ['#2F5D50','#D98F75','#79B553','#3B4A9C','#000000','#FFFFFF'];
+const FONT_FAMILIES = ["'Inter',sans-serif", "'Lora',serif", "'Georgia',serif", "'Courier New',monospace", "'Comic Sans MS',cursive", "'Trebuchet MS',sans-serif"];
+let pzDrawMode = false, pzDrawColor = '#2F5D50', pzDrawSize = 6, pzErasing = false;
+let pzSelected = null, pzStickerOpen = false, pzJustAddedText = false, pzEditingTextId = null;
+let pzCurrentBoard = 'pizarra';
+let expandedBoardKey = null;
+
+let expandedSlot = null;
+function toggleBoard(boardKey, slotKey){
+  slotKey = slotKey || boardKey;
+  if (expandedSlot === slotKey){ expandedBoardKey = null; expandedSlot = null; }
+  else { expandedBoardKey = boardKey; expandedSlot = slotKey; }
+  pzSelected = null; pzDrawMode = false; pzStickerOpen = false; pzEditingTextId = null;
+  render();
+}
+/* Caja de tarjeta simple (sin lienzo/pizarra — ese sistema fue reemplazado por el de texto enriquecido) */
 function cardBox(title, content, tint, bodyClass, printKey){
   const cls = 'card-b' + (bodyClass ? ' '+bodyClass : '');
   const printBtn = printKey ? `<button class="card-h-printbtn" onclick="App.printCard('${printKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
@@ -866,6 +914,507 @@ function cardBox(title, content, tint, bodyClass, printKey){
     </div>
   `;
 }
+
+function renderPzPreviewEl(el){
+  const style = `left:${el.x}%;top:${el.y}%;width:${el.w}%;height:${el.h}%;z-index:${el.z};`;
+  if (el.type === 'image') return `<div class="pzel" style="${style}"><img src="${el.src}"/></div>`;
+  if (el.type === 'sticker') return `<div class="pzel" style="${style}"><div class="pztext" style="font-size:${Math.max(10,el.h*1.6)}px;">${el.text}</div></div>`;
+  return `<div class="pzel" style="${style}"><div class="pztext" style="font-size:${Math.max(8,(el.fontSize||14)*0.55)}px;color:${el.color||'#2F5D50'};font-weight:${el.bold?'700':'400'};font-style:${el.italic?'italic':'normal'};text-align:${el.align||'center'};">${esc(el.text)}</div></div>`;
+}
+
+function renderBoard(boardKey, opts){
+  opts = opts || {};
+  pzCurrentBoard = boardKey;
+  const board = getBoard(boardKey);
+  const els = [...board.elementos].sort((a,b)=>a.z-b.z);
+  const sel = pzSelected;
+  return `
+    <div class="pztools">
+      <button class="pztool" onclick="document.getElementById('pzFileInput').click()">${ICONS.image} Imagen</button>
+      <button class="pztool" onclick="Pizarra.toggleStickers()">${ICONS.sticker} Sticker</button>
+      <button class="pztool" onclick="Pizarra.addText()">${ICONS.type} Texto</button>
+      <button class="pztool ${pzDrawMode?'active':''}" onclick="Pizarra.toggleDraw()">${ICONS.pencil} Lápiz</button>
+      ${Pizarra.clipboard ? `<button class="pztool" onclick="Pizarra.paste()">${ICONS.clipboard} Pegar</button>` : ''}
+      <input type="file" id="pzFileInput" accept="image/*" style="display:none" onchange="Pizarra.handleFile(event)"/>
+    </div>
+    ${pzDrawMode ? `
+      <div class="pzdrawtools">
+        ${PZ_COLORS.map(c=>`<button class="pzswatch ${(!pzErasing && pzDrawColor===c)?'active':''}" style="background:${c};${c==='#FFFFFF'?'border-color:var(--mintLine)':''}" onclick="Pizarra.setColor('${c}')"></button>`).join('')}
+        <input type="color" class="pzcolorpicker" value="${pzDrawColor}" oninput="Pizarra.setColor(this.value)" title="Cualquier color"/>
+        <input type="range" min="2" max="26" value="${pzDrawSize}" oninput="Pizarra.setSize(this.value)"/>
+        <button class="pztool pzeraser ${pzErasing?'active':''}" onclick="Pizarra.toggleEraser()">${ICONS.eraser}</button>
+        <button class="pztool" onclick="Pizarra.clearDrawing()">Limpiar</button>
+      </div>
+      <div class="pzdrawtools" style="padding-top:0;">
+        <button class="pztool pzrecognize" onclick="Pizarra.recognizeHandwriting()">${ICONS.sparkle} Convertir a texto</button>
+        <button class="pztool" onclick="Pizarra.exitDraw()">Listo</button>
+      </div>
+    ` : ''}
+    <div class="pzcanvas-wrap" style="position:relative;">
+      ${pzStickerOpen ? `
+        <div class="stickerpop">
+          <div class="stickerpop-grid">
+            ${STICKERS.map(s=>`<button onclick="Pizarra.addSticker('${s}')">${s}</button>`).join('')}
+          </div>
+          <div class="stickerpop-custom">
+            <input type="text" id="customEmojiInput" placeholder="Pegá cualquier emoji del teclado" maxlength="8"/>
+            <button class="pztool" onclick="Pizarra.addCustomEmoji()">Agregar</button>
+          </div>
+        </div>
+      `:''}
+      <div class="pzcanvas" id="pzCanvas" style="${opts.height?`height:${opts.height};`:''}">
+        ${board.drawing ? `<img class="pzdrawing" src="${board.drawing}"/>` : ''}
+        ${!pzDrawMode ? els.map(el => renderPzEl(el, el.id===sel)).join('') : ''}
+        ${pzDrawMode ? `<canvas id="pzDrawCanvas" class="pzdrawcanvas"></canvas>` : ''}
+      </div>
+    </div>
+    ${(sel && !pzDrawMode) ? renderSelectionBar(board, sel) : (!pzDrawMode ? `<p style="padding:0 20px;font-size:11.5px;color:var(--sub);">Tocá un elemento para moverlo. Arrastrá una esquina para el tamaño. El lápiz dibuja libremente sobre la hoja.</p>` : '')}
+  `;
+}
+
+function renderSelectionBar(board, sel){
+  const el = board.elementos.find(e=>e.id===sel);
+  if (!el) return '';
+  if (el.type === 'text' && pzEditingTextId === sel){
+    return `
+      <div class="pzdrawtools">
+        <button class="pztool ${el.bold?'active':''}" onclick="Pizarra.toggleTextStyle('bold')"><b>B</b></button>
+        <button class="pztool ${el.italic?'active':''}" onclick="Pizarra.toggleTextStyle('italic')"><i>I</i></button>
+        <button class="pztool ${el.underline?'active':''}" onclick="Pizarra.toggleTextStyle('underline')"><u>S</u></button>
+        <button class="pztool" onclick="Pizarra.resizeText(-2)">A-</button>
+        <button class="pztool" onclick="Pizarra.resizeText(2)">A+</button>
+      </div>
+      <div class="pzdrawtools" style="flex-wrap:nowrap;overflow-x:auto;">
+        ${FONT_FAMILIES.map((f,fi)=>`<button class="pztool fontbtn ${(el.font||FONT_FAMILIES[0])===f?'active':''}" style="font-family:${f};flex-shrink:0;" onclick="Pizarra.setTextFont(${fi})">Aa</button>`).join('')}
+      </div>
+      <div class="pzdrawtools">
+        <button class="pztool ${(el.align||'center')==='left'?'active':''}" onclick="Pizarra.setTextAlign('left')">${ICONS.alignLeft}</button>
+        <button class="pztool ${(el.align||'center')==='center'?'active':''}" onclick="Pizarra.setTextAlign('center')">${ICONS.alignCenter}</button>
+        <button class="pztool ${(el.align||'center')==='right'?'active':''}" onclick="Pizarra.setTextAlign('right')">${ICONS.alignRight}</button>
+        ${PZ_COLORS.filter(c=>c!=='#FFFFFF').map(c=>`<button class="pzswatch ${el.color===c?'active':''}" style="background:${c}" onclick="Pizarra.setTextColor('${c}')"></button>`).join('')}
+      </div>
+      <div class="pzbar">
+        <button class="pzbarbtn" onclick="Pizarra.stopEditingText()">${ICONS.check}Listo</button>
+      </div>
+    `;
+  }
+  return `
+    <div class="pzbar">
+      <button class="pzbarbtn" onclick="Pizarra.copy()">${ICONS.copy}Copiar</button>
+      <button class="pzbarbtn" onclick="Pizarra.cut()">${ICONS.scissors}Cortar</button>
+      ${el.type==='text' ? `<button class="pzbarbtn" onclick="Pizarra.editText()">${ICONS.pencil}Editar</button>` : ''}
+      <button class="pzbarbtn" onclick="Pizarra.layer(1)">${ICONS.layerUp}Adelante</button>
+      <button class="pzbarbtn" onclick="Pizarra.layer(-1)">${ICONS.layerDown}Atrás</button>
+      <button class="pzbarbtn" onclick="Pizarra.remove()">${ICONS.trash}Eliminar</button>
+      <button class="pzbarbtn" onclick="Pizarra.select(null)">${ICONS.x}Cerrar</button>
+    </div>
+  `;
+}
+
+function renderPzEl(el, isSelected){
+  const style = `left:${el.x}%;top:${el.y}%;width:${el.w}%;height:${el.h}%;z-index:${el.z};`;
+  let inner = '';
+  if (el.type === 'image') inner = `<img src="${el.src}" draggable="false"/>`;
+  else if (el.type === 'sticker') inner = `<div class="pztext" style="font-size:${Math.max(20,el.h*3)}px;">${el.text}</div>`;
+  else if (el.type === 'text') inner = `<div class="pztext" contenteditable="${pzEditingTextId===el.id?'true':'false'}" data-id="${el.id}" style="font-family:${el.font||FONT_FAMILIES[0]};font-size:${el.fontSize||14}px;color:${el.color||'#2F5D50'};font-weight:${el.bold?'700':'400'};font-style:${el.italic?'italic':'normal'};text-decoration:${el.underline?'underline':'none'};text-align:${el.align||'center'};">${esc(el.text)}</div>`;
+  return `
+    <div class="pzel ${isSelected?'selected':''}" data-id="${el.id}" style="${style}">
+      ${inner}
+      ${isSelected ? `
+        <div class="pzhandle nw" data-dir="nw"></div>
+        <div class="pzhandle ne" data-dir="ne"></div>
+        <div class="pzhandle sw" data-dir="sw"></div>
+        <div class="pzhandle se" data-dir="se"></div>
+      ` : ''}
+    </div>
+  `;
+}
+
+const Pizarra = {
+  board(){ return getBoard(pzCurrentBoard); },
+  save(){ DB.set('board_'+pzCurrentBoard, this.board()); },
+  addElement(partial){
+    const b = this.board();
+    const base = { id:uid(), x:30, y:30, w:30, h:20, z:(b.elementos.length+1) };
+    b.elementos.push(Object.assign(base, partial));
+    this.save();
+    pzSelected = base.id;
+    pzStickerOpen = false;
+    render();
+  },
+  toggleStickers(){ pzStickerOpen = !pzStickerOpen; render(); },
+  addSticker(emoji){ this.addElement({ type:'sticker', text:emoji, w:16, h:10 }); },
+  addCustomEmoji(){
+    const input = document.getElementById('customEmojiInput');
+    const val = input ? input.value.trim() : '';
+    if (!val){ if(input) input.focus(); return; }
+    this.addElement({ type:'sticker', text:val, w:16, h:10 });
+  },
+  addText(){ pzJustAddedText = true; this.addElement({ type:'text', text:'Escribí algo', w:40, h:12, fontSize:14, color:'#2F5D50', bold:false, italic:false, underline:false, align:'center' }); },
+  editText(){ pzEditingTextId = pzSelected; render(); },
+  stopEditingText(){
+    const editable = document.querySelector('[contenteditable="true"]');
+    if (editable){
+      const el = this.board().elementos.find(x=>x.id===pzEditingTextId);
+      if (el) el.text = editable.innerText;
+    }
+    pzEditingTextId = null;
+    this.save();
+    render();
+  },
+  _selText(){ return this.board().elementos.find(x=>x.id===pzSelected); },
+  toggleTextStyle(prop){
+    const el = this._selText();
+    if (!el) return;
+    el[prop] = !el[prop];
+    this.save();
+    render();
+  },
+  resizeText(delta){
+    const el = this._selText();
+    if (!el) return;
+    el.fontSize = Math.max(10, Math.min(48, (el.fontSize||14) + delta));
+    this.save();
+    render();
+  },
+  setTextAlign(align){
+    const el = this._selText();
+    if (!el) return;
+    el.align = align;
+    this.save();
+    render();
+  },
+  setTextColor(color){
+    const el = this._selText();
+    if (!el) return;
+    el.color = color;
+    this.save();
+    render();
+  },
+  setTextFont(fontIndex){
+    const el = this._selText();
+    if (!el) return;
+    el.font = FONT_FAMILIES[fontIndex] || FONT_FAMILIES[0];
+    this.save();
+    render();
+  },
+  handleFile(evt){
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDim = 700;
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim){
+          const ratio = Math.min(maxDim/w, maxDim/h);
+          w = Math.round(w*ratio); h = Math.round(h*ratio);
+        }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        const dataUrl = c.toDataURL('image/jpeg', 0.72);
+        const canvasEl = document.getElementById('pzCanvas');
+        const rect = canvasEl ? canvasEl.getBoundingClientRect() : {width:300,height:300};
+        const wPct = Math.min(60, (w / rect.width) * 100 * 0.6);
+        const hPct = wPct * (h/w) * (rect.width/rect.height);
+        Pizarra.addElement({ type:'image', src:dataUrl, w:wPct||35, h:Math.min(60,hPct)||25 });
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+    evt.target.value = '';
+  },
+  select(id){ pzSelected = id; pzStickerOpen=false; pzEditingTextId=null; render(); },
+  clipboard: null,
+  copy(){
+    const el = this.board().elementos.find(e=>e.id===pzSelected);
+    if (el) this.clipboard = Object.assign({}, el);
+  },
+  cut(){
+    const el = this.board().elementos.find(e=>e.id===pzSelected);
+    if (!el) return;
+    this.clipboard = Object.assign({}, el);
+    this.board().elementos = this.board().elementos.filter(e=>e.id!==pzSelected);
+    pzSelected = null;
+    this.save();
+    render();
+  },
+  paste(){
+    if (!this.clipboard) return;
+    const b = this.board();
+    const copy = Object.assign({}, this.clipboard, { id:uid(), x:Math.min(80,this.clipboard.x+4), y:Math.min(80,this.clipboard.y+4), z:b.elementos.length+1 });
+    b.elementos.push(copy);
+    pzSelected = copy.id;
+    this.save();
+    render();
+  },
+  layer(dir){
+    const el = this.board().elementos.find(e=>e.id===pzSelected);
+    if (!el) return;
+    el.z += dir * 10;
+    this.save();
+    render();
+  },
+  remove(){
+    const b = this.board();
+    b.elementos = b.elementos.filter(e=>e.id!==pzSelected);
+    pzSelected = null;
+    this.save();
+    render();
+  },
+  commit(){ this.save(); render(); },
+
+  /* --- dibujo libre --- */
+  toggleDraw(){
+    pzDrawMode = !pzDrawMode;
+    pzSelected = null;
+    render();
+  },
+  setColor(c){ pzDrawColor = c; pzErasing = false; this._refreshDrawToolbar(); },
+  setSize(v){ pzDrawSize = Number(v); },
+  toggleEraser(){ pzErasing = !pzErasing; this._refreshDrawToolbar(); },
+  _refreshDrawToolbar(){
+    document.querySelectorAll('.pzswatch').forEach((b,i)=>b.classList.toggle('active', !pzErasing && PZ_COLORS[i]===pzDrawColor));
+    const eraserBtn = document.querySelector('.pzeraser');
+    if (eraserBtn) eraserBtn.classList.toggle('active', pzErasing);
+  },
+  clearDrawing(){
+    const canvas = document.getElementById('pzDrawCanvas');
+    if (canvas){ const ctx = canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); }
+    this.board().drawing = null;
+  },
+  _blankRef(canvas){
+    const blank = document.createElement('canvas');
+    blank.width = canvas.width; blank.height = canvas.height;
+    const bctx = blank.getContext('2d');
+    bctx.fillStyle = '#FFFFFF';
+    bctx.fillRect(0, 0, blank.width, blank.height);
+    return blank;
+  },
+  exitDraw(){
+    const canvas = document.getElementById('pzDrawCanvas');
+    if (canvas){
+      const isBlank = canvas.toDataURL() === this._blankRef(canvas).toDataURL();
+      this.board().drawing = isBlank ? null : canvas.toDataURL('image/png');
+    }
+    this.save();
+    pzDrawMode = false;
+    render();
+  },
+
+  _prepareDrawingForOcr(source){
+    const sctx = source.getContext('2d');
+    if (!sctx) return null;
+    const pixels = sctx.getImageData(0, 0, source.width, source.height);
+    let minX=source.width, minY=source.height, maxX=-1, maxY=-1;
+    for (let y=0; y<source.height; y++){
+      for (let x=0; x<source.width; x++){
+        const a = pixels.data[(y*source.width+x)*4+3];
+        if (a > 20){ if(x<minX)minX=x; if(x>maxX)maxX=x; if(y<minY)minY=y; if(y>maxY)maxY=y; }
+      }
+    }
+    if (maxX < minX || maxY < minY) return null;
+    const margin = 35;
+    minX = Math.max(0, minX-margin); minY = Math.max(0, minY-margin);
+    maxX = Math.min(source.width-1, maxX+margin); maxY = Math.min(source.height-1, maxY+margin);
+    const w = maxX-minX+1, h = maxY-minY+1;
+    const crop = document.createElement('canvas'); crop.width=w; crop.height=h;
+    const cctx = crop.getContext('2d');
+    cctx.fillStyle = '#fff'; cctx.fillRect(0,0,w,h);
+    cctx.drawImage(source, minX, minY, w, h, 0, 0, w, h);
+    const img = cctx.getImageData(0,0,w,h);
+    for (let i=0; i<img.data.length; i+=4){
+      const brightness = (img.data[i]+img.data[i+1]+img.data[i+2])/3;
+      const ink = brightness < 245;
+      img.data[i]=ink?0:255; img.data[i+1]=ink?0:255; img.data[i+2]=ink?0:255; img.data[i+3]=255;
+    }
+    cctx.putImageData(img, 0, 0);
+    const scale = 3;
+    const out = document.createElement('canvas'); out.width=w*scale; out.height=h*scale;
+    const octx = out.getContext('2d');
+    octx.fillStyle='#fff'; octx.fillRect(0,0,out.width,out.height);
+    octx.imageSmoothingEnabled = false;
+    octx.drawImage(crop, 0, 0, out.width, out.height);
+    return out;
+  },
+
+  async recognizeHandwriting(){
+    const canvas = document.getElementById('pzDrawCanvas');
+    if (!canvas) return;
+    const prepared = this._prepareDrawingForOcr(canvas);
+    if (!prepared){
+      alert('Todavía no escribiste nada en la hoja.');
+      return;
+    }
+    const btn = document.querySelector('.pzrecognize');
+    const originalLabel = btn ? btn.innerHTML : '';
+    if (btn) btn.innerHTML = 'Reconociendo…';
+    try{
+      const mod = await import('https://cdn.jsdelivr.net/npm/tesseract.js@6/+esm');
+      const worker = await mod.createWorker('spa');
+      await worker.setParameters({ tessedit_pageseg_mode: mod.PSM.SINGLE_BLOCK });
+      const result = await worker.recognize(prepared.toDataURL('image/png'));
+      await worker.terminate();
+      const text = String(result?.data?.text || '').replace(/\s+/g,' ').trim();
+      if (text){
+        pzDrawMode = false;
+        this.addElement({ type:'text', text, w:55, h:14, fontSize:14, color:'#2F5D50' });
+      } else {
+        alert('No pude reconocer esa escritura. Probá con letras un poco más separadas y claras.');
+      }
+    }catch(e){
+      console.warn('Reconocimiento de escritura: error', e);
+      alert('No se pudo cargar el reconocedor. Revisá tu conexión a internet y probá de nuevo.');
+    } finally {
+      if (btn && document.body.contains(btn)) btn.innerHTML = originalLabel;
+    }
+  }
+};
+
+function initDrawCanvas(){
+  const canvas = document.getElementById('pzDrawCanvas');
+  const wrap = document.getElementById('pzCanvas');
+  if (!canvas || !wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, rect.width, rect.height);
+  const drawingData = Pizarra.board().drawing;
+  if (drawingData){
+    const img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
+    img.src = drawingData;
+  }
+  let drawing = false;
+  const pos = (e) => {
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+  canvas.addEventListener('pointerdown', (e) => {
+    drawing = true;
+    canvas.setPointerCapture(e.pointerId);
+    const p = pos(e);
+    ctx.beginPath(); ctx.moveTo(p.x, p.y);
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    const p = pos(e);
+    ctx.globalCompositeOperation = pzErasing ? 'destination-out' : 'source-over';
+    ctx.strokeStyle = pzDrawColor;
+    ctx.lineWidth = pzDrawSize;
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  });
+  const endStroke = () => { drawing = false; };
+  canvas.addEventListener('pointerup', endStroke);
+  canvas.addEventListener('pointerleave', endStroke);
+}
+
+function attachPizarraEvents(){
+  const canvas = document.getElementById('pzCanvas');
+  if (!canvas) return;
+
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.target === canvas) Pizarra.select(null);
+  });
+
+  canvas.querySelectorAll('.pzel').forEach(elDiv => {
+    const id = elDiv.dataset.id;
+
+    elDiv.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.pzhandle')) return;
+      if (e.target.getAttribute && e.target.getAttribute('contenteditable') === 'true') { e.stopPropagation(); return; }
+      e.stopPropagation();
+      if (pzSelected !== id){ Pizarra.select(id); return; }
+      const el = Pizarra.board().elementos.find(x=>x.id===id);
+      const rect = canvas.getBoundingClientRect();
+      const startX = e.clientX, startY = e.clientY;
+      const startXPct = el.x, startYPct = el.y;
+      let moved = false;
+      elDiv.setPointerCapture(e.pointerId);
+      const onMove = (ev) => {
+        const dx = ((ev.clientX - startX) / rect.width) * 100;
+        const dy = ((ev.clientY - startY) / rect.height) * 100;
+        if (Math.abs(dx)>0.3 || Math.abs(dy)>0.3) moved = true;
+        el.x = Math.max(0, Math.min(100-el.w, startXPct + dx));
+        el.y = Math.max(0, Math.min(100-el.h, startYPct + dy));
+        elDiv.style.left = el.x+'%';
+        elDiv.style.top = el.y+'%';
+      };
+      const onUp = () => {
+        elDiv.removeEventListener('pointermove', onMove);
+        elDiv.removeEventListener('pointerup', onUp);
+        if (moved) Pizarra.commit();
+      };
+      elDiv.addEventListener('pointermove', onMove);
+      elDiv.addEventListener('pointerup', onUp);
+    });
+
+    elDiv.querySelectorAll('.pzhandle').forEach(handle => {
+      handle.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        const dir = handle.dataset.dir;
+        const el = Pizarra.board().elementos.find(x=>x.id===id);
+        const rect = canvas.getBoundingClientRect();
+        const startX = e.clientX, startY = e.clientY;
+        const start = { x:el.x, y:el.y, w:el.w, h:el.h };
+        handle.setPointerCapture(e.pointerId);
+        const onMove = (ev) => {
+          const dx = ((ev.clientX - startX) / rect.width) * 100;
+          const dy = ((ev.clientY - startY) / rect.height) * 100;
+          if (dir.includes('e')) el.w = Math.max(6, Math.min(100-start.x, start.w + dx));
+          if (dir.includes('s')) el.h = Math.max(6, Math.min(100-start.y, start.h + dy));
+          if (dir.includes('w')){ const nw = Math.max(6, start.w - dx); el.x = start.x + (start.w - nw); el.w = nw; }
+          if (dir.includes('n')){ const nh = Math.max(6, start.h - dy); el.y = start.y + (start.h - nh); el.h = nh; }
+          elDiv.style.left = el.x+'%'; elDiv.style.top = el.y+'%';
+          elDiv.style.width = el.w+'%'; elDiv.style.height = el.h+'%';
+        };
+        const onUp = () => {
+          handle.removeEventListener('pointermove', onMove);
+          handle.removeEventListener('pointerup', onUp);
+          Pizarra.commit();
+        };
+        handle.addEventListener('pointermove', onMove);
+        handle.addEventListener('pointerup', onUp);
+      });
+    });
+
+    const editable = elDiv.querySelector('[contenteditable]');
+    if (editable){
+      editable.addEventListener('blur', () => {
+        const savedText = editable.innerText;
+        setTimeout(() => {
+          const el = Pizarra.board().elementos.find(x=>x.id===id);
+          if (el){ el.text = savedText; Pizarra.save(); }
+          if (pzEditingTextId === id) pzEditingTextId = null;
+          render();
+        }, 0);
+      });
+      if (pzJustAddedText && id === pzSelected){
+        pzJustAddedText = false;
+        pzEditingTextId = id;
+        editable.setAttribute('contenteditable','true');
+        setTimeout(() => {
+          editable.focus();
+          const range = document.createRange();
+          range.selectNodeContents(editable);
+          const sel = window.getSelection();
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }, 0);
+      }
+    }
+  });
+}
+
 
 /* ---------- SISTEMA DE TEXTO ENRIQUECIDO (una sola caja, tocar y escribir) ---------- */
 const RICH_STICKERS_KW = [
@@ -1738,52 +2287,6 @@ const App = {
     div.innerHTML = buildPrintSectionHTML(cardKey);
     document.body.appendChild(div);
     setTimeout(() => window.print(), 50);
-  },
-
-  /* --- copia de seguridad: descarga todo lo guardado en el navegador como un archivo .json --- */
-  exportBackup(){
-    const data = {};
-    for (let i=0; i<localStorage.length; i++){
-      const k = localStorage.key(i);
-      if (k && k.startsWith('planner:')) data[k] = localStorage.getItem(k);
-    }
-    const payload = { app:'mi-planner-digital', exportedAt:new Date().toISOString(), data };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const today = new Date().toISOString().slice(0,10);
-    a.href = url;
-    a.download = `mi-planner-backup-${today}.json`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  },
-
-  /* --- copia de seguridad: restaura desde un archivo .json exportado antes --- */
-  importBackup(evt){
-    const file = evt.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      evt.target.value = '';
-      let parsed;
-      try{ parsed = JSON.parse(e.target.result); }
-      catch(err){ alert(t('txt_backup_error')); return; }
-      const data = (parsed && parsed.data) ? parsed.data : null;
-      if (!data || typeof data !== 'object'){ alert(t('txt_backup_error')); return; }
-      if (!confirm(t('txt_backup_confirm'))) return;
-      const toRemove = [];
-      for (let i=0; i<localStorage.length; i++){
-        const k = localStorage.key(i);
-        if (k && k.startsWith('planner:')) toRemove.push(k);
-      }
-      toRemove.forEach(k => localStorage.removeItem(k));
-      Object.keys(data).forEach(k => { if (k.startsWith('planner:')) localStorage.setItem(k, data[k]); });
-      alert(t('txt_backup_done'));
-      location.reload();
-    };
-    reader.readAsText(file);
   }
 };
 
@@ -1930,32 +2433,18 @@ function buildPrintSectionHTML(screenKey){
 }
 
 /* ---------- módulo de sincronización ---------- */
-/* claves "de arriba" del state (viven directo en state[clave]) */
+/* CADA clave (cada día, cada sección) se guarda en SU PROPIO documento de Firestore,
+   en vez de compartir un único documento entre todos. Así cada uno tiene su propio
+   límite de 1MB, y una foto en "Lunes" no compite por espacio con "Martes" o "Viernes". */
 const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
-/* claves que NUNCA se sincronizan: configuración propia de este dispositivo, no contenido */
-const SYNC_EXCLUDE = ['syncConfig','apiKey','lang'];
-
-/* recorre TODO lo guardado en este dispositivo (incluye las cajas de texto enriquecido:
-   rich_r_inicio_hoy, rich_semana_lunes, rich_r_notas, rich_turno_<id>, etc.) para que
-   la sincronización no se quede afuera de nada, sea lo que sea que se agregue a futuro */
-function syncableKeys(){
-  const keys = [];
-  for (let i=0; i<localStorage.length; i++){
-    const k = localStorage.key(i);
-    if (!k || !k.startsWith('planner:')) continue;
-    const short = k.slice('planner:'.length);
-    if (SYNC_EXCLUDE.includes(short)) continue;
-    keys.push(short);
-  }
-  return keys;
-}
+function isSyncKey(k){ return SYNC_KEYS.includes(k) || k.indexOf('rich_') === 0; }
 
 const Sync = {
   db: null,
   unsub: null,
   applyingRemote: false,
-  pushTimer: null,
-  hasReceivedInitial: false,
+  pushTimers: {},
+  migrated: false,
   loadScript(src){
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -1966,28 +2455,41 @@ const Sync = {
   },
   async start(){
     if (!state.syncConfig) return;
-    this.hasReceivedInitial = false;
     try{
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
       const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(state.syncConfig.firebaseConfig);
       this.db = firebase.firestore();
-      const ref = this.db.collection('planners').doc(state.syncConfig.code);
-      this.unsub = ref.onSnapshot(doc => {
-        /* importante: hasta no recibir esto una vez (aunque el documento esté vacío), este dispositivo
-           no manda nada a la nube — así evitamos que un dispositivo nuevo sin datos borre lo que ya había */
-        this.hasReceivedInitial = true;
-        if (!doc.exists) return;
-        const remote = doc.data();
+      const parentRef = this.db.collection('planners').doc(state.syncConfig.code);
+      const dataCol = parentRef.collection('data');
+
+      /* Migración de una sola vez: si existían datos en el documento viejo (compartido),
+         los copiamos a documentos individuales para liberar espacio. */
+      if (!this.migrated){
+        this.migrated = true;
+        try{
+          const oldDoc = await parentRef.get();
+          if (oldDoc.exists){
+            const oldData = oldDoc.data() || {};
+            const keysToMigrate = Object.keys(oldData).filter(isSyncKey);
+            if (keysToMigrate.length){
+              const batch = this.db.batch();
+              keysToMigrate.forEach(k => batch.set(dataCol.doc(k), { value: oldData[k] }, { merge: true }));
+              await batch.commit();
+            }
+          }
+        }catch(migErr){ /* si la migración falla no es crítico, seguimos con la sincronización normal */ }
+      }
+
+      this.unsub = dataCol.onSnapshot(snap => {
         this.applyingRemote = true;
-        Object.keys(remote).forEach(k => {
-          if (SYNC_EXCLUDE.includes(k)) return;
-          DB.set(k, remote[k]);
-          if (SYNC_KEYS.includes(k)){
-            state[k] = remote[k];
-          } else if (k.startsWith('rich_')){
-            if (!state.richContent) state.richContent = {};
-            state.richContent[k.slice('rich_'.length)] = remote[k];
+        snap.docChanges().forEach(change => {
+          if (change.type === 'removed') return;
+          const k = change.doc.id;
+          const remote = change.doc.data();
+          if (remote && remote.value !== undefined){
+            state[k] = remote.value;
+            DB.set(k, state[k]);
           }
         });
         this.applyingRemote = false;
@@ -2005,22 +2507,20 @@ const Sync = {
   stop(){
     if (this.unsub) this.unsub();
     this.db = null;
-    this.hasReceivedInitial = false;
   },
-  push(){
-    if (!this.db || this.applyingRemote || !this.hasReceivedInitial) return;
-    clearTimeout(this.pushTimer);
-    this.pushTimer = setTimeout(() => {
-      const payload = {};
-      syncableKeys().forEach(k => { const v = DB.get(k, null); if (v !== null) payload[k] = v; });
-      this.db.collection('planners').doc(state.syncConfig.code).set(payload, {merge:true}).catch(()=>{});
+  push(key){
+    if (!this.db || this.applyingRemote || !key) return;
+    clearTimeout(this.pushTimers[key]);
+    this.pushTimers[key] = setTimeout(() => {
+      const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
+      dataCol.doc(key).set({ value: state[key] }, { merge: true }).catch(()=>{});
     }, 500);
   }
 };
 
 /* engancha cada guardado local con un push a Firebase, si está conectado */
 const _dbSet = DB.set.bind(DB);
-DB.set = (key, value) => { _dbSet(key, value); if (!SYNC_EXCLUDE.includes(key)) Sync.push(); };
+DB.set = (key, value) => { _dbSet(key, value); if (isSyncKey(key)) Sync.push(key); };
 
 /* revisa recordatorios de turnos cada 30s (mientras la app está abierta) */
 function checkReminders(){
