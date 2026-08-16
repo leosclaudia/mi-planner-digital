@@ -161,6 +161,13 @@
   .semana-nav-mid{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);}
   .semnavbtn{background:var(--card);border:1px solid var(--mintLine);border-radius:10px;width:34px;height:34px;font-size:19px;line-height:1;color:var(--ink);cursor:pointer;flex-shrink:0;}
   .semhoybtn{background:transparent;border:1px solid var(--mintLine);border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--sub);cursor:pointer;}
+  /* El input de fecha va transparente encima del ícono: así se abre el selector
+     nativo del sistema (la rueda del celular), igual que al poner una alarma. */
+  .fechapick{position:relative;display:inline-flex;align-items:center;justify-content:center;
+    width:30px;height:30px;border:1px solid var(--mintLine);border-radius:9px;background:var(--card);
+    font-size:14px;cursor:pointer;flex-shrink:0;}
+  .fechapick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0;}
+  .movepick{width:26px;height:26px;font-size:13px;}
   .vista-sel{display:flex;gap:6px;justify-content:center;margin:-6px 0 14px;}
   .vistabtn{background:var(--card);border:1px solid var(--mintLine);border-radius:999px;padding:5px 14px;font-size:12px;color:var(--sub);cursor:pointer;}
   .vistabtn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;}
@@ -743,6 +750,10 @@ function renderSemana(){
       <button class="semnavbtn" onclick="App.moverSemana(-1)" title="Semana anterior">‹</button>
       <div class="semana-nav-mid">
         <b>${esc(rotuloSemana())}</b>
+        <span class="fechapick" title="Ir a una fecha">
+          📅
+          <input type="date" value="${isoFecha(ds[0])}" onchange="App.irAFecha(this.value)"/>
+        </span>
         ${semanaOffset !== 0 ? `<button class="semhoybtn" onclick="App.semanaHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
       </div>
       <button class="semnavbtn" onclick="App.moverSemana(1)" title="Período siguiente">›</button>
@@ -768,6 +779,7 @@ function renderSemana(){
         <div class="card-h" style="cursor:pointer" onclick="App.toggleDay(${i})">
           <span>${esc(label.toUpperCase())}</span>
           <span style="display:flex;align-items:center;gap:6px;">
+            ${isOpen ? `<span class="fechapick movepick" title="Mover esta nota a otra fecha" onclick="event.stopPropagation()">↪<input type="date" onclick="event.stopPropagation()" onchange="App.moverNota('${isoFecha(fecha)}', this.value)"/></span>` : ''}
             <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${i}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
             <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
           </span>
@@ -2333,6 +2345,50 @@ const App = {
   toggleDay(i){ openDayIdx = (openDayIdx===i) ? null : i; render(); },
   moverSemana(n){ semanaOffset += n; openDayIdx = null; render(); },
   semanaHoy(){ semanaOffset = 0; openDayIdx = null; render(); },
+  /* Salta directo a la fecha elegida y deja ese día abierto, sin tener que ir
+     apretando las flechas una semana por vez. */
+  irAFecha(iso){
+    if (!iso) return;
+    const [y, m, dd] = iso.split('-').map(Number);
+    if (!y || !m || !dd) return;
+    const destino = new Date(y, m-1, dd);
+    const base = lunesDe(new Date());
+    const diff = Math.round((destino - base) / 86400000);
+    semanaOffset = Math.floor(diff / vistaDias);
+    openDayIdx = diff - semanaOffset * vistaDias;
+    render();
+  },
+  /* Mueve la nota entera (texto, imágenes y dibujo) de un día a otro, sin copiar y pegar.
+     Si el día de destino ya tiene algo escrito, lo respeta y agrega la nota abajo. */
+  moverNota(isoOrigen, isoDestino){
+    if (!isoDestino || isoDestino === isoOrigen) return;
+    const kO = 'semana_' + isoOrigen, kD = 'semana_' + isoDestino;
+    const origen = getRich(kO);
+    if (!origen || (!origen.html && !origen.drawing)){
+      alert('Ese día no tiene nada para mover.');
+      return;
+    }
+    const destino = getRich(kD);
+    const ocupado = !!(destino && (destino.html || destino.drawing));
+    const fmt = iso => { const [y,m,d] = iso.split('-'); return d+'/'+m; };
+    const aviso = ocupado
+      ? 'El día ' + fmt(isoDestino) + ' ya tiene una nota.\n\nLa nota del ' + fmt(isoOrigen) + ' se va a agregar abajo de la que ya está.\n\n¿Seguimos?'
+      : '¿Mover la nota del ' + fmt(isoOrigen) + ' al ' + fmt(isoDestino) + '?';
+    if (!confirm(aviso)) return;
+
+    destino.html = ocupado && destino.html
+      ? destino.html + '<br>' + (origen.html || '')
+      : (origen.html || '');
+    if (!destino.drawing && origen.drawing) destino.drawing = origen.drawing;
+    saveRich(kD);
+
+    origen.html = '';
+    origen.drawing = null;
+    saveRich(kO);
+
+    richActive = null;
+    this.irAFecha(isoDestino);
+  },
   setVistaDias(n){
     vistaDias = n;
     DB.set('vistaDias', n);   // no se sincroniza: es una preferencia de este dispositivo
