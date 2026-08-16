@@ -1489,13 +1489,11 @@ function getRich(key){
   return state.richContent[key];
 }
 function saveRich(key){ DB.set('rich_'+key, state.richContent[key]); }
-/* Trae al lienzo nuevo el texto viejo escrito en un día de Semana antes de esta actualización, para no perderlo */
+/* Trae al lienzo nuevo el texto viejo escrito en un día de Semana antes de esta actualización, para no perderlo.
+   DESACTIVADA: causaba que, en dispositivos donde el contenido nuevo (con imagen) todavía no había
+   llegado de la nube, se pisara con el texto viejo antes de que la sincronización terminara de cargar. */
 function migrateDayTextToRich(key, oldText){
-  if (!oldText) return;
-  const data = getRich(key);
-  if (data.html) return;
-  data.html = esc(oldText);
-  saveRich(key);
+  return;
 }
 
 let richActive = null, richActiveTitle = '', richPanel = null;
