@@ -234,7 +234,12 @@ const DB = {
     catch(e){ return fallback; }
   },
   set(key, value){
-    try{ localStorage.setItem('planner:'+key, JSON.stringify(value)); }catch(e){}
+    try{ localStorage.setItem('planner:'+key, JSON.stringify(value)); }
+    catch(e){
+      /* Antes acá había un catch vacío: si el navegador se quedaba sin espacio, el guardado
+         fallaba en silencio y la imagen "desaparecía" sola en el siguiente render. */
+      alert('No se pudo guardar "'+key+'".\n\nMotivo: '+((e && e.name) ? e.name : e)+'\n\nCasi seguro es falta de espacio: las imágenes ocupan mucho.');
+    }
   }
 };
 const uid = () => Math.random().toString(36).slice(2,9);
