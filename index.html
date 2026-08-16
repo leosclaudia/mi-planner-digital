@@ -1708,8 +1708,18 @@ const RichText = {
     saveRich(key);
   },
   focusActive(){
-    const el = document.getElementById('richtext-'+richActive);
-    if (el) el.focus();
+    /* Si richActive quedó apuntando a una caja que ya no está en pantalla (o nunca se tocó),
+       lo reapuntamos a la única caja visible. Sin esto, insertar una imagen en un día que
+       todavía no se tocó no guarda nada, porque persist() sale antes de escribir. */
+    let el = richActive ? document.getElementById('richtext-'+richActive) : null;
+    if (!el){
+      const boxes = document.querySelectorAll('.richtext');
+      if (boxes.length !== 1) return;
+      el = boxes[0];
+      richActive = el.dataset.key;
+      richActiveTitle = '';
+    }
+    el.focus();
   },
   command(cmd, value){
     this.focusActive();
