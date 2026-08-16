@@ -2620,13 +2620,13 @@ function buildPrintSectionHTML(screenKey){
    límite de 1MB, y una foto en "Lunes" no compite por espacio con "Martes" o "Viernes". */
 const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
 function isSyncKey(k){ return SYNC_KEYS.includes(k) || k.indexOf('rich_') === 0; }
+/* 'migratedToDocs' es una marca local del navegador, no un dato del planner: nunca se sube. */
 
 const Sync = {
   db: null,
   unsub: null,
   applyingRemote: false,
   pushTimers: {},
-  migrated: false,
   /* Claves con un cambio local que todavía NO se confirmó en la nube.
      Mientras una clave esté acá, ninguna versión que llegue de la nube la puede pisar. */
   dirty: {},
@@ -2650,20 +2650,36 @@ const Sync = {
 
       /* Migración de una sola vez: si existían datos en el documento viejo (compartido),
          los copiamos a documentos individuales para liberar espacio. */
-      if (!this.migrated){
-        this.migrated = true;
+      /* ESTE ERA EL BUG DE FONDO.
+         Antes: this.migrated era una variable en memoria, así que se reseteaba en CADA arranque,
+         y la migración volvía a copiar los campos viejos del documento padre encima de los datos
+         actuales. Resultado: guardabas una foto, y al abrir la app de nuevo la nota volvía a la
+         versión vieja. Ahora la migración corre una sola vez (queda anotado en el navegador),
+         nunca pisa un documento que ya existe, y al terminar borra los campos viejos del padre. */
+      if (!DB.get('migratedToDocs', false)){
         try{
           const oldDoc = await parentRef.get();
           if (oldDoc.exists){
             const oldData = oldDoc.data() || {};
             const keysToMigrate = Object.keys(oldData).filter(isSyncKey);
             if (keysToMigrate.length){
-              const batch = this.db.batch();
-              keysToMigrate.forEach(k => batch.set(dataCol.doc(k), { value: oldData[k] }, { merge: true }));
-              await batch.commit();
+              const existing = await dataCol.get();
+              const yaEstan = {};
+              existing.forEach(doc => { yaEstan[doc.id] = true; });
+              const faltantes = keysToMigrate.filter(k => !yaEstan[k]);
+              if (faltantes.length){
+                const batch = this.db.batch();
+                faltantes.forEach(k => batch.set(dataCol.doc(k), { value: oldData[k] }, { merge: true }));
+                await batch.commit();
+              }
+              /* Limpiamos los campos viejos del documento padre para que no puedan volver a pisar nada. */
+              const borrado = {};
+              keysToMigrate.forEach(k => { borrado[k] = firebase.firestore.FieldValue.delete(); });
+              await parentRef.set(borrado, { merge: true });
             }
           }
-        }catch(migErr){ /* si la migración falla no es crítico, seguimos con la sincronización normal */ }
+          DB.set('migratedToDocs', true);
+        }catch(migErr){ /* si falla, seguimos con la sincronización normal */ }
       }
 
       /* Todo lo que se editó antes de que Firebase terminara de cargar quedó en espera:
