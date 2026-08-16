@@ -157,6 +157,11 @@
   /* --- Semana en pantalla ancha: grilla de tarjetas ---
      En el celular queda todo igual (una columna). Desde 900px la app se ensancha y los
      7 días se acomodan en columnas, así la tarjeta abierta deja de quedar larguísima. */
+  .semana-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+  .semana-nav-mid{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);}
+  .semnavbtn{background:var(--card);border:1px solid var(--mintLine);border-radius:10px;width:34px;height:34px;font-size:19px;line-height:1;color:var(--ink);cursor:pointer;flex-shrink:0;}
+  .semhoybtn{background:transparent;border:1px solid var(--mintLine);border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--sub);cursor:pointer;}
+  .card.dia-hoy{border-color:var(--accent);box-shadow:0 0 0 2px rgba(155,122,148,.22);}
   .semana-grid{display:grid;gap:14px;align-items:start;}
   .semana-grid .card{margin-bottom:0;}
   @media (min-width:620px){
@@ -437,6 +442,9 @@ function t(key){
 function dayLabel(dia){ return t('dia_'+(DIA_SLUGS[dia]||'')); }
 
 
+/* Poné true para volver a mostrar la pestaña del Asistente (chat con Gemini). */
+const MOSTRAR_ASISTENTE = false;
+
 /* ---------- estado ---------- */
 let state = {
   tab: 'portada',            // portada | inicio | semana | habitos | asistente | mas
@@ -540,6 +548,7 @@ function render(){
     comidas:[t('title_comidas'), t('sub_comidas')],
     sync:[t('title_sync'), t('sub_sync')],
   };
+  if (!MOSTRAR_ASISTENTE && state.tab === 'asistente') state.tab = 'inicio';
   let screenKey = state.tab === 'mas' && state.masScreen ? state.masScreen : state.tab;
 
   if (screenKey === 'portada'){
@@ -613,7 +622,7 @@ function renderTabBar(){
     ['inicio', ICONS.home, t('tab_inicio')],
     ['semana', ICONS.calendar, t('tab_semana')],
     ['habitos', ICONS.check, t('tab_habitos')],
-    ['asistente', ICONS.sparkle, t('tab_asistente')],
+    ...(MOSTRAR_ASISTENTE ? [['asistente', ICONS.sparkle, t('tab_asistente')]] : []),
     ['mas', ICONS.grid, t('tab_mas')],
   ];
   return `<div class="tabbar">${tabs.map(([id,icon,label])=>`
@@ -642,31 +651,107 @@ function renderInicio(){
 }
 
 /* ---------- SEMANA ---------- */
-let openDay = DIAS[0];
+/* Cada día se guarda por su FECHA real (ej. semana_2026-08-17), no por el nombre del día.
+   Así la semana que viene no pisa lo de esta y queda historial. */
 const DIA_SLUGS = {Lunes:'lunes',Martes:'martes','Miércoles':'miercoles',Jueves:'jueves',Viernes:'viernes','Sábado':'sabado',Domingo:'domingo'};
+let semanaOffset = 0;   // 0 = esta semana, -1 = la anterior, 1 = la siguiente
+let openDayIdx = null;  // 0 = lunes ... 6 = domingo
+
+function isoFecha(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function lunesDe(d){
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() - ((x.getDay()+6) % 7));   // getDay(): 0=domingo
+  return x;
+}
+function lunesVisible(){
+  const l = lunesDe(new Date());
+  l.setDate(l.getDate() + semanaOffset*7);
+  return l;
+}
+function diasDeLaSemana(){
+  const l = lunesVisible();
+  return Array.from({length:7}, (_,i) => { const d = new Date(l); d.setDate(l.getDate()+i); return d; });
+}
+function claveDia(fecha){ return 'semana_' + isoFecha(fecha); }
+function rotuloSemana(){
+  const ds = diasDeLaSemana(), a = ds[0], b = ds[6];
+  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
+  const mes = d => d.toLocaleDateString(loc, { month:'short' }).replace('.','');
+  const mismoMes = a.getMonth() === b.getMonth();
+  return mismoMes
+    ? `${a.getDate()} – ${b.getDate()} ${mes(b)} ${b.getFullYear()}`
+    : `${a.getDate()} ${mes(a)} – ${b.getDate()} ${mes(b)} ${b.getFullYear()}`;
+}
+function rotuloDia(fecha, i){
+  return dayLabel(DIAS[i]) + ' ' + fecha.getDate();
+}
+
+/* Traslada lo que estaba guardado por nombre de día (semana_lunes, semana_martes, …)
+   a las fechas de la semana en curso. Corre una sola vez. */
+function migrarSemanaAFechas(){
+  if (DB.get('semanaPorFechas', false)) return;
+  const l = lunesDe(new Date());
+  DIAS.forEach((dia, i) => {
+    const viejo = DB.get('rich_semana_' + DIA_SLUGS[dia], null);
+    if (!viejo || (!viejo.html && !viejo.drawing)) return;
+    const f = new Date(l); f.setDate(l.getDate()+i);
+    const nuevaClave = 'rich_' + claveDia(f);
+    if (DB.get(nuevaClave, null)) return;      // ya hay algo escrito ahí: no lo tocamos
+    if (!state.richContent) state.richContent = {};
+    state.richContent[claveDia(f)] = viejo;
+    DB.set(nuevaClave, viejo);
+  });
+  const enfoqueViejo = state.semana.enfoque;
+  if (enfoqueViejo){
+    if (!state.semana.enfoques) state.semana.enfoques = {};
+    if (!state.semana.enfoques[isoFecha(l)]) state.semana.enfoques[isoFecha(l)] = enfoqueViejo;
+    DB.set('semana', state.semana);
+  }
+  DB.set('semanaPorFechas', true);
+}
+
 function renderSemana(){
+  migrarSemanaAFechas();
   const d = state.semana;
+  if (!d.enfoques) d.enfoques = {};
+  const ds = diasDeLaSemana();
+  const claveSem = isoFecha(ds[0]);
+  const hoy = isoFecha(new Date());
+  if (openDayIdx === null){
+    const i = ds.findIndex(f => isoFecha(f) === hoy);
+    openDayIdx = i >= 0 ? i : 0;
+  }
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+    <div class="semana-nav">
+      <button class="semnavbtn" onclick="App.moverSemana(-1)" title="Semana anterior">‹</button>
+      <div class="semana-nav-mid">
+        <b>${esc(rotuloSemana())}</b>
+        ${semanaOffset !== 0 ? `<button class="semhoybtn" onclick="App.semanaHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
+      </div>
+      <button class="semnavbtn" onclick="App.moverSemana(1)" title="Semana siguiente">›</button>
+    </div>
     <div class="card">
       <div class="card-b">
         <label style="font-size:11px;font-weight:700;">${esc(t('card_enfoque'))}</label>
-        <input type="text" value="${esc(d.enfoque)}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
+        <input type="text" value="${esc(d.enfoques[claveSem]||'')}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setEnfoqueSemana('${claveSem}', this.value)"/>
       </div>
     </div>
     <div class="semana-grid">
-    ${DIAS.map((dia)=>{
-      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota':'';
-      const isOpen = openDay===dia;
-      const key = 'semana_'+DIA_SLUGS[dia];
-      migrateDayTextToRich(key, d.dias[dia]);
-      const label = dayLabel(dia);
+    ${ds.map((fecha, i)=>{
+      const tint = i >= 5 ? 'terracota' : '';
+      const isOpen = openDayIdx === i;
+      const esHoy = isoFecha(fecha) === hoy;
+      const key = claveDia(fecha);
+      const label = rotuloDia(fecha, i);
       return `
-      <div class="card ${tint} ${isOpen?'dia-abierto':''}">
-        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
+      <div class="card ${tint} ${isOpen?'dia-abierto':''} ${esHoy?'dia-hoy':''}">
+        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay(${i})">
           <span>${esc(label.toUpperCase())}</span>
           <span style="display:flex;align-items:center;gap:6px;">
-            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${DIA_SLUGS[dia]}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
+            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${i}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
             <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
           </span>
         </div>
@@ -715,7 +800,19 @@ function renderMas(){
   return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
     <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
   `).join('')}</div>
-  <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>`;
+  <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>
+  <div class="card" style="margin-top:18px;">
+    <div class="card-h"><span>Copia de seguridad</span></div>
+    <div class="card-b">
+      <p style="font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:10px;">
+        Guardá todo tu planner en un archivo. Si algún día se pierde o se rompe algo,
+        con ese archivo volvés a como estabas.
+      </p>
+      <button class="dashedbtn" style="margin-top:0;" onclick="App.exportarBackup()">⬇️ Bajar copia (.json)</button>
+      <button class="dashedbtn" style="margin-top:10px;" onclick="document.getElementById('backupFileInput').click()">⬆️ Restaurar desde archivo</button>
+      <input type="file" id="backupFileInput" accept=".json,application/json" style="display:none" onchange="App.importarBackup(event)"/>
+    </div>
+  </div>`;
 }
 
 /* ---------- FINANZAS ---------- */
@@ -2216,7 +2313,73 @@ const App = {
     state.masScreen = (tab==='mas' && masScreen) ? masScreen : null;
     render();
   },
-  toggleDay(dia){ openDay = (openDay===dia) ? null : dia; render(); },
+  toggleDay(i){ openDayIdx = (openDayIdx===i) ? null : i; render(); },
+  moverSemana(n){ semanaOffset += n; openDayIdx = null; render(); },
+  semanaHoy(){ semanaOffset = 0; openDayIdx = null; render(); },
+  setEnfoqueSemana(claveSem, valor){
+    if (!state.semana.enfoques) state.semana.enfoques = {};
+    state.semana.enfoques[claveSem] = valor;
+    DB.set('semana', state.semana);
+  },
+
+  /* --- copia de seguridad --- */
+  /* Claves guardadas que forman parte del planner (excluye configuración y marcas internas). */
+  clavesDelPlanner(){
+    const fuera = ['apiKey','syncConfig','migratedToDocs','pendienteSubirTodo'];
+    const out = [];
+    for (let i=0;i<localStorage.length;i++){
+      const k = localStorage.key(i);
+      if (k && k.indexOf('planner:') === 0){
+        const corta = k.slice(8);
+        if (fuera.indexOf(corta) === -1) out.push(corta);
+      }
+    }
+    return out;
+  },
+  exportarBackup(){
+    const datos = {};
+    this.clavesDelPlanner().forEach(k => { datos[k] = localStorage.getItem('planner:'+k); });
+    const paquete = { app:'mi-planner-digital', version:1, fecha:new Date().toISOString(), datos };
+    const blob = new Blob([JSON.stringify(paquete)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const f = new Date(), dd = n => String(n).padStart(2,'0');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `planner-${f.getFullYear()}-${dd(f.getMonth()+1)}-${dd(f.getDate())}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  },
+  importarBackup(evt){
+    const file = evt.target.files[0];
+    evt.target.value = '';
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      let paquete = null;
+      try{ paquete = JSON.parse(e.target.result); }catch(err){}
+      if (!paquete || paquete.app !== 'mi-planner-digital' || !paquete.datos){
+        alert('Ese archivo no es una copia de este planner. Elegí el .json que bajaste con "Bajar copia".');
+        return;
+      }
+      const claves = Object.keys(paquete.datos);
+      const cuando = paquete.fecha ? new Date(paquete.fecha).toLocaleString('es-AR') : 'fecha desconocida';
+      if (!confirm('Vas a reemplazar TODO lo que tenés ahora por la copia del ' + cuando +
+                   ' (' + claves.length + ' secciones).\n\nEsto no se puede deshacer. ¿Seguimos?')) return;
+      try{
+        this.clavesDelPlanner().forEach(k => localStorage.removeItem('planner:'+k));
+        claves.forEach(k => localStorage.setItem('planner:'+k, paquete.datos[k]));
+      }catch(err){
+        alert('No entró toda la copia: se quedó sin espacio el navegador.\n\n' + err);
+        return;
+      }
+      /* Al recargar, la copia restaurada se sube a la nube; si no, la versión de la nube
+         (la vieja) la pisaría de nuevo. */
+      DB.set('pendienteSubirTodo', true);
+      alert('Copia restaurada. La app se recarga ahora.');
+      location.reload();
+    };
+    reader.readAsText(file);
+  },
 
   /* Fuerza la subida de TODO lo que hay en este dispositivo al código actual.
      Necesario al cambiar de código: la nube nueva arranca vacía y el push normal
@@ -2224,8 +2387,7 @@ const App = {
   subirTodo(){
     if (!Sync.db){ alert('Todavía no está conectado a la nube. Esperá unos segundos y probá de nuevo.'); return; }
     let n = 0;
-    SYNC_KEYS.forEach(k => { if (state[k] !== undefined){ Sync.push(k); n++; } });
-    Object.keys(state.richContent || {}).forEach(k => { Sync.push('rich_'+k); n++; });
+    this.clavesDelPlanner().forEach(k => { if (isSyncKey(k)){ Sync.push(k); n++; } });
     alert('Subiendo ' + n + ' secciones a la nube. Esperá unos segundos y fijate que diga "Última sincronización".');
   },
 
@@ -2551,8 +2713,10 @@ const PRINT_BUILDERS = {
   },
   semana(){
     let html = `<section class="p-section"><h2>${esc(t('title_semana'))}</h2>`;
-    html += `<p class="p-sub"><b>${esc(t('card_enfoque'))}:</b> ${esc(state.semana.enfoque||'—')}</p>`;
-    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('semana_'+DIA_SLUGS[dia])}`; });
+    const ds = diasDeLaSemana();
+    html += `<p class="p-sub">${esc(rotuloSemana())}</p>`;
+    html += `<p class="p-sub"><b>${esc(t('card_enfoque'))}:</b> ${esc((state.semana.enfoques||{})[isoFecha(ds[0])]||'—')}</p>`;
+    ds.forEach((f,i)=>{ html += `<h3>${esc(rotuloDia(f,i))}</h3>${pRichBlock(claveDia(f))}`; });
     return html + `</section>`;
   },
   habitos(){
@@ -2628,9 +2792,10 @@ const PRINT_BUILDERS = {
   }
 };
 /* Constructores de impresión para cada día individual de Semana */
-DIAS.forEach(dia=>{
-  PRINT_BUILDERS['semana_dia_'+DIA_SLUGS[dia]] = function(){
-    return `<section class="p-section"><h2>${esc(dayLabel(dia).toUpperCase())}</h2>${pRichBlock('semana_'+DIA_SLUGS[dia])}</section>`;
+DIAS.forEach((dia,i)=>{
+  PRINT_BUILDERS['semana_dia_'+i] = function(){
+    const f = diasDeLaSemana()[i];
+    return `<section class="p-section"><h2>${esc(rotuloDia(f,i).toUpperCase())}</h2>${pRichBlock(claveDia(f))}</section>`;
   };
 });
 const PRINT_ORDER = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
@@ -2725,6 +2890,12 @@ const Sync = {
          ahora que hay conexión, lo mandamos. */
       this.flushPending();
 
+      /* Si se acaba de restaurar una copia, mandamos todo a la nube antes de escuchar cambios. */
+      if (DB.get('pendienteSubirTodo', false)){
+        DB.set('pendienteSubirTodo', false);
+        App.clavesDelPlanner().forEach(k => { if (isSyncKey(k)) this.push(k); });
+      }
+
       this.unsub = dataCol.onSnapshot(snap => {
         this.applyingRemote = true;
         snap.docChanges().forEach(change => {
@@ -2779,9 +2950,15 @@ const Sync = {
     /* Para las claves de texto enriquecido (imágenes incluidas), el contenido real y actualizado
        vive en state.richContent[...], no en state[key] directamente — ahí es donde hay que leerlo
        antes de subirlo, o se termina mandando una copia vieja o vacía. */
-    const value = (key.indexOf('rich_') === 0)
-      ? (state.richContent ? state.richContent[key.slice(5)] : undefined)
-      : state[key];
+    let value;
+    if (key.indexOf('rich_') === 0){
+      const rk = key.slice(5);
+      value = (state.richContent && state.richContent[rk] !== undefined)
+        ? state.richContent[rk]
+        : DB.get(key, undefined);
+    } else {
+      value = (state[key] !== undefined) ? state[key] : DB.get(key, undefined);
+    }
     if (value === undefined) return;
     const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
     dataCol.doc(key).set({ value }, { merge: true })
