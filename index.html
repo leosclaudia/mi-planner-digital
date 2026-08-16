@@ -1504,6 +1504,7 @@ let richDrawHistory = {}, richDrawFuture = {};
 let richCopied = '';
 let richCustomTextColor = '#7A3B3B', richCustomHighlightColor = '#FFF59D';
 let richSelectedImage = null;
+let richImageClipboard = null;
 
 function richCard(title, key, placeholder, tint, printKey){
   const data = getRich(key);
@@ -1567,11 +1568,18 @@ function renderRichToolbar(){
     </div>
 
     ${richSelectedImage ? `
-      <div class="richpanel" style="display:flex;align-items:center;gap:8px;">
+      <div class="richpanel" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
         <span style="font-size:12px;color:var(--sub);">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
         <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Move up':'Subir'}</button>
         <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Move down':'Bajar'}</button>
+        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut (move to another day/section)':'Cortar (mover a otro día/sección)'}</button>
         <button class="dashedbtn" style="margin-top:0;color:#B23B3B;" onmousedown="event.preventDefault()" onclick="RichText.deleteSelectedImage()">${ICONS.trash} ${state.lang==='en'?'Delete':'Eliminar'}</button>
+      </div>
+    ` : ''}
+    ${(!richSelectedImage && richImageClipboard) ? `
+      <div class="richpanel" style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--sub);">${state.lang==='en'?'You have a cut image ready:':'Tenés una imagen cortada, lista para pegar:'}</span>
+        <button class="dashedbtn" style="margin-top:0;" onmousedown="event.preventDefault()" onclick="RichText.pasteImageFromClipboard()">${ICONS.clipboard} ${state.lang==='en'?'Paste image here':'Pegar imagen acá'}</button>
       </div>
     ` : ''}
 
@@ -1839,6 +1847,22 @@ const RichText = {
     if (!img) return;
     img.remove();
     richSelectedImage = null;
+    this.persist(richActive);
+    refreshRichToolbar();
+  },
+  cutImageToClipboard(){
+    const img = richSelectedImage;
+    if (!img) return;
+    richImageClipboard = img.outerHTML;
+    img.remove();
+    richSelectedImage = null;
+    this.persist(richActive);
+    refreshRichToolbar();
+  },
+  pasteImageFromClipboard(){
+    if (!richImageClipboard || !richActive) return;
+    this.focusActive();
+    document.execCommand('insertHTML', false, richImageClipboard);
     this.persist(richActive);
     refreshRichToolbar();
   },
