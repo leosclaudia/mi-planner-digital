@@ -1849,13 +1849,14 @@ const RichText = {
         /* Antes: 900px y calidad 0.75, que daba fotos de 300-500 KB en base64.
            Firestore rechaza cualquier documento de más de 1 MB, así que la nota del día
            con foto no se llegaba a subir nunca y al recargar volvía la versión vieja sin imagen.
-           Con 640px y calidad 0.6 una foto queda en torno a 50-80 KB. */
-        const maxDim = 640;
+           Con 900px y calidad 0.78 una foto/placa queda en torno a 150-200 KB: entra
+           holgada en la nube y el texto de las placas sigue leyéndose al ampliarla. */
+        const maxDim = 900;
         let w = img.width, h = img.height;
         if (w > maxDim || h > maxDim){ const r = Math.min(maxDim/w, maxDim/h); w=Math.round(w*r); h=Math.round(h*r); }
         const c = document.createElement('canvas'); c.width=w; c.height=h;
         c.getContext('2d').drawImage(img,0,0,w,h);
-        const dataUrl = c.toDataURL('image/jpeg', 0.6);
+        const dataUrl = c.toDataURL('image/jpeg', 0.78);
         RichText.insertHtmlInActive(`<img src="${dataUrl}" alt="Imagen" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
       };
       img.src = e.target.result;
