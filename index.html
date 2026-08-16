@@ -1525,7 +1525,7 @@ function richBoxOnly(key, title, placeholder){
       <div class="richbox">
         <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
              onfocus="RichText.setActive('${key}','${esc(title)}')"
-             onclick="RichText.deselectImage()"
+             onclick="RichText.handleBoxClick(event)"
              oninput="RichText.persist('${key}')">${data.html}</div>
         <canvas class="richink" id="richink-${key}" data-key="${key}"></canvas>
       </div>
@@ -1819,9 +1819,16 @@ const RichText = {
   selectImage(evt, img){
     if (evt) evt.stopPropagation();
     document.querySelectorAll('.rt-img-selected').forEach(el => el.classList.remove('rt-img-selected'));
-    img.classList.add('rt-img-selected');
+    img.classList.add('rt-img', 'rt-img-selected');
     richSelectedImage = img;
     refreshRichToolbar();
+  },
+  handleBoxClick(evt){
+    if (evt.target && evt.target.tagName === 'IMG'){
+      this.selectImage(evt, evt.target);
+    } else {
+      this.deselectImage();
+    }
   },
   deselectImage(){
     if (richSelectedImage){
