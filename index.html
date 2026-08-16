@@ -146,6 +146,20 @@
   .richstickergrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:220px;overflow-y:auto;margin-bottom:8px;}
   .richstickergrid button{background:#fff;border:1px solid var(--mintLine);border-radius:10px;height:44px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
   .richediting{font-size:11px;color:var(--sub);margin-top:6px;}
+  /* --- Semana en pantalla ancha: grilla de tarjetas ---
+     En el celular queda todo igual (una columna). Desde 900px la app se ensancha y los
+     7 días se acomodan en columnas, así la tarjeta abierta deja de quedar larguísima. */
+  .semana-grid{display:grid;gap:14px;align-items:start;}
+  .semana-grid .card{margin-bottom:0;}
+  @media (min-width:620px){
+    #app{max-width:1080px;}
+    main{padding:0 24px 24px;}
+    .semana-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  }
+  @media (min-width:1000px){
+    .semana-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+    .semana-grid .card.dia-abierto{grid-column:span 2;}
+  }
   .richbox{position:relative;min-height:110px;}
   .richtext{position:relative;z-index:10;min-height:110px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--ink);outline:none;}
   .richtext:empty:before{content:attr(data-placeholder);color:#C9C2B4;}
@@ -632,6 +646,7 @@ function renderSemana(){
         <input type="text" value="${esc(d.enfoque)}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
       </div>
     </div>
+    <div class="semana-grid">
     ${DIAS.map((dia)=>{
       const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota':'';
       const isOpen = openDay===dia;
@@ -639,7 +654,7 @@ function renderSemana(){
       migrateDayTextToRich(key, d.dias[dia]);
       const label = dayLabel(dia);
       return `
-      <div class="card ${tint}">
+      <div class="card ${tint} ${isOpen?'dia-abierto':''}">
         <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
           <span>${esc(label.toUpperCase())}</span>
           <span style="display:flex;align-items:center;gap:6px;">
@@ -650,7 +665,7 @@ function renderSemana(){
         ${isOpen ? richBoxOnly(key, label, t('ph_dia_notas')) : ''}
       </div>`;
     }).join('')}
-    <button class="dashedbtn" style="margin-top:14px;" onclick="App.diagnostico()">🩺 Diagnóstico</button>
+    </div>
   `;
 }
 
