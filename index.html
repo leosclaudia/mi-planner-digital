@@ -2627,6 +2627,9 @@ const Sync = {
   applyingRemote: false,
   pushTimers: {},
   migrated: false,
+  /* Claves con un cambio local que todavía NO se confirmó en la nube.
+     Mientras una clave esté acá, ninguna versión que llegue de la nube la puede pisar. */
+  dirty: {},
   loadScript(src){
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -2663,11 +2666,19 @@ const Sync = {
         }catch(migErr){ /* si la migración falla no es crítico, seguimos con la sincronización normal */ }
       }
 
+      /* Todo lo que se editó antes de que Firebase terminara de cargar quedó en espera:
+         ahora que hay conexión, lo mandamos. */
+      this.flushPending();
+
       this.unsub = dataCol.onSnapshot(snap => {
         this.applyingRemote = true;
         snap.docChanges().forEach(change => {
           if (change.type === 'removed') return;
           const k = change.doc.id;
+          /* Si acá hay un cambio local sin subir (por ejemplo una foto recién insertada
+             mientras Firebase todavía estaba cargando), la copia de la nube está vieja.
+             Pisarla era lo que hacía "desaparecer" la imagen a los pocos segundos. */
+          if (this.dirty[k]) return;
           const remote = change.doc.data();
           if (remote && remote.value !== undefined){
             state[k] = remote.value;
@@ -2700,31 +2711,39 @@ const Sync = {
     this.db = null;
   },
   push(key){
-    if (!this.db || this.applyingRemote || !key) return;
+    if (this.applyingRemote || !key) return;
+    /* Antes, si Firebase todavía no había terminado de cargar (this.db === null), este push
+       se descartaba en silencio y el cambio no se subía nunca. Ahora se anota como pendiente
+       y se manda apenas hay conexión. */
+    this.dirty[key] = true;
     clearTimeout(this.pushTimers[key]);
-    this.pushTimers[key] = setTimeout(() => {
-      const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
-      /* Para las claves de texto enriquecido (imágenes incluidas), el contenido real y actualizado
-         vive en state.richContent[...], no en state[key] directamente — ahí es donde hay que leerlo
-         antes de subirlo, o se termina mandando una copia vieja o vacía. */
-      const value = (key.indexOf('rich_') === 0)
-        ? (state.richContent ? state.richContent[key.slice(5)] : undefined)
-        : state[key];
-      if (value === undefined) return;
-      dataCol.doc(key).set({ value }, { merge: true })
-        .then(() => {
-          state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
-          render();
-        })
-        .catch(err => {
-          const msg = (err && err.message) ? err.message : String(err);
-          state.syncStatus = 'No se pudo guardar "' + key + '": ' + msg;
-          /* Antes esto solo se veía si entrabas a la pantalla de Sincronización, así que
-             una nota que no se subía parecía "borrarse sola" al recargar. Ahora avisa. */
-          alert('La nube rechazó el guardado de "' + key + '".\n\n' + msg + '\n\nSi menciona el tamaño del documento, la nota tiene demasiadas imágenes o muy pesadas.');
-          render();
-        });
-    }, 500);
+    this.pushTimers[key] = setTimeout(() => this.flushKey(key), 500);
+  },
+  flushKey(key){
+    if (!this.db || !state.syncConfig) return;   // sigue pendiente; se manda al conectar
+    /* Para las claves de texto enriquecido (imágenes incluidas), el contenido real y actualizado
+       vive en state.richContent[...], no en state[key] directamente — ahí es donde hay que leerlo
+       antes de subirlo, o se termina mandando una copia vieja o vacía. */
+    const value = (key.indexOf('rich_') === 0)
+      ? (state.richContent ? state.richContent[key.slice(5)] : undefined)
+      : state[key];
+    if (value === undefined) return;
+    const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
+    dataCol.doc(key).set({ value }, { merge: true })
+      .then(() => {
+        delete this.dirty[key];
+        state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
+        render();
+      })
+      .catch(err => {
+        const msg = (err && err.message) ? err.message : String(err);
+        /* Queda en dirty a propósito: así la copia local no se pisa y se reintenta al reconectar. */
+        state.syncStatus = 'Sin subir "' + key + '": ' + msg;
+        render();
+      });
+  },
+  flushPending(){
+    Object.keys(this.dirty).forEach(k => this.flushKey(k));
   }
 };
 
