@@ -3150,15 +3150,25 @@ function ubicarMarco(img){
    'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
 (function initArrastreImagenes(){
   let img = null, modo = null, x0 = 0, y0 = 0, ix = 0, iy = 0, w0 = 0;
-  let dx = 0, dy = 0, movio = false, pedido = null;
+  let dx = 0, dy = 0, movio = false, pedido = null, esquina = null;
   let topeIzq = 0, topeDer = 0, topeArr = 0, topeAba = 0;
   const num = v => parseFloat(v) || 0;
   const ESQUINA = 30;   // zona de las esquinas, en píxeles
 
-  function enEsquina(el, ev){
+  /* Devuelve cuál de las 4 esquinas se tocó ('br','bl','tr','tl') o null si no fue en ninguna. */
+  function queEsquina(el, ev){
     const r = el.getBoundingClientRect();
-    return (ev.clientX > r.right - ESQUINA && ev.clientY > r.bottom - ESQUINA);
+    const cerca_der = ev.clientX > r.right - ESQUINA;
+    const cerca_izq = ev.clientX < r.left + ESQUINA;
+    const cerca_aba = ev.clientY > r.bottom - ESQUINA;
+    const cerca_arr = ev.clientY < r.top + ESQUINA;
+    if (cerca_der && cerca_aba) return 'br';
+    if (cerca_izq && cerca_aba) return 'bl';
+    if (cerca_der && cerca_arr) return 'tr';
+    if (cerca_izq && cerca_arr) return 'tl';
+    return null;
   }
+  function enEsquina(el, ev){ return !!queEsquina(el, ev); }
 
   /* Un solo repintado por cuadro de video: sin esto el arrastre se siente pesado
      porque el navegador recalcula el diseño en cada evento del dedo. */
@@ -3166,10 +3176,19 @@ function ubicarMarco(img){
     pedido = null;
     if (!img) return;
     if (modo === 'estirar'){
-      const tope = Math.min(1600, Math.round(w0 + topeDer));   // sin salirse del recuadro
-      const nuevo = Math.max(60, Math.min(Math.round(w0 + dx), tope));
+      /* Si la esquina agarrada está del lado izquierdo, arrastrar hacia la izquierda debe
+         AGRANDAR la imagen (dx negativo suma ancho); del lado derecho es al revés, como antes. */
+      const signo = (esquina === 'bl' || esquina === 'tl') ? -1 : 1;
+      const tope = Math.min(1600, Math.round(w0 + (signo===1?topeDer:-topeIzq)));
+      const nuevo = Math.max(60, Math.min(Math.round(w0 + signo*dx), tope));
       img.style.width = nuevo + 'px';
       img.style.height = 'auto';
+      /* Si la imagen está en posición libre y se agarró del lado izquierdo, hay que correr
+         el borde izquierdo para que el lado derecho quede fijo (si no, "flota" para el lado
+         que no corresponde). */
+      if (img.classList.contains('rt-libre') && (esquina === 'bl' || esquina === 'tl')){
+        img.style.left = (ix - (nuevo - w0)) + 'px';
+      }
     } else {
       /* No dejamos que se escape del recuadro: quedaría flotando sobre la tarjeta. */
       const mx = Math.max(topeIzq, Math.min(dx, topeDer));
@@ -3184,7 +3203,8 @@ function ubicarMarco(img){
     if (!el || el.tagName !== 'IMG' || !el.closest('.richtext')) return;
     if (!el.classList.contains('rt-img-selected')) return;   // primero se toca para seleccionar
 
-    modo = enEsquina(el, ev) ? 'estirar' : 'mover';
+    esquina = queEsquina(el, ev);
+    modo = esquina ? 'estirar' : 'mover';
     /* Medimos ANTES de tocar las clases: al quitarle el tope de miniatura la imagen
        saltaba a su tamaño original y el estirado arrancaba de un ancho equivocado. */
     const r = el.getBoundingClientRect();
@@ -3266,6 +3286,9 @@ function ubicarMarco(img){
       const wPx = num(img.style.width);
       const pct = Math.max(8, Math.min(100, (wPx / contW) * 100));
       img.style.width = pct + '%';
+      if (img.classList.contains('rt-libre') && (esquina === 'bl' || esquina === 'tl')){
+        img.style.left = ((num(img.style.left) / contW) * 100) + '%';
+      }
       img.style.transform = '';
     } else {
       img.style.transform = '';
