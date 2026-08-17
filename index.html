@@ -189,6 +189,14 @@
      Ahora se muestran chicas (miniatura); con el botón "Ver grande" se abren a pantalla completa. */
   .richtext img{max-width:70%;max-height:180px;width:auto;height:auto;object-fit:contain;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
   .richtext img.rt-img-big{max-width:100%;max-height:none;}
+  /* El 'margin:8px auto' de arriba centra la imagen siempre. Estas clases permiten
+     moverla: pegada a la izquierda, a la derecha, o con el texto al lado. */
+  .richtext img.rt-izq{margin:8px auto 8px 0;}
+  .richtext img.rt-der{margin:8px 0 8px auto;}
+  .richtext img.rt-flota-izq{float:left;margin:4px 14px 8px 0;max-width:45%;}
+  .richtext img.rt-flota-der{float:right;margin:4px 0 8px 14px;max-width:45%;}
+  /* Sin esto, el recuadro se "achica" detrás de una imagen flotante. */
+  .richtext::after{content:'';display:block;clear:both;}
   .imgviewer{position:fixed;inset:0;background:rgba(30,25,22,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;}
   .imgviewer img{max-width:100%;max-height:86vh;border-radius:10px;}
   .imgviewer button{position:absolute;top:14px;right:16px;background:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;}
@@ -1578,6 +1586,10 @@ function renderRichToolbar(){
         <span style="font-size:11px;color:var(--sub);width:100%;">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.viewImageFull()">🔍 ${state.lang==='en'?'View big':'Ver grande'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.toggleImageSize()">↔️ ${state.lang==='en'?'Size':'Tamaño'}</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('izq')" title="${state.lang==='en'?'Left':'A la izquierda'}">⬅️</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('centro')" title="${state.lang==='en'?'Center':'Centrada'}">⏺️</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('der')" title="${state.lang==='en'?'Right':'A la derecha'}">➡️</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('flota')" title="${state.lang==='en'?'Text beside':'Texto al lado'}">📄 ${state.lang==='en'?'Beside':'Al lado'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Up':'Subir'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Down':'Bajar'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut':'Cortar'}</button>
@@ -1931,6 +1943,21 @@ const RichText = {
     document.body.appendChild(ov);
   },
   /* Alterna entre miniatura (por defecto) e imagen grande dentro de la nota. */
+  /* Cambia dónde se ubica la imagen dentro del recuadro. 'flota' hace que el texto
+     se acomode al costado, y vuelve a alternar entre izquierda y derecha. */
+  alignImage(donde){
+    const img = richSelectedImage;
+    if (!img) return;
+    const clases = ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'];
+    const eraFlotaIzq = img.classList.contains('rt-flota-izq');
+    clases.forEach(c => img.classList.remove(c));
+    if (donde === 'izq')   img.classList.add('rt-izq');
+    if (donde === 'der')   img.classList.add('rt-der');
+    if (donde === 'flota') img.classList.add(eraFlotaIzq ? 'rt-flota-der' : 'rt-flota-izq');
+    /* 'centro' no agrega nada: es el comportamiento por defecto. */
+    this.persist(richActive);
+    refreshRichToolbar();
+  },
   toggleImageSize(){
     const img = richSelectedImage;
     if (!img) return;
