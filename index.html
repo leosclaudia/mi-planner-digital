@@ -541,6 +541,15 @@ function renderLangToggle(extraClass){
 }
 
 function render(){
+  /* Si hay un campo de texto con foco (por ej. escribiendo un título) y llega una
+     sincronización de fondo, el redibujado completo de la pantalla lo hacía perder
+     el foco y el cursor, cortando lo que se estaba escribiendo. Lo guardamos acá
+     y lo restauramos al final. */
+  const focoPrevio = document.activeElement;
+  let focoInfo = null;
+  if (focoPrevio && focoPrevio.id && (focoPrevio.tagName === 'INPUT' || focoPrevio.tagName === 'TEXTAREA')){
+    focoInfo = { id: focoPrevio.id, start: focoPrevio.selectionStart, end: focoPrevio.selectionEnd };
+  }
   const app = document.getElementById('app');
   const titles = {
     inicio:[t('title_inicio'), t('sub_inicio')],
@@ -596,6 +605,13 @@ function render(){
     <main id="main">${contentHtml}</main>
     ${renderTabBar()}
   `;
+  if (focoInfo){
+    const de_nuevo = document.getElementById(focoInfo.id);
+    if (de_nuevo && (de_nuevo.tagName === 'INPUT' || de_nuevo.tagName === 'TEXTAREA')){
+      de_nuevo.focus();
+      try{ de_nuevo.setSelectionRange(focoInfo.start, focoInfo.end); }catch(e){}
+    }
+  }
   if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
@@ -1028,7 +1044,7 @@ function renderNotasRich(){
       <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
       <div class="card">
         <div class="card-b">
-          <input type="text" value="${esc(n.titulo)}" placeholder="Título de la nota"
+          <input type="text" id="notaTitulo-${n.id}" value="${esc(n.titulo)}" placeholder="Título de la nota"
             style="font-weight:700;font-size:15px;border-bottom:1px solid var(--mintLine);padding-bottom:7px;"
             oninput="App.setNotaCampo('${n.id}','titulo',this.value)"/>
           <div class="row" style="margin-top:10px;align-items:center;">
