@@ -219,7 +219,7 @@
   .richtext img.rt-libre.rt-agarrada{cursor:grabbing;opacity:.85;box-shadow:0 8px 22px rgba(85,72,65,.3);}
   /* Medida a mano: cuando la persona estira la imagen, su ancho manda por sobre los
      topes de la miniatura. Sin esto el max-width la volvería a achicar sola. */
-  .richtext img.rt-medida{max-width:none !important;max-height:none !important;height:auto;}
+  .richtext img.rt-medida{max-width:100% !important;max-height:none !important;height:auto;}
   .richtext img.rt-estirando{opacity:.9;}
   /* Mientras se arrastra usamos transform (lo mueve la placa de video, no el navegador
      rehaciendo el diseño), y avisamos con will-change. Antes se movía con left/top en
@@ -2024,10 +2024,15 @@ const RichText = {
     const img = richSelectedImage;
     if (!img) return;
     const actual = img.getBoundingClientRect().width || 240;
-    const nuevo = Math.max(60, Math.min(Math.round(actual * factor), 1600));
+    const caja = img.closest('.richtext');
+    const contW = (caja ? caja.getBoundingClientRect().width : 0) || 300;
+    const nuevoPx = Math.max(30, Math.min(Math.round(actual * factor), contW));
+    /* Se guarda en % del ancho del cuadro (no en píxeles fijos) para que se adapte
+       sola al pasar de una pantalla ancha (PC) a una angosta (celu). */
+    const pct = Math.max(8, Math.min(100, Math.round((nuevoPx / contW) * 100)));
     img.classList.add('rt-medida');
     img.classList.remove('rt-img-big');
-    img.style.width = nuevo + 'px';
+    img.style.width = pct + '%';
     img.style.height = 'auto';
     this.persist(richActive);
     refreshRichToolbar();
@@ -3188,6 +3193,11 @@ function ubicarMarco(img){
     if (modo === 'mover'){
       /* Una imagen seleccionada se mueve directamente: no hace falta activar nada antes. */
       ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'].forEach(c => el.classList.remove(c));
+      /* Si la posición había quedado guardada en % (para adaptarse a cada pantalla), la
+         convertimos a píxeles reales de ESTA pantalla antes de arrastrar — así el arrastre
+         arranca del lugar correcto y no de un número tomado de otra pantalla. */
+      if (el.style.left && el.style.left.indexOf('%') !== -1) el.style.left = Math.round(parseFloat(el.style.left)/100 * c.width) + 'px';
+      if (el.style.top && el.style.top.indexOf('%') !== -1) el.style.top = Math.round(parseFloat(el.style.top)/100 * c.width) + 'px';
       if (!el.style.left) el.style.left = '0px';
       if (!el.style.top)  el.style.top  = '0px';
       el.classList.add('rt-libre');
@@ -3240,18 +3250,27 @@ function ubicarMarco(img){
   function soltar(){
     if (!img) return;
     if (pedido){ cancelAnimationFrame(pedido); pedido = null; }
+    const caja = img.closest('.richtext');
+    const contW = (caja ? caja.getBoundingClientRect().width : 0) || 300;
     if (modo === 'mover' && movio){
       /* Pasamos el desplazamiento temporal a la posición definitiva, ya recortado. */
       const mx = Math.max(topeIzq, Math.min(dx, topeDer));
       const my = Math.max(topeArr, Math.min(dy, topeAba));
       img.style.transform = '';
-      img.style.left = (ix + mx) + 'px';
-      img.style.top  = (iy + my) + 'px';
+      /* Guardamos la posición en % del ancho del cuadro, no en píxeles fijos —
+         así en una pantalla más angosta (el celu) la imagen aparece en el lugar
+         proporcional correcto, en vez de con el mismo número de píxeles de la PC. */
+      img.style.left = (((ix + mx) / contW) * 100) + '%';
+      img.style.top  = (((iy + my) / contW) * 100) + '%';
+    } else if (modo === 'estirar' && movio){
+      const wPx = num(img.style.width);
+      const pct = Math.max(8, Math.min(100, (wPx / contW) * 100));
+      img.style.width = pct + '%';
+      img.style.transform = '';
     } else {
       img.style.transform = '';
     }
     img.classList.remove('rt-agarrada','rt-estirando');
-    const caja = img.closest('.richtext');
     const guardar = movio;
     ubicarMarco(img);
     const el = img;
