@@ -203,7 +203,7 @@
   .richink:not(.active){pointer-events:none;z-index:0;}
   /* Las fotos verticales estiraban la tarjeta del día a lo largo y tapaban el texto.
      Ahora se muestran chicas (miniatura); con el botón "Ver grande" se abren a pantalla completa. */
-  .richtext img{max-width:70%;max-height:180px;width:auto;height:auto;object-fit:contain;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
+  .richtext img{box-sizing:border-box;max-width:70%;max-height:180px;width:auto;height:auto;object-fit:contain;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
   .richtext img.rt-img-big{max-width:100%;max-height:none;}
   /* El 'margin:8px auto' de arriba centra la imagen siempre. Estas clases permiten
      moverla: pegada a la izquierda, a la derecha, o con el texto al lado. */
@@ -220,13 +220,27 @@
   /* Medida a mano: cuando la persona estira la imagen, su ancho manda por sobre los
      topes de la miniatura. Sin esto el max-width la volvería a achicar sola. */
   .richtext img.rt-medida{max-width:none !important;max-height:none !important;height:auto;}
-  .richtext img.rt-estirando{opacity:.85;box-shadow:0 8px 22px rgba(85,72,65,.3);}
+  .richtext img.rt-estirando{opacity:.9;}
+  /* Mientras se arrastra usamos transform (lo mueve la placa de video, no el navegador
+     rehaciendo el diseño), y avisamos con will-change. Antes se movía con left/top en
+     cada movimiento del dedo y por eso iba a los tirones. */
+  .richtext img.rt-agarrada,.richtext img.rt-estirando{will-change:transform,width;box-shadow:0 10px 26px rgba(85,72,65,.28);}
+  /* Marco de selección: solo visual, no recibe toques (los maneja la imagen). */
+  .rt-marco{position:absolute;border:1.5px solid var(--accent);border-radius:8px;
+    pointer-events:none;z-index:9;box-sizing:border-box;}
+  .rt-marco i{position:absolute;width:13px;height:13px;background:#fff;
+    border:2.5px solid var(--accent);border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+  .rt-marco i.nw{left:-7px;top:-7px;}
+  .rt-marco i.ne{right:-7px;top:-7px;}
+  .rt-marco i.sw{left:-7px;bottom:-7px;}
+  .rt-marco i.se{right:-7px;bottom:-7px;background:var(--accent);width:16px;height:16px;
+    border-color:#fff;bottom:-9px;right:-9px;}
   /* Sin esto, el recuadro se "achica" detrás de una imagen flotante. */
   .richtext::after{content:'';display:block;clear:both;}
   .imgviewer{position:fixed;inset:0;background:rgba(30,25,22,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;}
   .imgviewer img{max-width:100%;max-height:86vh;border-radius:10px;}
   .imgviewer button{position:absolute;top:14px;right:16px;background:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;}
-  .richtext img.rt-img-selected{border:2px solid var(--accent, #79B553);box-shadow:0 0 0 3px rgba(121,181,83,.25);}
+  .richtext img.rt-img-selected{border-color:transparent;}
   .pzel.selected{outline:1.5px dashed var(--accent);}
   .pzhandle.ne{top:-8px;right:-8px;cursor:nesw-resize;}
   .pzhandle.sw{bottom:-8px;left:-8px;cursor:nesw-resize;}
@@ -323,7 +337,7 @@ const I18N = {
     menu_comidas:'Comidas', menu_comidas_sub:'Menú de la semana',
     menu_sync:'Sincronizar', menu_sync_sub:'Entre tus dispositivos',
     portada_title1:'MI PLANNER', portada_title2:'DIGITAL', portada_tagline:'para vos',
-    portada_desc:'Organizá tu día a día, tu huerta y tus proyectos, a tu manera',
+    portada_desc:'Organizá tu día a día, tus notas y tus proyectos, a tu manera',
     portada_start:'TOCÁ PARA COMENZAR',
     card_hoy:'HOY', ph_hoy:'¿Qué es lo más importante de hoy?...',
     card_prioridades:'PRIORIDADES', ph_prioridad:'Escribí una prioridad', btn_agregar_prioridad:'Agregar prioridad',
@@ -390,7 +404,7 @@ const I18N = {
     menu_comidas:'Meals', menu_comidas_sub:'Weekly menu',
     menu_sync:'Sync', menu_sync_sub:'Between your devices',
     portada_title1:'MY DIGITAL', portada_title2:'PLANNER', portada_tagline:'made for you',
-    portada_desc:'Organize your day to day, your garden, and your projects, your way',
+    portada_desc:'Organize your day to day, your notes, and your projects, your way',
     portada_start:'TAP TO START',
     card_hoy:'TODAY', ph_hoy:'What\'s most important today?...',
     card_prioridades:'PRIORITIES', ph_prioridad:'Write a priority', btn_agregar_prioridad:'Add priority',
@@ -1617,7 +1631,6 @@ function renderRichToolbar(){
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('centro')" title="${state.lang==='en'?'Center':'Centrada'}">⏺️</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('der')" title="${state.lang==='en'?'Right':'A la derecha'}">➡️</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('flota')" title="${state.lang==='en'?'Text beside':'Texto al lado'}">📄 ${state.lang==='en'?'Beside':'Al lado'}</button>
-        <button class="richimgbtn" style="${richSelectedImage && richSelectedImage.classList.contains('rt-libre') ? 'background:var(--mint);border-color:var(--accent);font-weight:700;' : ''}" onmousedown="event.preventDefault()" onclick="RichText.toggleLibre()" title="${state.lang==='en'?'Drag anywhere':'Arrastrar a mano'}">✋ ${state.lang==='en'?'Free':'Libre'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Up':'Subir'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Down':'Bajar'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut':'Cortar'}</button>
@@ -1905,6 +1918,7 @@ const RichText = {
     document.querySelectorAll('.rt-img-selected').forEach(el => el.classList.remove('rt-img-selected'));
     img.classList.add('rt-img', 'rt-img-selected');
     richSelectedImage = img;
+    dibujarMarco(img);
     refreshRichToolbar();
   },
   handleBoxClick(evt){
@@ -1918,6 +1932,7 @@ const RichText = {
     if (richSelectedImage){
       richSelectedImage.classList.remove('rt-img-selected');
       richSelectedImage = null;
+      borrarMarco();
       refreshRichToolbar();
     }
   },
@@ -3098,72 +3113,157 @@ setInterval(checkReminders, 30000);
    Los eventos van sobre document (no sobre cada imagen) porque render() rehace el HTML
    a cada rato: si se engancharan a la imagen, se perderían en el primer redibujado.
    'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
-(function initArrastreImagenes(){
-  let img = null, modo = null, x0 = 0, y0 = 0, ix = 0, iy = 0, w0 = 0, movio = false;
-  const num = v => parseFloat(v) || 0;
-  const ESQUINA = 26;   // zona de la esquina inferior derecha, en píxeles
+/* Dibuja el marco con las manijas de las esquinas sobre la imagen seleccionada.
+   Es solo visual (pointer-events:none): los toques los sigue manejando la imagen. */
+function borrarMarco(){
+  document.querySelectorAll('.rt-marco').forEach(m => m.remove());
+}
+function dibujarMarco(img){
+  borrarMarco();
+  const caja = img && img.closest('.richbox');
+  if (!caja) return;
+  const m = document.createElement('div');
+  m.className = 'rt-marco';
+  m.innerHTML = '<i class="nw"></i><i class="ne"></i><i class="sw"></i><i class="se"></i>';
+  caja.appendChild(m);
+  ubicarMarco(img);
+}
+function ubicarMarco(img){
+  const m = document.querySelector('.rt-marco');
+  const caja = img && img.closest('.richbox');
+  if (!m || !caja) return;
+  const a = img.getBoundingClientRect(), b = caja.getBoundingClientRect();
+  m.style.left   = (a.left - b.left) + 'px';
+  m.style.top    = (a.top  - b.top)  + 'px';
+  m.style.width  = a.width  + 'px';
+  m.style.height = a.height + 'px';
+}
 
-  /* ¿El puntero está sobre la esquina de abajo a la derecha? Ahí se estira. */
+/* ---------- mover y redimensionar imágenes a mano ----------
+   Los eventos van sobre document (no sobre cada imagen) porque render() rehace el HTML
+   a cada rato: si se engancharan a la imagen, se perderían en el primer redibujado.
+   'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
+(function initArrastreImagenes(){
+  let img = null, modo = null, x0 = 0, y0 = 0, ix = 0, iy = 0, w0 = 0;
+  let dx = 0, dy = 0, movio = false, pedido = null;
+  let topeIzq = 0, topeDer = 0, topeArr = 0, topeAba = 0;
+  const num = v => parseFloat(v) || 0;
+  const ESQUINA = 30;   // zona de las esquinas, en píxeles
+
   function enEsquina(el, ev){
     const r = el.getBoundingClientRect();
-    return ev.clientX > r.right - ESQUINA && ev.clientY > r.bottom - ESQUINA;
+    return (ev.clientX > r.right - ESQUINA && ev.clientY > r.bottom - ESQUINA);
+  }
+
+  /* Un solo repintado por cuadro de video: sin esto el arrastre se siente pesado
+     porque el navegador recalcula el diseño en cada evento del dedo. */
+  function pintar(){
+    pedido = null;
+    if (!img) return;
+    if (modo === 'estirar'){
+      const tope = Math.min(1600, Math.round(w0 + topeDer));   // sin salirse del recuadro
+      const nuevo = Math.max(60, Math.min(Math.round(w0 + dx), tope));
+      img.style.width = nuevo + 'px';
+      img.style.height = 'auto';
+    } else {
+      /* No dejamos que se escape del recuadro: quedaría flotando sobre la tarjeta. */
+      const mx = Math.max(topeIzq, Math.min(dx, topeDer));
+      const my = Math.max(topeArr, Math.min(dy, topeAba));
+      img.style.transform = `translate(${mx}px, ${my}px)`;
+    }
+    ubicarMarco(img);
   }
 
   document.addEventListener('pointerdown', ev => {
     const el = ev.target;
     if (!el || el.tagName !== 'IMG' || !el.closest('.richtext')) return;
-    const seleccionada = el.classList.contains('rt-img-selected');
-    const libre = el.classList.contains('rt-libre');
+    if (!el.classList.contains('rt-img-selected')) return;   // primero se toca para seleccionar
 
-    if (seleccionada && enEsquina(el, ev))      modo = 'estirar';
-    else if (libre)                              modo = 'mover';
-    else return;
+    modo = enEsquina(el, ev) ? 'estirar' : 'mover';
+    /* Medimos ANTES de tocar las clases: al quitarle el tope de miniatura la imagen
+       saltaba a su tamaño original y el estirado arrancaba de un ancho equivocado. */
+    const r = el.getBoundingClientRect();
+    const c = el.closest('.richtext').getBoundingClientRect();
+    w0 = r.width;
+    if (modo === 'mover'){
+      /* Una imagen seleccionada se mueve directamente: no hace falta activar nada antes. */
+      ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'].forEach(c => el.classList.remove(c));
+      if (!el.style.left) el.style.left = '0px';
+      if (!el.style.top)  el.style.top  = '0px';
+      el.classList.add('rt-libre');
+      el.setAttribute('draggable','false');
+      /* El modo libre anula el 'margin:auto' que centraba la imagen, así que al agarrarla
+         daba un salto hacia la izquierda. Acá medimos ese corrimiento y lo compensamos,
+         para que la imagen arranque exactamente donde estaba. */
+      const desp = el.getBoundingClientRect();
+      const salto = { x: desp.left - r.left, y: desp.top - r.top };
+      if (salto.x || salto.y){
+        el.style.left = (num(el.style.left) - salto.x) + 'px';
+        el.style.top  = (num(el.style.top)  - salto.y) + 'px';
+      }
+    } else {
+      /* Fijamos el ancho actual en el mismo momento en que se quita el tope,
+         así no hay ningún salto visible. */
+      el.style.width = Math.round(w0) + 'px';
+      el.style.height = 'auto';
+      el.classList.add('rt-medida');
+      el.classList.remove('rt-img-big');
+    }
 
-    img = el; movio = false;
+    img = el; movio = false; dx = 0; dy = 0;
     x0 = ev.clientX; y0 = ev.clientY;
-    ix = num(el.style.left); iy = num(el.style.top);
-    w0 = el.getBoundingClientRect().width;
+    ix = num(el.style.left); iy = num(el.style.top);   // ya compensado el salto de arriba
+    topeIzq = c.left + 4 - r.left;   topeDer = c.right - 4 - r.right;
+    topeArr = c.top  + 4 - r.top;    topeAba = c.bottom - 4 - r.bottom;
+    if (topeDer < topeIzq) topeDer = topeIzq;
+    if (topeAba < topeArr) topeAba = topeArr;
     el.classList.add(modo === 'estirar' ? 'rt-estirando' : 'rt-agarrada');
     try{ el.setPointerCapture(ev.pointerId); }catch(e){}
-    /* evita que el navegador ponga el cursor de texto o inicie su propio arrastre */
     ev.preventDefault();
-    RichText.selectImage(ev, el);
-  });
+  }, true);
 
   document.addEventListener('pointermove', ev => {
-    /* Sin arrastre en curso, solo cambiamos el cursor para avisar que ahí se estira. */
     if (!img){
       const el = ev.target;
       if (el && el.tagName === 'IMG' && el.classList.contains('rt-img-selected') && el.closest('.richtext')){
-        el.style.cursor = enEsquina(el, ev) ? 'nwse-resize'
-                        : (el.classList.contains('rt-libre') ? 'grab' : '');
+        el.style.cursor = enEsquina(el, ev) ? 'nwse-resize' : 'grab';
       }
       return;
     }
-    const dx = ev.clientX - x0, dy = ev.clientY - y0;
+    dx = ev.clientX - x0;
+    dy = ev.clientY - y0;
     if (Math.abs(dx) > 2 || Math.abs(dy) > 2) movio = true;
-    if (modo === 'estirar'){
-      const nuevo = Math.max(60, Math.min(Math.round(w0 + dx), 1600));
-      img.classList.add('rt-medida');
-      img.classList.remove('rt-img-big');
-      img.style.width = nuevo + 'px';
-      img.style.height = 'auto';
-    } else {
-      img.style.left = (ix + dx) + 'px';
-      img.style.top  = (iy + dy) + 'px';
-    }
+    if (!pedido) pedido = requestAnimationFrame(pintar);
     ev.preventDefault();
   });
 
   function soltar(){
     if (!img) return;
+    if (pedido){ cancelAnimationFrame(pedido); pedido = null; }
+    if (modo === 'mover' && movio){
+      /* Pasamos el desplazamiento temporal a la posición definitiva, ya recortado. */
+      const mx = Math.max(topeIzq, Math.min(dx, topeDer));
+      const my = Math.max(topeArr, Math.min(dy, topeAba));
+      img.style.transform = '';
+      img.style.left = (ix + mx) + 'px';
+      img.style.top  = (iy + my) + 'px';
+    } else {
+      img.style.transform = '';
+    }
     img.classList.remove('rt-agarrada','rt-estirando');
     const caja = img.closest('.richtext');
+    const guardar = movio;
+    ubicarMarco(img);
+    const el = img;
     img = null; modo = null;
-    if (movio && caja && caja.dataset.key) RichText.persist(caja.dataset.key);
+    if (guardar && caja && caja.dataset.key) RichText.persist(caja.dataset.key);
+    else if (!guardar) RichText.selectImage(null, el);
   }
   document.addEventListener('pointerup', soltar);
   document.addEventListener('pointercancel', soltar);
+
+  /* Si cambia el tamaño de la ventana, el marco tiene que seguir a la imagen. */
+  window.addEventListener('resize', () => { if (richSelectedImage) ubicarMarco(richSelectedImage); });
 })();
 
 document.documentElement.lang = state.lang;
