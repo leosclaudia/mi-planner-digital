@@ -195,6 +195,16 @@
   .richtext img.rt-der{margin:8px 0 8px auto;}
   .richtext img.rt-flota-izq{float:left;margin:4px 14px 8px 0;max-width:45%;}
   .richtext img.rt-flota-der{float:right;margin:4px 0 8px 14px;max-width:45%;}
+  /* Modo libre: la imagen se puede arrastrar con el mouse o el lápiz a cualquier lado.
+     Usa position:relative (no absolute) a propósito: así sigue ocupando su lugar y el
+     recuadro crece con ella, en vez de quedarse chico y tapar el texto. */
+  .richtext img.rt-libre{position:relative;margin:0 !important;cursor:grab;touch-action:none;
+    -webkit-user-drag:none;user-select:none;z-index:3;}
+  .richtext img.rt-libre.rt-agarrada{cursor:grabbing;opacity:.85;box-shadow:0 8px 22px rgba(85,72,65,.3);}
+  /* Medida a mano: cuando la persona estira la imagen, su ancho manda por sobre los
+     topes de la miniatura. Sin esto el max-width la volvería a achicar sola. */
+  .richtext img.rt-medida{max-width:none !important;max-height:none !important;height:auto;}
+  .richtext img.rt-estirando{opacity:.85;box-shadow:0 8px 22px rgba(85,72,65,.3);}
   /* Sin esto, el recuadro se "achica" detrás de una imagen flotante. */
   .richtext::after{content:'';display:block;clear:both;}
   .imgviewer{position:fixed;inset:0;background:rgba(30,25,22,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;}
@@ -1585,11 +1595,14 @@ function renderRichToolbar(){
       <div class="richpanel" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;">
         <span style="font-size:11px;color:var(--sub);width:100%;">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.viewImageFull()">🔍 ${state.lang==='en'?'View big':'Ver grande'}</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.toggleImageSize()">↔️ ${state.lang==='en'?'Size':'Tamaño'}</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.escalarImagen(0.85)" title="${state.lang==='en'?'Smaller':'Más chica'}">➖</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.escalarImagen(1.18)" title="${state.lang==='en'?'Bigger':'Más grande'}">➕</button>
+        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.medidaOriginal()" title="${state.lang==='en'?'Reset size':'Tamaño original'}">↔️ ${state.lang==='en'?'Reset':'Original'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('izq')" title="${state.lang==='en'?'Left':'A la izquierda'}">⬅️</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('centro')" title="${state.lang==='en'?'Center':'Centrada'}">⏺️</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('der')" title="${state.lang==='en'?'Right':'A la derecha'}">➡️</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('flota')" title="${state.lang==='en'?'Text beside':'Texto al lado'}">📄 ${state.lang==='en'?'Beside':'Al lado'}</button>
+        <button class="richimgbtn" style="${richSelectedImage && richSelectedImage.classList.contains('rt-libre') ? 'background:var(--mint);border-color:var(--accent);font-weight:700;' : ''}" onmousedown="event.preventDefault()" onclick="RichText.toggleLibre()" title="${state.lang==='en'?'Drag anywhere':'Arrastrar a mano'}">✋ ${state.lang==='en'?'Free':'Libre'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Up':'Subir'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Down':'Bajar'}</button>
         <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut':'Cortar'}</button>
@@ -1955,6 +1968,46 @@ const RichText = {
     if (donde === 'der')   img.classList.add('rt-der');
     if (donde === 'flota') img.classList.add(eraFlotaIzq ? 'rt-flota-der' : 'rt-flota-izq');
     /* 'centro' no agrega nada: es el comportamiento por defecto. */
+    this.persist(richActive);
+    refreshRichToolbar();
+  },
+  /* Activa/desactiva el modo libre de una imagen. Con el modo activo se la agarra
+     con el dedo, el mouse o el lápiz y se la suelta donde uno quiera. */
+  toggleLibre(){
+    const img = richSelectedImage;
+    if (!img) return;
+    if (img.classList.contains('rt-libre')){
+      img.classList.remove('rt-libre');
+      img.style.left = ''; img.style.top = '';
+    } else {
+      ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'].forEach(c => img.classList.remove(c));
+      img.classList.add('rt-libre');
+      if (!img.style.left) img.style.left = '0px';
+      if (!img.style.top)  img.style.top  = '0px';
+      img.setAttribute('draggable','false');
+    }
+    this.persist(richActive);
+    refreshRichToolbar();
+  },
+  /* Cambia el ancho de la imagen por un porcentaje. La altura va sola, para no deformarla. */
+  escalarImagen(factor){
+    const img = richSelectedImage;
+    if (!img) return;
+    const actual = img.getBoundingClientRect().width || 240;
+    const nuevo = Math.max(60, Math.min(Math.round(actual * factor), 1600));
+    img.classList.add('rt-medida');
+    img.classList.remove('rt-img-big');
+    img.style.width = nuevo + 'px';
+    img.style.height = 'auto';
+    this.persist(richActive);
+    refreshRichToolbar();
+  },
+  /* Vuelve al tamaño de miniatura con el que entró. */
+  medidaOriginal(){
+    const img = richSelectedImage;
+    if (!img) return;
+    img.classList.remove('rt-medida','rt-img-big');
+    img.style.width = ''; img.style.height = '';
     this.persist(richActive);
     refreshRichToolbar();
   },
@@ -3025,6 +3078,78 @@ function checkReminders(){
   });
 }
 setInterval(checkReminders, 30000);
+
+/* ---------- arrastrar imágenes a mano ----------
+   Los eventos van sobre document (no sobre cada imagen) porque render() rehace el HTML
+   a cada rato: si se engancharan a la imagen, se perderían en el primer redibujado.
+   'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
+(function initArrastreImagenes(){
+  let img = null, modo = null, x0 = 0, y0 = 0, ix = 0, iy = 0, w0 = 0, movio = false;
+  const num = v => parseFloat(v) || 0;
+  const ESQUINA = 26;   // zona de la esquina inferior derecha, en píxeles
+
+  /* ¿El puntero está sobre la esquina de abajo a la derecha? Ahí se estira. */
+  function enEsquina(el, ev){
+    const r = el.getBoundingClientRect();
+    return ev.clientX > r.right - ESQUINA && ev.clientY > r.bottom - ESQUINA;
+  }
+
+  document.addEventListener('pointerdown', ev => {
+    const el = ev.target;
+    if (!el || el.tagName !== 'IMG' || !el.closest('.richtext')) return;
+    const seleccionada = el.classList.contains('rt-img-selected');
+    const libre = el.classList.contains('rt-libre');
+
+    if (seleccionada && enEsquina(el, ev))      modo = 'estirar';
+    else if (libre)                              modo = 'mover';
+    else return;
+
+    img = el; movio = false;
+    x0 = ev.clientX; y0 = ev.clientY;
+    ix = num(el.style.left); iy = num(el.style.top);
+    w0 = el.getBoundingClientRect().width;
+    el.classList.add(modo === 'estirar' ? 'rt-estirando' : 'rt-agarrada');
+    try{ el.setPointerCapture(ev.pointerId); }catch(e){}
+    /* evita que el navegador ponga el cursor de texto o inicie su propio arrastre */
+    ev.preventDefault();
+    RichText.selectImage(ev, el);
+  });
+
+  document.addEventListener('pointermove', ev => {
+    /* Sin arrastre en curso, solo cambiamos el cursor para avisar que ahí se estira. */
+    if (!img){
+      const el = ev.target;
+      if (el && el.tagName === 'IMG' && el.classList.contains('rt-img-selected') && el.closest('.richtext')){
+        el.style.cursor = enEsquina(el, ev) ? 'nwse-resize'
+                        : (el.classList.contains('rt-libre') ? 'grab' : '');
+      }
+      return;
+    }
+    const dx = ev.clientX - x0, dy = ev.clientY - y0;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) movio = true;
+    if (modo === 'estirar'){
+      const nuevo = Math.max(60, Math.min(Math.round(w0 + dx), 1600));
+      img.classList.add('rt-medida');
+      img.classList.remove('rt-img-big');
+      img.style.width = nuevo + 'px';
+      img.style.height = 'auto';
+    } else {
+      img.style.left = (ix + dx) + 'px';
+      img.style.top  = (iy + dy) + 'px';
+    }
+    ev.preventDefault();
+  });
+
+  function soltar(){
+    if (!img) return;
+    img.classList.remove('rt-agarrada','rt-estirando');
+    const caja = img.closest('.richtext');
+    img = null; modo = null;
+    if (movio && caja && caja.dataset.key) RichText.persist(caja.dataset.key);
+  }
+  document.addEventListener('pointerup', soltar);
+  document.addEventListener('pointercancel', soltar);
+})();
 
 document.documentElement.lang = state.lang;
 window.addEventListener('afterprint', () => {
