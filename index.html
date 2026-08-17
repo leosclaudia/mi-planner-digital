@@ -46,6 +46,22 @@
     width:100%;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;color:var(--ink);
   }
   textarea{resize:none;line-height:1.5;}
+  /* El campo de fecha del navegador viene con su propio recuadro cuadrado y su tipografía,
+     y desentonaba con el resto. Lo vestimos como una pastilla, igual que los demás controles. */
+  input[type=date], input[type=time]{
+    -webkit-appearance:none;appearance:none;
+    border:none;outline:none;cursor:pointer;
+    background:var(--mint);color:var(--ink);
+    font-family:inherit;font-size:12.5px;font-weight:600;
+    padding:5px 10px;border-radius:999px;width:auto;max-width:100%;
+  }
+  input[type=date]::-webkit-calendar-picker-indicator,
+  input[type=time]::-webkit-calendar-picker-indicator{opacity:.45;cursor:pointer;margin-left:2px;}
+  input[type=date]::-webkit-inner-spin-button, input[type=time]::-webkit-inner-spin-button,
+  input[type=date]::-webkit-clear-button, input[type=time]::-webkit-clear-button{display:none;}
+  /* No aplica a los selectores invisibles (el 📅 de Semana y el ↪ de mover). */
+  input[type=time]{background:var(--terracota);}
+  .fechapick input[type=date]{background:transparent;padding:0;border-radius:0;}
   input::placeholder,textarea::placeholder{color:#C9C2B4;}
   .row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .row:last-child{margin-bottom:0;}
@@ -1003,9 +1019,8 @@ function renderNotasRich(){
             oninput="App.setNotaCampo('${n.id}','titulo',this.value)"/>
           <div class="row" style="margin-top:10px;align-items:center;">
             <input type="date" value="${esc(n.fecha||'')}"
-              style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;font-size:13px;"
               oninput="App.setNotaCampo('${n.id}','fecha',this.value)"/>
-            <button class="xbtn" title="Eliminar nota" onclick="App.borrarNota('${n.id}')">${ICONS.x}</button>
+            <button class="xbtn" style="margin-left:auto;" title="Eliminar nota" onclick="App.borrarNota('${n.id}')">${ICONS.x}</button>
           </div>
         </div>
         ${richBoxOnly(key, n.titulo || 'Nota', 'Texto, imágenes, stickers, dibujo a mano…')}
@@ -1170,8 +1185,8 @@ function renderTurnos(){
             <button class="xbtn" onclick="App.removeItem('turnos','lista','${item.id}')">${ICONS.x}</button>
           </div>
           <div class="row" style="margin-top:6px;">
-            <input type="date" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
-            <input type="time" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
+            <input type="date" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
+            <input type="time" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
           </div>
           <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${esc(item.recordar?t('btn_te_avisare'):t('btn_avisarme'))}</button>
         </div>
