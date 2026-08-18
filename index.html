@@ -214,6 +214,9 @@
   /* Modo libre: la imagen se puede arrastrar con el mouse o el lápiz a cualquier lado.
      Usa position:relative (no absolute) a propósito: así sigue ocupando su lugar y el
      recuadro crece con ella, en vez de quedarse chico y tapar el texto. */
+  /* Un respiro al final de cada recuadro: sin esto el cuadro se ajusta justo al contenido
+     y una imagen no tiene margen para moverse hacia arriba o hacia abajo. */
+  .richtext{padding-bottom:70px;}
   .richtext img.rt-libre{position:relative;margin:0 !important;cursor:grab;touch-action:none;
     -webkit-user-drag:none;user-select:none;z-index:3;}
   .richtext img.rt-libre.rt-agarrada{cursor:grabbing;opacity:.85;box-shadow:0 8px 22px rgba(85,72,65,.3);}
@@ -539,6 +542,27 @@ function renderLangToggle(extraClass){
     </div>
   `;
 }
+
+/* Redibujado que NO interrumpe a quien está escribiendo.
+   La sincronización redibuja la pantalla cada vez que confirma un guardado, y eso
+   destruía el casillero donde estabas tipeando: entraban dos o tres letras y se cortaba.
+   Ahora, si hay un campo con el foco puesto, el redibujado espera a que lo sueltes. */
+let renderPendiente = false;
+function escribiendoAhora(){
+  const a = document.activeElement;
+  return !!(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable));
+}
+function renderSeguro(){
+  if (escribiendoAhora()){ renderPendiente = true; return; }
+  render();
+}
+document.addEventListener('focusout', () => {
+  if (!renderPendiente) return;
+  /* Damos un respiro por si el foco solo saltó de un campo a otro. */
+  setTimeout(() => {
+    if (renderPendiente && !escribiendoAhora()){ renderPendiente = false; render(); }
+  }, 150);
+});
 
 function render(){
   /* Si hay un campo de texto con foco (por ej. escribiendo un título) y llega una
@@ -2041,7 +2065,7 @@ const RichText = {
     if (!img) return;
     const actual = img.getBoundingClientRect().width || 240;
     const caja = img.closest('.richtext');
-    const contW = (caja ? caja.getBoundingClientRect().width : 0) || 300;
+    const contW = anchoInterno(caja);
     const nuevoPx = Math.max(30, Math.min(Math.round(actual * factor), contW));
     /* Se guarda en % del ancho del cuadro (no en píxeles fijos) para que se adapte
        sola al pasar de una pantalla ancha (PC) a una angosta (celu). */
@@ -3046,14 +3070,14 @@ const Sync = {
         });
         this.applyingRemote = false;
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
-        render();
+        renderSeguro();
       }, err => {
         state.syncStatus = 'No se pudo conectar (revisá la config o tu conexión).';
-        render();
+        renderSeguro();
       });
     }catch(e){
       state.syncStatus = 'No se pudo cargar Firebase. Revisá tu conexión a internet.';
-      render();
+      renderSeguro();
     }
   },
   stop(){
@@ -3096,13 +3120,13 @@ const Sync = {
       .then(() => {
         delete this.dirty[key];
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
-        render();
+        renderSeguro();
       })
       .catch(err => {
         const msg = (err && err.message) ? err.message : String(err);
         /* Queda en dirty a propósito: así la copia local no se pisa y se reintenta al reconectar. */
         state.syncStatus = 'Sin subir "' + key + '": ' + msg;
-        render();
+        renderSeguro();
       });
   },
   flushPending(){
@@ -3164,6 +3188,16 @@ function ubicarMarco(img){
    Los eventos van sobre document (no sobre cada imagen) porque render() rehace el HTML
    a cada rato: si se engancharan a la imagen, se perderían en el primer redibujado.
    'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
+/* Ancho contra el que el navegador resuelve un 'left' en porcentaje: es el ancho
+   INTERNO del contenedor (sin sus márgenes internos), no el que devuelve
+   getBoundingClientRect. Usar el equivocado corría la imagen unos píxeles cada vez. */
+function anchoInterno(caja){
+  if (!caja) return 300;
+  const cs = getComputedStyle(caja);
+  const w = caja.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0);
+  return w > 0 ? w : (caja.getBoundingClientRect().width || 300);
+}
+
 (function initArrastreImagenes(){
   let img = null, modo = null, x0 = 0, y0 = 0, ix = 0, iy = 0, w0 = 0;
   let dx = 0, dy = 0, movio = false, pedido = null, esquina = null;
@@ -3232,8 +3266,10 @@ function ubicarMarco(img){
       /* Si la posición había quedado guardada en % (para adaptarse a cada pantalla), la
          convertimos a píxeles reales de ESTA pantalla antes de arrastrar — así el arrastre
          arranca del lugar correcto y no de un número tomado de otra pantalla. */
-      if (el.style.left && el.style.left.indexOf('%') !== -1) el.style.left = Math.round(parseFloat(el.style.left)/100 * c.width) + 'px';
-      if (el.style.top && el.style.top.indexOf('%') !== -1) el.style.top = Math.round(parseFloat(el.style.top)/100 * c.width) + 'px';
+      const anchoRef = anchoInterno(el.closest('.richtext'));
+      if (el.style.left && el.style.left.indexOf('%') !== -1) el.style.left = Math.round(parseFloat(el.style.left)/100 * anchoRef) + 'px';
+      /* Compatibilidad: las notas viejas pueden tener el 'top' guardado en %; lo pasamos a píxeles. */
+      if (el.style.top && el.style.top.indexOf('%') !== -1) el.style.top = Math.round(parseFloat(el.style.top)/100 * anchoRef) + 'px';
       if (!el.style.left) el.style.left = '0px';
       if (!el.style.top)  el.style.top  = '0px';
       el.classList.add('rt-libre');
@@ -3287,17 +3323,19 @@ function ubicarMarco(img){
     if (!img) return;
     if (pedido){ cancelAnimationFrame(pedido); pedido = null; }
     const caja = img.closest('.richtext');
-    const contW = (caja ? caja.getBoundingClientRect().width : 0) || 300;
+    const contW = anchoInterno(caja);
     if (modo === 'mover' && movio){
       /* Pasamos el desplazamiento temporal a la posición definitiva, ya recortado. */
       const mx = Math.max(topeIzq, Math.min(dx, topeDer));
       const my = Math.max(topeArr, Math.min(dy, topeAba));
       img.style.transform = '';
-      /* Guardamos la posición en % del ancho del cuadro, no en píxeles fijos —
-         así en una pantalla más angosta (el celu) la imagen aparece en el lugar
-         proporcional correcto, en vez de con el mismo número de píxeles de la PC. */
+      /* El corrimiento horizontal va en % del ancho del cuadro, para que en una pantalla
+         más angosta (el celu) la imagen caiga en el lugar proporcional correcto.
+         El vertical va en píxeles: un 'top' en porcentaje CSS lo calcula contra la ALTURA
+         del contenedor, que acá depende del contenido, y el navegador lo tomaba como cero.
+         Ese era el motivo de que la imagen no se pudiera mover ni para arriba ni para abajo. */
       img.style.left = (((ix + mx) / contW) * 100) + '%';
-      img.style.top  = (((iy + my) / contW) * 100) + '%';
+      img.style.top  = (iy + my) + 'px';
     } else if (modo === 'estirar' && movio){
       const wPx = num(img.style.width);
       const pct = Math.max(8, Math.min(100, (wPx / contW) * 100));
