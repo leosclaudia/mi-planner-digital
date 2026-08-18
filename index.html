@@ -4,14 +4,6 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Mi Planner Digital</title>
-<!--
-  Mi Planner Digital
-  Copyright (c) 2026 Claudia — github.com/leosclaudia
-  Todos los derechos reservados. Ver el archivo LICENSE del repositorio.
-  Prohibida la copia, redistribucion o uso comercial sin autorizacion escrita.
--->
-<meta name="author" content="Claudia (leosclaudia)" />
-<meta name="copyright" content="Copyright (c) 2026 Claudia. Todos los derechos reservados." />
 <meta name="theme-color" content="#65475F" />
 <link rel="manifest" href="manifest.json" />
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -46,22 +38,6 @@
     width:100%;border:none;background:transparent;outline:none;font-family:inherit;font-size:14px;color:var(--ink);
   }
   textarea{resize:none;line-height:1.5;}
-  /* El campo de fecha del navegador viene con su propio recuadro cuadrado y su tipografía,
-     y desentonaba con el resto. Lo vestimos como una pastilla, igual que los demás controles. */
-  input[type=date], input[type=time]{
-    -webkit-appearance:none;appearance:none;
-    border:none;outline:none;cursor:pointer;
-    background:var(--mint);color:var(--ink);
-    font-family:inherit;font-size:12.5px;font-weight:600;
-    padding:5px 10px;border-radius:999px;width:auto;max-width:100%;
-  }
-  input[type=date]::-webkit-calendar-picker-indicator,
-  input[type=time]::-webkit-calendar-picker-indicator{opacity:.45;cursor:pointer;margin-left:2px;}
-  input[type=date]::-webkit-inner-spin-button, input[type=time]::-webkit-inner-spin-button,
-  input[type=date]::-webkit-clear-button, input[type=time]::-webkit-clear-button{display:none;}
-  /* No aplica a los selectores invisibles (el 📅 de Semana y el ↪ de mover). */
-  input[type=time]{background:var(--terracota);}
-  .fechapick input[type=date]{background:transparent;padding:0;border-radius:0;}
   input::placeholder,textarea::placeholder{color:#C9C2B4;}
   .row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .row:last-child{margin-bottom:0;}
@@ -72,9 +48,7 @@
   .addlink{background:none;border:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 0;white-space:nowrap;}
   .addlink svg{flex-shrink:0;width:14px;height:14px;}
   .dashedbtn{width:100%;padding:12px;border-radius:16px;border:1px dashed var(--mintLine);background:none;color:var(--accent);font-size:13px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;margin-top:2px;}
-  .richimgbtn{width:auto;padding:6px 10px;border-radius:10px;border:1px solid var(--mintLine);background:#fff;color:var(--accent);font-size:12px;font-weight:500;display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-  .grid2 .card-expanded{grid-column:1 / -1;}
   .grid4menu{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px;}
   .menuitem{background:var(--card);border:1px solid var(--mintLine);border-radius:16px;padding:18px 14px;text-align:left;cursor:pointer;}
   .menuitem b{display:block;font-size:14px;color:var(--ink);margin-bottom:2px;}
@@ -89,12 +63,37 @@
   .tab.active{color:var(--ink);font-weight:600;}
   .tab svg{width:20px;height:20px;}
   .tab span{font-size:10px;}
+  .day-card summary{list-style:none;cursor:pointer;}
+  .day-card summary::-webkit-details-marker{display:none;}
   .habit-days{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;}
-  .habit-day.esHoy{border-color:var(--ink);border-width:2px;font-weight:700;color:var(--ink);}
   .habit-day{width:28px;height:28px;flex-shrink:0;border-radius:50%;border:1px solid var(--mintLine);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--sub);background:none;cursor:pointer;}
   .habit-day.on{background:var(--accent);color:#fff;border-color:var(--accent);}
   .habit-name{width:100%;font-weight:600;font-size:14px;border:none;background:transparent;outline:none;color:var(--ink);}
+  .chat-wrap{flex:1;display:flex;flex-direction:column;height:100%;}
+  .chat-msgs{flex:1;overflow-y:auto;padding:8px 20px 12px;display:flex;flex-direction:column;gap:10px;}
+  .msg{max-width:80%;padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.5;}
+  .msg.user{align-self:flex-end;background:var(--ink);color:#fff;}
+  .msg.bot{align-self:flex-start;background:var(--card);border:1px solid var(--mintLine);}
+  .chat-input{display:flex;gap:8px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--mintLine);background:var(--bg);}
+  .chat-input input{flex:1;background:var(--card);border:1px solid var(--mintLine);border-radius:24px;padding:10px 16px;font-size:13.5px;}
+  .sendbtn,.gearbtn{background:var(--accent);border:none;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .gearbtn{background:none;border:1px solid var(--mintLine);color:var(--ink);}
+  .sendbtn svg,.gearbtn svg{width:16px;height:16px;}
   .menuitem{}
+  .asis-top{display:flex;justify-content:space-between;align-items:flex-start;padding:18px 20px 6px;}
+  .asistabs{display:flex;gap:8px;padding:8px 20px 4px;}
+  .asistab{background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;}
+  .asistab.active{background:var(--ink);border-color:var(--ink);color:#fff;}
+  .dump-scroll{flex:1;overflow-y:auto;padding:12px 20px 20px;}
+  .dumpchoices{display:flex;align-items:center;gap:6px;margin-top:8px;}
+  .dumpchoice{background:none;border:1px solid var(--mintLine);color:var(--sub);font-size:11.5px;font-weight:600;padding:6px 10px;border-radius:16px;cursor:pointer;}
+  .dumpchoice.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .modal-bg{position:fixed;inset:0;background:rgba(30,33,29,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;}
+  .modal{background:var(--card);border-radius:18px;padding:20px;max-width:340px;width:100%;}
+  .modal h3{font-size:16px;margin-bottom:8px;}
+  .modal p{font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:12px;}
+  .modal input{border:1px solid var(--mintLine);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:12px;}
+  .modal .actions{display:flex;gap:8px;justify-content:flex-end;}
   .btn{border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;}
   .btn.primary{background:var(--ink);color:#fff;}
   .btn.ghost{background:none;color:var(--sub);}
@@ -133,125 +132,17 @@
   .richstickergrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;max-height:220px;overflow-y:auto;margin-bottom:8px;}
   .richstickergrid button{background:#fff;border:1px solid var(--mintLine);border-radius:10px;height:44px;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
   .richediting{font-size:11px;color:var(--sub);margin-top:6px;}
-  /* --- Semana en pantalla ancha: grilla de tarjetas ---
-     En el celular queda todo igual (una columna). Desde 900px la app se ensancha y los
-     7 días se acomodan en columnas, así la tarjeta abierta deja de quedar larguísima. */
-  .semana-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
-  .semana-nav-mid{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);}
-  .semnavbtn{background:var(--card);border:1px solid var(--mintLine);border-radius:10px;width:34px;height:34px;font-size:19px;line-height:1;color:var(--ink);cursor:pointer;flex-shrink:0;}
-  .semhoybtn{background:transparent;border:1px solid var(--mintLine);border-radius:999px;padding:3px 10px;font-size:11.5px;color:var(--sub);cursor:pointer;}
-  /* El input de fecha va transparente encima del ícono: así se abre el selector
-     nativo del sistema (la rueda del celular), igual que al poner una alarma. */
-  .fechapick{position:relative;display:inline-flex;align-items:center;justify-content:center;
-    width:30px;height:30px;border:1px solid var(--mintLine);border-radius:9px;background:var(--card);
-    font-size:14px;cursor:pointer;flex-shrink:0;}
-  .fechapick input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;border:none;padding:0;}
-  .movepick{width:26px;height:26px;font-size:13px;}
-  .ordbtns{display:flex;gap:0;flex-shrink:0;}
-  .ordbtns button{background:none;border:none;font-size:12px;cursor:pointer;padding:2px 3px;line-height:1;}
-  .ordbtns button:disabled{opacity:.2;cursor:default;}
-  .limpiarbtn{width:100%;margin-top:10px;background:none;border:1px dashed var(--mintLine);border-radius:12px;
-    padding:8px;font-size:12.5px;color:var(--sub);cursor:pointer;}
-  .habitnum{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;
-    font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;}
-  .habitmover{display:flex;gap:1px;flex-shrink:0;}
-  .habitmover button{background:none;border:none;font-size:13px;cursor:pointer;padding:2px 3px;line-height:1;}
-  .habitmover button:disabled{opacity:.22;cursor:default;}
-  .habitcard{transition:opacity .15s;}
-  .habitcard.arrastrando{opacity:.4;}
-  .habitcard.sobre{outline:2px dashed var(--accent);outline-offset:2px;}
-  .notas-grid{display:grid;gap:12px;align-items:start;}
-  @media (min-width:620px){ .notas-grid{grid-template-columns:repeat(2,minmax(0,1fr));} }
-  @media (min-width:1000px){ .notas-grid{grid-template-columns:repeat(3,minmax(0,1fr));} }
-  .notas-grid .card{margin-bottom:0;}
-  .notacard{transition:opacity .15s,transform .15s;}
-  .notacard.arrastrando{opacity:.4;}
-  .notacard.sobre{outline:2px dashed var(--accent);outline-offset:2px;}
-  .notamover{display:flex;align-items:center;justify-content:space-between;gap:6px;
-    padding:6px 12px 10px;border-top:1px solid var(--mintLine);}
-  .notamover button{background:none;border:none;font-size:15px;cursor:pointer;padding:2px 8px;line-height:1;}
-  .notamover button:disabled{opacity:.22;cursor:default;}
-  .notagarra{color:var(--sub);font-size:15px;letter-spacing:1px;cursor:grab;}
-  .avisoguardado{position:fixed;left:50%;bottom:78px;transform:translateX(-50%) translateY(8px);
-    background:var(--ink);color:#fff;font-size:12px;font-weight:600;padding:7px 15px;border-radius:999px;
-    opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:8000;}
-  .avisoguardado.visible{opacity:.94;transform:translateX(-50%) translateY(0);}
-  .resultado{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;background:var(--card);
-    border:1px solid var(--mintLine);border-radius:14px;padding:11px 13px;margin-bottom:9px;cursor:pointer;}
-  .res-zona{font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--sub);}
-  .res-frag{font-size:13px;line-height:1.5;color:var(--ink);}
-  .vista-sel{display:flex;gap:6px;justify-content:center;margin:-6px 0 14px;}
-  .vistabtn{background:var(--card);border:1px solid var(--mintLine);border-radius:999px;padding:5px 14px;font-size:12px;color:var(--sub);cursor:pointer;}
-  .vistabtn.on{background:var(--ink);border-color:var(--ink);color:#fff;font-weight:600;}
-  .card.dia-hoy{border-color:var(--accent);box-shadow:0 0 0 2px rgba(155,122,148,.22);}
-  .semana-grid{display:grid;gap:14px;align-items:start;}
-  .semana-grid .card{margin-bottom:0;}
-  @media (min-width:620px){
-    #app{max-width:1080px;}
-    main{padding:0 24px 24px;}
-    .semana-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-  }
-  @media (min-width:1000px){
-    .semana-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
-    .semana-grid .card.dia-abierto{grid-column:span 2;}
-  }
   .richbox{position:relative;min-height:110px;}
   .richtext{position:relative;z-index:10;min-height:110px;padding:14px 16px;font-size:14px;line-height:1.6;color:var(--ink);outline:none;}
   .richtext:empty:before{content:attr(data-placeholder);color:#C9C2B4;}
   .richink{position:absolute;inset:0;width:100%;height:100%;touch-action:none;}
   .richink.active{z-index:20;cursor:crosshair;}
   .richink:not(.active){pointer-events:none;z-index:0;}
-  /* Las fotos verticales estiraban la tarjeta del día a lo largo y tapaban el texto.
-     Ahora se muestran chicas (miniatura); con el botón "Ver grande" se abren a pantalla completa. */
-  .richtext img{box-sizing:border-box;max-width:70%;max-height:180px;width:auto;height:auto;object-fit:contain;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);cursor:pointer;border:2px solid transparent;}
-  .richtext img.rt-img-big{max-width:100%;max-height:none;}
-  /* El 'margin:8px auto' de arriba centra la imagen siempre. Estas clases permiten
-     moverla: pegada a la izquierda, a la derecha, o con el texto al lado. */
-  .richtext img.rt-izq{margin:8px auto 8px 0;}
-  .richtext img.rt-der{margin:8px 0 8px auto;}
-  .richtext img.rt-flota-izq{float:left;margin:4px 14px 8px 0;max-width:45%;}
-  .richtext img.rt-flota-der{float:right;margin:4px 0 8px 14px;max-width:45%;}
-  /* Modo libre: la imagen se puede arrastrar con el mouse o el lápiz a cualquier lado.
-     Usa position:relative (no absolute) a propósito: así sigue ocupando su lugar y el
-     recuadro crece con ella, en vez de quedarse chico y tapar el texto. */
-  /* Un respiro al final de cada recuadro: sin esto el cuadro se ajusta justo al contenido
-     y una imagen no tiene margen para moverse hacia arriba o hacia abajo. */
-  .richtext{padding-bottom:70px;}
-  .richtext img.rt-libre{position:relative;margin:0 !important;cursor:grab;touch-action:none;
-    -webkit-user-drag:none;user-select:none;z-index:3;}
-  .richtext img.rt-libre.rt-agarrada{cursor:grabbing;opacity:.85;box-shadow:0 8px 22px rgba(85,72,65,.3);}
-  /* Medida a mano: cuando la persona estira la imagen, su ancho manda por sobre los
-     topes de la miniatura. Sin esto el max-width la volvería a achicar sola. */
-  .richtext img.rt-medida{max-width:100% !important;max-height:none !important;height:auto;}
-  .richtext img.rt-estirando{opacity:.9;}
-  /* Mientras se arrastra usamos transform (lo mueve la placa de video, no el navegador
-     rehaciendo el diseño), y avisamos con will-change. Antes se movía con left/top en
-     cada movimiento del dedo y por eso iba a los tirones. */
-  .richtext img.rt-agarrada,.richtext img.rt-estirando{will-change:transform,width;box-shadow:0 10px 26px rgba(85,72,65,.28);}
-  /* Marco de selección: solo visual, no recibe toques (los maneja la imagen). */
-  .rt-marco{position:absolute;border:1.5px solid var(--accent);border-radius:8px;
-    pointer-events:none;z-index:9;box-sizing:border-box;}
-  .rt-marco i{position:absolute;width:13px;height:13px;background:#fff;
-    border:2.5px solid var(--accent);border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);}
-  .rt-marco i.nw{left:-7px;top:-7px;}
-  .rt-marco i.ne{right:-7px;top:-7px;}
-  .rt-marco i.sw{left:-7px;bottom:-7px;}
-  .rt-marco i.se{right:-7px;bottom:-7px;background:var(--accent);width:16px;height:16px;
-    border-color:#fff;bottom:-9px;right:-9px;}
-  /* Sin esto, el recuadro se "achica" detrás de una imagen flotante. */
-  .richtext::after{content:'';display:block;clear:both;}
-  .imgviewer{position:fixed;inset:0;background:rgba(30,25,22,.92);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;}
-  .imgviewer img{max-width:100%;max-height:86vh;border-radius:10px;}
-  .imgviewer button{position:absolute;top:14px;right:16px;background:#fff;border:none;border-radius:999px;padding:8px 16px;font-size:15px;font-weight:600;cursor:pointer;}
-  .richtext img.rt-img-selected{border-color:transparent;}
-  .pzel.selected{outline:1.5px dashed var(--accent);}
-  .pzhandle.ne{top:-8px;right:-8px;cursor:nesw-resize;}
-  .pzhandle.sw{bottom:-8px;left:-8px;cursor:nesw-resize;}
-  .pzhandle.se{bottom:-8px;right:-8px;cursor:nwse-resize;}
+  .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);}
 
-  .pztool.active{background:var(--accent);border-color:var(--accent);color:#fff;}
-  .pzswatch.active{border-color:var(--ink);}
   .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
+  .card-h-btn svg{width:14px;height:14px;}
   .langtoggle{flex-shrink:0;display:inline-flex;align-items:center;background:var(--card);border:1px solid var(--mintLine);border-radius:20px;padding:3px;gap:2px;margin-top:2px;}
   .langtoggle-seg{border:none;background:none;color:var(--sub);font-size:11.5px;font-weight:700;letter-spacing:.02em;padding:6px 13px;border-radius:16px;cursor:pointer;}
   .langtoggle-seg.active{background:var(--ink);color:#fff;}
@@ -260,10 +151,6 @@
   .printbtn svg{width:16px;height:16px;}
   .card-h-printbtn{background:none;border:none;color:inherit;opacity:.6;cursor:pointer;padding:2px;display:flex;align-items:center;}
   .card-h-printbtn svg{width:15px;height:15px;}
-  /* La flechita que abre/cierra cada día nunca había tenido regla propia: heredaba un tamaño
-     al azar. Ahora queda igual que el resto de los íconos del encabezado. */
-  .daychevron{opacity:.6;}
-  .daychevron svg{width:15px;height:15px;}
   .card-h-printbtn:hover{opacity:1;}
 
   /* ---------- vista de impresión / exportación ---------- */
@@ -305,12 +192,7 @@ const DB = {
     catch(e){ return fallback; }
   },
   set(key, value){
-    try{ localStorage.setItem('planner:'+key, JSON.stringify(value)); }
-    catch(e){
-      /* Antes acá había un catch vacío: si el navegador se quedaba sin espacio, el guardado
-         fallaba en silencio y la imagen "desaparecía" sola en el siguiente render. */
-      alert('No se pudo guardar "'+key+'".\n\nMotivo: '+((e && e.name) ? e.name : e)+'\n\nCasi seguro es falta de espacio: las imágenes ocupan mucho.');
-    }
+    try{ localStorage.setItem('planner:'+key, JSON.stringify(value)); }catch(e){}
   }
 };
 const uid = () => Math.random().toString(36).slice(2,9);
@@ -318,7 +200,7 @@ const uid = () => Math.random().toString(36).slice(2,9);
 /* ---------- traducciones ---------- */
 const I18N = {
   es: {
-    tab_inicio:'Inicio', tab_semana:'Semana', tab_habitos:'Hábitos', tab_mas:'Más',
+    tab_inicio:'Inicio', tab_semana:'Semana', tab_habitos:'Hábitos', tab_asistente:'Asistente', tab_mas:'Más',
     title_inicio:'Inicio', sub_inicio:'Un espacio simple para ordenar lo importante',
     title_semana:'Semana', sub_semana:'Tocá un día para abrirlo',
     title_habitos:'Hábitos', sub_habitos:'Marcá cada día sin buscar perfección',
@@ -327,6 +209,7 @@ const I18N = {
     title_proyectos:'Proyectos', sub_proyectos:'Uno por cada idea que querés llevar a la práctica',
     title_notas:'Notas', sub_notas:'Escribí, dibujá o pegá lo que quieras',
     title_objetivos:'Objetivos', sub_objetivos:'Elegí pocas metas, claras y posibles',
+    title_asistente:'Asistente', sub_asistente:'Pedile una mano para organizarte',
     title_compras:'Compras', sub_compras:'Lo que tenés que comprar',
     title_turnos:'Turnos', sub_turnos:'Citas, clases y encuentros',
     title_comidas:'Comidas', sub_comidas:'Un menú simple para la semana',
@@ -335,12 +218,13 @@ const I18N = {
     menu_finanzas:'Finanzas', menu_finanzas_sub:'Ingresos, gastos y ahorro',
     menu_proyectos:'Proyectos', menu_proyectos_sub:'Uno por cada idea',
     menu_objetivos:'Objetivos', menu_objetivos_sub:'Metas del año',
+    menu_notas:'Notas', menu_notas_sub:'Espacio libre',
     menu_compras:'Compras', menu_compras_sub:'Lista para el mercado',
     menu_turnos:'Turnos', menu_turnos_sub:'Citas y encuentros',
     menu_comidas:'Comidas', menu_comidas_sub:'Menú de la semana',
     menu_sync:'Sincronizar', menu_sync_sub:'Entre tus dispositivos',
     portada_title1:'MI PLANNER', portada_title2:'DIGITAL', portada_tagline:'para vos',
-    portada_desc:'Organizá tu día a día, tus notas y tus proyectos, a tu manera',
+    portada_desc:'Organizá tu día a día, tu huerta y tus proyectos, a tu manera',
     portada_start:'TOCÁ PARA COMENZAR',
     card_hoy:'HOY', ph_hoy:'¿Qué es lo más importante de hoy?...',
     card_prioridades:'PRIORIDADES', ph_prioridad:'Escribí una prioridad', btn_agregar_prioridad:'Agregar prioridad',
@@ -375,17 +259,33 @@ const I18N = {
     txt_codigo_instrucciones:'Inventá una palabra o frase. Usá la misma en todos tus dispositivos.',
     ph_codigo_sync:'ej: planner-familia-2026',
     btn_conectar:'Conectar', txt_sync_privacidad:'Nada de esto pasa por servidores nuestros: se guarda directo en tu proyecto de Firebase, con tu cuenta.',
+    tab_chat:'Chat', tab_dump:'Volcar pendientes',
+    ph_chat_msg:'Escribí tu mensaje...', ph_chat_apikey:'Configurá tu API key primero (⚙)',
+    dump_intro:'Escribí todo lo que tenés en la cabeza, sin orden. El asistente lo separa en ítems sueltos y sugiere si van a Prioridades de hoy o a la lista de Compras. Podés ajustar todo antes de guardar.',
+    ph_dump:'Ej: llamar a la contadora, comprar tomates y pan, regar la huerta, responder mail de la clienta',
+    btn_organizar:'Organizar mis pendientes', btn_organizando:'Organizando…',
+    txt_propuesta:'Propuesta', btn_a_prioridades:'A Prioridades', btn_a_compras:'A Compras',
+    btn_agregar_todo:'Agregar todo a mi planner',
     rich_editing:'Editando:', rich_choose_font:'Elegir fuente', rich_search_sticker:'Buscar o pegar cualquier emoji...',
     rich_color_texto:'Color del texto', rich_resaltador:'Resaltador',
     rich_texto_normal:'Texto normal', rich_quitar_resaltado:'Quitar resaltado',
     rich_fino:'Fino', rich_medio:'Medio', rich_grueso:'Grueso', rich_muy_grueso:'Muy grueso',
     rich_borrar_dibujo:'Borrar dibujo', rich_convertir_texto:'Convertir lo escrito a texto',
     rich_cortar:'Cortar caja', rich_copiar:'Copiar caja', rich_pegar:'Pegar', rich_vaciar:'Vaciar',
+    rich_descargar_imgs:'Descargar imágenes',
+    rich_sin_imgs:'Esta caja no tiene ninguna imagen para descargar.',
+    chat_welcome:'¡Hola! Soy tu asistente del planner. Contame en qué andás y te ayudo a organizarlo.',
     btn_print:'Imprimir / Exportar PDF',
+    btn_backup_download:'Descargar copia de seguridad',
+    btn_backup_restore:'Restaurar desde un archivo',
+    txt_backup_hint:'Guardá este archivo de vez en cuando (ej: en Google Drive) por si algún día perdés los datos del navegador.',
+    txt_backup_confirm:'Esto va a reemplazar todo lo que tenés ahora en la app por el contenido del archivo. ¿Continuar?',
+    txt_backup_done:'Listo, se restauró tu copia de seguridad. La app se va a recargar.',
+    txt_backup_error:'Ese archivo no parece una copia de seguridad válida de Mi Planner Digital.',
     lang_toggle:'English',
   },
   en: {
-    tab_inicio:'Home', tab_semana:'Week', tab_habitos:'Habits', tab_mas:'More',
+    tab_inicio:'Home', tab_semana:'Week', tab_habitos:'Habits', tab_asistente:'Assistant', tab_mas:'More',
     title_inicio:'Home', sub_inicio:'A simple space to sort out what matters',
     title_semana:'Week', sub_semana:'Tap a day to open it',
     title_habitos:'Habits', sub_habitos:'Check off each day, no need for perfection',
@@ -394,6 +294,7 @@ const I18N = {
     title_proyectos:'Projects', sub_proyectos:'One for each idea you want to put into action',
     title_notas:'Notes', sub_notas:'Write, draw, or paste whatever you want',
     title_objetivos:'Goals', sub_objetivos:'Choose a few goals, clear and achievable',
+    title_asistente:'Assistant', sub_asistente:'Ask for a hand getting organized',
     title_compras:'Shopping', sub_compras:'What you need to buy',
     title_turnos:'Appointments', sub_turnos:'Appointments, classes and meetings',
     title_comidas:'Meals', sub_comidas:'A simple menu for the week',
@@ -402,12 +303,13 @@ const I18N = {
     menu_finanzas:'Finances', menu_finanzas_sub:'Income, expenses and savings',
     menu_proyectos:'Projects', menu_proyectos_sub:'One for each idea',
     menu_objetivos:'Goals', menu_objetivos_sub:'This year\'s goals',
+    menu_notas:'Notes', menu_notas_sub:'Free space',
     menu_compras:'Shopping', menu_compras_sub:'Grocery list',
     menu_turnos:'Appointments', menu_turnos_sub:'Appointments and meetings',
     menu_comidas:'Meals', menu_comidas_sub:'Weekly menu',
     menu_sync:'Sync', menu_sync_sub:'Between your devices',
     portada_title1:'MY DIGITAL', portada_title2:'PLANNER', portada_tagline:'made for you',
-    portada_desc:'Organize your day to day, your notes, and your projects, your way',
+    portada_desc:'Organize your day to day, your garden, and your projects, your way',
     portada_start:'TAP TO START',
     card_hoy:'TODAY', ph_hoy:'What\'s most important today?...',
     card_prioridades:'PRIORITIES', ph_prioridad:'Write a priority', btn_agregar_prioridad:'Add priority',
@@ -442,13 +344,29 @@ const I18N = {
     txt_codigo_instrucciones:'Make up a word or phrase. Use the same one on all your devices.',
     ph_codigo_sync:'e.g: family-planner-2026',
     btn_conectar:'Connect', txt_sync_privacidad:'None of this goes through our servers: it\'s saved directly to your own Firebase project, under your own account.',
+    tab_chat:'Chat', tab_dump:'Brain dump',
+    ph_chat_msg:'Type your message...', ph_chat_apikey:'Set up your API key first (⚙)',
+    dump_intro:'Write down everything on your mind, in any order. The assistant splits it into separate items and suggests whether they go to today\'s Priorities or the Shopping list. You can adjust everything before saving.',
+    ph_dump:'E.g: call the accountant, buy tomatoes and bread, water the garden, reply to client email',
+    btn_organizar:'Organize my to-dos', btn_organizando:'Organizing…',
+    txt_propuesta:'Proposal', btn_a_prioridades:'To Priorities', btn_a_compras:'To Shopping',
+    btn_agregar_todo:'Add everything to my planner',
     rich_editing:'Editing:', rich_choose_font:'Choose font', rich_search_sticker:'Search or paste any emoji...',
     rich_color_texto:'Text color', rich_resaltador:'Highlighter',
     rich_texto_normal:'Normal text', rich_quitar_resaltado:'Remove highlight',
     rich_fino:'Thin', rich_medio:'Medium', rich_grueso:'Thick', rich_muy_grueso:'Extra thick',
     rich_borrar_dibujo:'Clear drawing', rich_convertir_texto:'Convert handwriting to text',
     rich_cortar:'Cut box', rich_copiar:'Copy box', rich_pegar:'Paste', rich_vaciar:'Clear',
+    rich_descargar_imgs:'Download images',
+    rich_sin_imgs:'This box has no images to download.',
+    chat_welcome:'Hi! I\'m your planner assistant. Tell me what\'s going on and I\'ll help you get organized.',
     btn_print:'Print / Export PDF',
+    btn_backup_download:'Download backup',
+    btn_backup_restore:'Restore from a file',
+    txt_backup_hint:'Save this file every once in a while (e.g. to Google Drive) in case you ever lose your browser data.',
+    txt_backup_confirm:'This will replace everything currently in the app with the content of this file. Continue?',
+    txt_backup_done:'Done, your backup was restored. The app will reload now.',
+    txt_backup_error:'That file does not look like a valid Mi Planner Digital backup.',
     lang_toggle:'Español',
   }
 };
@@ -460,22 +378,24 @@ function t(key){
 function dayLabel(dia){ return t('dia_'+(DIA_SLUGS[dia]||'')); }
 
 
-
 /* ---------- estado ---------- */
 let state = {
-  tab: 'portada',            // portada | inicio | semana | habitos | mas
+  tab: 'portada',            // portada | inicio | semana | habitos | asistente | mas
   masScreen: null,          // finanzas | proyectos | notas | objetivos
   inicio: DB.get('inicio', { hoy:'', prioridades:[{id:uid(),text:'',done:false}], recordatorios:'' }),
   semana: DB.get('semana', { enfoque:'', dias:{} }),
   habitos: DB.get('habitos', { lista:[{id:uid(),nombre:'',marcas:{}}] }),
   finanzas: DB.get('finanzas', { ingresos:'', gastos:'', ahorro:'', movimientos:[], recordar:[{id:uid(),text:'',done:false}] }),
   proyectos: DB.get('proyectos', { lista:[] }),
-  objetivos: DB.get('objetivos', { lista: [] }),   // migrarObjetivosALista() siembra las 4 originales
-  /* Cada nota es una ficha con título y fecha; el contenido va aparte, en rich_nota_<id>. */
-  notas: DB.get('notas', { lista:[] }),
+  objetivos: DB.get('objetivos', {
+    personal:{meta:'',paso:'',fecha:''}, trabajo:{meta:'',paso:'',fecha:''},
+    bienestar:{meta:'',paso:'',fecha:''}, dinero:{meta:'',paso:'',fecha:''}
+  }),
   compras: DB.get('compras', { lista:[{id:uid(),text:'',done:false}] }),
   turnos: DB.get('turnos', { lista:[] }),
   comidas: DB.get('comidas', { dias:{} }),
+  chat: [],
+  apiKey: DB.get('apiKey', ''),
   syncConfig: DB.get('syncConfig', null),
   syncStatus: '',
   boards: {},
@@ -483,10 +403,6 @@ let state = {
 };
 
 /* tableros dinámicos: uno por cada caja, se crean solos la primera vez que se abren */
-function getBoard(key){
-  if (!state.boards[key]) state.boards[key] = DB.get('board_'+key, { elementos: [], drawing: null });
-  return state.boards[key];
-}
 
 const ICONS = {
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg>',
@@ -496,9 +412,9 @@ const ICONS = {
   grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
   plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>',
   x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>',
   gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
   chevron:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
-  note:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg>',
   cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
   clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
   plate:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/></svg>',
@@ -524,7 +440,9 @@ const ICONS = {
   undo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10h10a5 5 0 0 1 0 10H8M3 10l4-4M3 10l4 4"/></svg>',
   redo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10H11a5 5 0 0 0 0 10h5M21 10l-4-4M21 10l-4 4"/></svg>',
   globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>',
-  printer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>'
+  printer:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>',
+  download:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>',
+  upload:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M7 14l5-5 5 5"/><path d="M4 19h16"/></svg>'
 };
 
 const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
@@ -532,6 +450,7 @@ const DIAS = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Doming
 /* ---------- utilidades de render ---------- */
 function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
+function chkSvg(done){ return done ? ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>','').replace('stroke="currentColor"','stroke="white"') : ''; }
 
 /* ---------- render principal ---------- */
 function renderLangToggle(extraClass){
@@ -543,37 +462,7 @@ function renderLangToggle(extraClass){
   `;
 }
 
-/* Redibujado que NO interrumpe a quien está escribiendo.
-   La sincronización redibuja la pantalla cada vez que confirma un guardado, y eso
-   destruía el casillero donde estabas tipeando: entraban dos o tres letras y se cortaba.
-   Ahora, si hay un campo con el foco puesto, el redibujado espera a que lo sueltes. */
-let renderPendiente = false;
-function escribiendoAhora(){
-  const a = document.activeElement;
-  return !!(a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.isContentEditable));
-}
-function renderSeguro(){
-  if (escribiendoAhora()){ renderPendiente = true; return; }
-  render();
-}
-document.addEventListener('focusout', () => {
-  if (!renderPendiente) return;
-  /* Damos un respiro por si el foco solo saltó de un campo a otro. */
-  setTimeout(() => {
-    if (renderPendiente && !escribiendoAhora()){ renderPendiente = false; render(); }
-  }, 150);
-});
-
 function render(){
-  /* Si hay un campo de texto con foco (por ej. escribiendo un título) y llega una
-     sincronización de fondo, el redibujado completo de la pantalla lo hacía perder
-     el foco y el cursor, cortando lo que se estaba escribiendo. Lo guardamos acá
-     y lo restauramos al final. */
-  const focoPrevio = document.activeElement;
-  let focoInfo = null;
-  if (focoPrevio && focoPrevio.id && (focoPrevio.tagName === 'INPUT' || focoPrevio.tagName === 'TEXTAREA')){
-    focoInfo = { id: focoPrevio.id, start: focoPrevio.selectionStart, end: focoPrevio.selectionEnd };
-  }
   const app = document.getElementById('app');
   const titles = {
     inicio:[t('title_inicio'), t('sub_inicio')],
@@ -584,11 +473,11 @@ function render(){
     proyectos:[t('title_proyectos'), t('sub_proyectos')],
     notas:[t('title_notas'), t('sub_notas')],
     objetivos:[t('title_objetivos'), t('sub_objetivos')],
+    asistente:[t('title_asistente'), t('sub_asistente')],
     compras:[t('title_compras'), t('sub_compras')],
     turnos:[t('title_turnos'), t('sub_turnos')],
     comidas:[t('title_comidas'), t('sub_comidas')],
     sync:[t('title_sync'), t('sub_sync')],
-    buscar:['Buscar', 'Encontrá cualquier cosa que hayas escrito'],
   };
   let screenKey = state.tab === 'mas' && state.masScreen ? state.masScreen : state.tab;
 
@@ -605,7 +494,10 @@ function render(){
 
   let contentHtml = '';
   let headerHtml = '';
-  {
+  if (screenKey === 'asistente'){
+    headerHtml = '';
+    contentHtml = renderAsistente();
+  } else {
     const langBtn = screenKey==='inicio' ? renderLangToggle() : '';
     const printBtn = (screenKey!=='mas' && screenKey!=='sync') ? `<button class="printbtn" onclick="App.printSection('${screenKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
     headerHtml = `<header class="top">${backRow}<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;"><div><h1>${esc(title)}</h1><p>${esc(subtitle)}</p></div><div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">${printBtn}${langBtn}</div></div><div class="rule"></div></header>`;
@@ -621,7 +513,6 @@ function render(){
     else if (screenKey==='comidas') contentHtml = renderComidas();
     else if (screenKey==='sync') contentHtml = renderSync();
     else if (screenKey==='notas') contentHtml = renderNotasRich();
-    else if (screenKey==='buscar') contentHtml = renderBuscar();
   }
 
   app.innerHTML = `
@@ -629,13 +520,7 @@ function render(){
     <main id="main">${contentHtml}</main>
     ${renderTabBar()}
   `;
-  if (focoInfo){
-    const de_nuevo = document.getElementById(focoInfo.id);
-    if (de_nuevo && (de_nuevo.tagName === 'INPUT' || de_nuevo.tagName === 'TEXTAREA')){
-      de_nuevo.focus();
-      try{ de_nuevo.setSelectionRange(focoInfo.start, focoInfo.end); }catch(e){}
-    }
-  }
+  if (screenKey === 'asistente') scrollChatToBottom();
   if (['inicio','notas','semana','proyectos','turnos','comidas'].includes(screenKey)){
     document.querySelectorAll('.richink').forEach(c => initRichInk(c.dataset.key));
   }
@@ -663,9 +548,9 @@ function renderPortada(){
 function renderTabBar(){
   const tabs = [
     ['inicio', ICONS.home, t('tab_inicio')],
-    ['notas', ICONS.note, t('title_notas')],
     ['semana', ICONS.calendar, t('tab_semana')],
     ['habitos', ICONS.check, t('tab_habitos')],
+    ['asistente', ICONS.sparkle, t('tab_asistente')],
     ['mas', ICONS.grid, t('tab_mas')],
   ];
   return `<div class="tabbar">${tabs.map(([id,icon,label])=>`
@@ -694,211 +579,54 @@ function renderInicio(){
 }
 
 /* ---------- SEMANA ---------- */
-/* Cada día se guarda por su FECHA real (ej. semana_2026-08-17), no por el nombre del día.
-   Así la semana que viene no pisa lo de esta y queda historial. */
+let openDay = DIAS[0];
 const DIA_SLUGS = {Lunes:'lunes',Martes:'martes','Miércoles':'miercoles',Jueves:'jueves',Viernes:'viernes','Sábado':'sabado',Domingo:'domingo'};
-let semanaOffset = 0;   // 0 = período actual, -1 = el anterior, 1 = el siguiente
-let openDayIdx = null;  // índice del día abierto dentro del rango visible
-/* Cuántos días se muestran a la vez: 7, 14 o 30. Queda guardado en este dispositivo. */
-let vistaDias = DB.get('vistaDias', 7);
-
-function isoFecha(d){
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-function lunesDe(d){
-  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-  x.setDate(x.getDate() - ((x.getDay()+6) % 7));   // getDay(): 0=domingo
-  return x;
-}
-function lunesVisible(){
-  const l = lunesDe(new Date());
-  /* El salto de las flechas es del tamaño del período que estés viendo:
-     7 días saltan una semana, 30 días saltan un mes. */
-  l.setDate(l.getDate() + semanaOffset*vistaDias);
-  return l;
-}
-function diasDeLaSemana(){
-  const l = lunesVisible();
-  return Array.from({length:vistaDias}, (_,i) => { const d = new Date(l); d.setDate(l.getDate()+i); return d; });
-}
-function claveDia(fecha){ return 'semana_' + isoFecha(fecha); }
-function rotuloSemana(){
-  const ds = diasDeLaSemana(), a = ds[0], b = ds[ds.length-1];
-  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
-  const mes = d => d.toLocaleDateString(loc, { month:'short' }).replace('.','');
-  const mismoMes = a.getMonth() === b.getMonth();
-  return mismoMes
-    ? `${a.getDate()} – ${b.getDate()} ${mes(b)} ${b.getFullYear()}`
-    : `${a.getDate()} ${mes(a)} – ${b.getDate()} ${mes(b)} ${b.getFullYear()}`;
-}
-function rotuloDia(fecha){
-  /* Antes salía del índice (que solo servía para semanas de lunes a domingo).
-     Ahora sale de la fecha, así funciona igual con 7, 14 o 30 días. */
-  const nombre = DIAS[(fecha.getDay()+6) % 7];
-  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
-  const mes = fecha.toLocaleDateString(loc, { month:'short' }).replace('.','');
-  return vistaDias > 7
-    ? dayLabel(nombre) + ' ' + fecha.getDate() + ' ' + mes
-    : dayLabel(nombre) + ' ' + fecha.getDate();
-}
-
-/* Traslada lo que estaba guardado por nombre de día (semana_lunes, semana_martes, …)
-   a las fechas de la semana en curso. Corre una sola vez. */
-function migrarSemanaAFechas(){
-  if (DB.get('semanaPorFechas', false)) return;
-  const l = lunesDe(new Date());
-  DIAS.forEach((dia, i) => {
-    const viejo = DB.get('rich_semana_' + DIA_SLUGS[dia], null);
-    if (!viejo || (!viejo.html && !viejo.drawing)) return;
-    const f = new Date(l); f.setDate(l.getDate()+i);
-    const nuevaClave = 'rich_' + claveDia(f);
-    if (DB.get(nuevaClave, null)) return;      // ya hay algo escrito ahí: no lo tocamos
-    if (!state.richContent) state.richContent = {};
-    state.richContent[claveDia(f)] = viejo;
-    DB.set(nuevaClave, viejo);
-  });
-  const enfoqueViejo = state.semana.enfoque;
-  if (enfoqueViejo){
-    if (!state.semana.enfoques) state.semana.enfoques = {};
-    if (!state.semana.enfoques[isoFecha(l)]) state.semana.enfoques[isoFecha(l)] = enfoqueViejo;
-    DB.set('semana', state.semana);
-  }
-  DB.set('semanaPorFechas', true);
-}
-
 function renderSemana(){
-  migrarSemanaAFechas();
   const d = state.semana;
-  if (!d.enfoques) d.enfoques = {};
-  const ds = diasDeLaSemana();
-  const claveSem = isoFecha(ds[0]);
-  const hoy = isoFecha(new Date());
-  if (openDayIdx === null){
-    const i = ds.findIndex(f => isoFecha(f) === hoy);
-    openDayIdx = i >= 0 ? i : 0;
-  }
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    <div class="semana-nav">
-      <button class="semnavbtn" onclick="App.moverSemana(-1)" title="Semana anterior">‹</button>
-      <div class="semana-nav-mid">
-        <b>${esc(rotuloSemana())}</b>
-        <span class="fechapick" title="Ir a una fecha">
-          📅
-          <input type="date" value="${isoFecha(ds[0])}" onchange="App.irAFecha(this.value)"/>
-        </span>
-        ${semanaOffset !== 0 ? `<button class="semhoybtn" onclick="App.semanaHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
-      </div>
-      <button class="semnavbtn" onclick="App.moverSemana(1)" title="Período siguiente">›</button>
-    </div>
-    <div class="vista-sel">
-      ${[7,14,30].map(n => `<button class="vistabtn ${vistaDias===n?'on':''}" onclick="App.setVistaDias(${n})">${n} ${state.lang==='en'?'days':'días'}</button>`).join('')}
-    </div>
     <div class="card">
       <div class="card-b">
         <label style="font-size:11px;font-weight:700;">${esc(t('card_enfoque'))}</label>
-        <input type="text" value="${esc(d.enfoques[claveSem]||'')}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setEnfoqueSemana('${claveSem}', this.value)"/>
+        <input type="text" value="${esc(d.enfoque)}" placeholder="${esc(t('ph_enfoque'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:6px;margin-top:6px;" oninput="App.setField('semana','enfoque',this.value)"/>
       </div>
     </div>
-    <div class="semana-grid">
-    ${ds.map((fecha, i)=>{
-      const tint = (fecha.getDay()===0 || fecha.getDay()===6) ? 'terracota' : '';
-      const isOpen = openDayIdx === i;
-      const esHoy = isoFecha(fecha) === hoy;
-      const key = claveDia(fecha);
-      const label = rotuloDia(fecha);
+    ${DIAS.map((dia)=>{
+      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota':'';
+      const isOpen = openDay===dia;
+      const key = 'semana_'+DIA_SLUGS[dia];
+      migrateDayTextToRich(key, d.dias[dia]);
+      const label = dayLabel(dia);
       return `
-      <div class="card ${tint} ${isOpen?'dia-abierto':''} ${esHoy?'dia-hoy':''}">
-        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay(${i})">
+      <div class="card ${tint}">
+        <div class="card-h" style="cursor:pointer" onclick="App.toggleDay('${dia}')">
           <span>${esc(label.toUpperCase())}</span>
           <span style="display:flex;align-items:center;gap:6px;">
-            ${isOpen ? `<span class="fechapick movepick" title="Mover esta nota a otra fecha" onclick="event.stopPropagation()">↪<input type="date" onclick="event.stopPropagation()" onchange="App.moverNota('${isoFecha(fecha)}', this.value)"/></span>` : ''}
-            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('dia_${isoFecha(fecha)}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
+            <button class="card-h-printbtn" onclick="event.stopPropagation();App.printCard('semana_dia_${DIA_SLUGS[dia]}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>
             <span class="daychevron" style="transform:rotate(${isOpen?'90':'-90'}deg);display:flex;">${ICONS.chevron}</span>
           </span>
         </div>
         ${isOpen ? richBoxOnly(key, label, t('ph_dia_notas')) : ''}
       </div>`;
     }).join('')}
-    </div>
   `;
 }
 
 /* ---------- HÁBITOS ---------- */
-/* Mes que se está mirando en Hábitos. 0 = este mes, -1 = el anterior. */
-let habitosOffset = 0;
-let habitoArrastrado = null;   // índice del hábito que se está arrastrando
-function mesVisible(){
-  const h = new Date();
-  return new Date(h.getFullYear(), h.getMonth() + habitosOffset, 1);
-}
-function rotuloMes(){
-  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
-  const m = mesVisible().toLocaleDateString(loc, { month:'long', year:'numeric' });
-  return m.charAt(0).toUpperCase() + m.slice(1);
-}
-
-/* Antes las marcas se guardaban por número de día suelto (1..31), sin mes: al cambiar de
-   mes aparecían tildados los días del mes anterior y al tocarlos se sobrescribían.
-   Ahora la clave es la fecha completa. Esto traslada lo viejo al mes en curso, una sola vez. */
-function migrarHabitosAMeses(){
-  if (DB.get('habitosPorFechas', false)) return;
-  const h = new Date(), y = h.getFullYear(), m = h.getMonth();
-  (state.habitos.lista || []).forEach(hab => {
-    const nuevas = {};
-    Object.keys(hab.marcas || {}).forEach(k => {
-      if (/^\d{1,2}$/.test(k)){
-        if (hab.marcas[k]) nuevas[isoFecha(new Date(y, m, Number(k)))] = true;
-      } else {
-        nuevas[k] = hab.marcas[k];
-      }
-    });
-    hab.marcas = nuevas;
-  });
-  DB.set('habitos', state.habitos);
-  DB.set('habitosPorFechas', true);
-}
-
 function renderHabitos(){
-  migrarHabitosAMeses();
-  const base = mesVisible();
-  const y = base.getFullYear(), m = base.getMonth();
-  const cantidad = new Date(y, m+1, 0).getDate();       // días que tiene ese mes
-  const dias = Array.from({length:cantidad}, (_,i) => new Date(y, m, i+1));
-  const hoyIso = isoFecha(new Date());
+  const dias31 = Array.from({length:31},(_,i)=>i+1);
   return `
-    <div class="semana-nav">
-      <button class="semnavbtn" onclick="App.moverMes(-1)" title="Mes anterior">‹</button>
-      <div class="semana-nav-mid">
-        <b>${esc(rotuloMes())}</b>
-        ${habitosOffset !== 0 ? `<button class="semhoybtn" onclick="App.mesHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
-      </div>
-      <button class="semnavbtn" onclick="App.moverMes(1)" title="Mes siguiente">›</button>
-    </div>
-    ${state.habitos.lista.length > 1 ? `<p style="font-size:11.5px;color:var(--sub);text-align:center;margin:-4px 0 12px;">
-      El número es la prioridad. Movelos con las flechitas o arrastrándolos.
-    </p>` : ''}
-    ${state.habitos.lista.map((h,i)=>`
-      <div class="card habitcard" draggable="true"
-           ondragstart="App.habitoDragStart(event,${i})"
-           ondragover="App.habitoDragOver(event)"
-           ondragleave="this.classList.remove('sobre')"
-           ondrop="App.habitoDrop(event,${i})"
-           ondragend="App.habitoDragEnd(event)">
+    ${state.habitos.lista.map(h=>`
+      <div class="card">
         <div class="card-b" style="padding-bottom:8px;">
-          <div class="row" style="align-items:center;">
-            <span class="habitnum" title="Prioridad">${i+1}</span>
+          <div class="row">
             <input class="habit-name" type="text" value="${esc(h.nombre)}" placeholder="${esc(t('ph_nombre_habito'))}" oninput="App.setListField('habitos','lista','${h.id}','nombre',this.value)"/>
-            <span class="habitmover">
-              <button title="Subir" onclick="App.moverHabito(${i},-1)" ${i===0?'disabled':''}>⬆️</button>
-              <button title="Bajar" onclick="App.moverHabito(${i},1)" ${i===state.habitos.lista.length-1?'disabled':''}>⬇️</button>
-            </span>
             <button class="xbtn" onclick="App.removeItem('habitos','lista','${h.id}')">${ICONS.x}</button>
           </div>
         </div>
         <div class="card-b" style="padding-top:0;">
           <div class="habit-days">
-            ${dias.map(f=>{ const iso = isoFecha(f); return `<button class="habit-day ${h.marcas[iso]?'on':''} ${iso===hoyIso?'esHoy':''}" onclick="App.toggleHabitDay('${h.id}','${iso}')">${f.getDate()}</button>`; }).join('')}
+            ${dias31.map(n=>`<button class="habit-day ${h.marcas[n]?'on':''}" onclick="App.toggleHabitDay('${h.id}',${n})">${n}</button>`).join('')}
           </div>
         </div>
       </div>
@@ -913,28 +641,20 @@ function renderMas(){
     ['finanzas','menu_finanzas','menu_finanzas_sub'],
     ['proyectos','menu_proyectos','menu_proyectos_sub'],
     ['objetivos','menu_objetivos','menu_objetivos_sub'],
+    ['notas','menu_notas','menu_notas_sub'],
     ['compras','menu_compras','menu_compras_sub'],
     ['turnos','menu_turnos','menu_turnos_sub'],
     ['comidas','menu_comidas','menu_comidas_sub'],
     ['sync','menu_sync','menu_sync_sub'],
   ];
-  const buscarBtn = `<button class="dashedbtn" style="margin:0 0 14px;" onclick="App.goto('mas','buscar')">🔎 Buscar en todo el planner</button>`;
-  return `${buscarBtn}<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
+  return `<div class="grid4menu">${items.map(([id,labelKey,subKey])=>`
     <button class="menuitem" onclick="App.goto('mas','${id}')"><b>${esc(t(labelKey))}</b><span>${esc(t(subKey))}</span></button>
   `).join('')}</div>
   <button class="dashedbtn" style="margin-top:14px;" onclick="App.printPlanner()">${ICONS.printer} ${esc(t('btn_print'))}</button>
-  <div class="card" style="margin-top:18px;">
-    <div class="card-h"><span>Copia de seguridad</span></div>
-    <div class="card-b">
-      <p style="font-size:12.5px;color:var(--sub);line-height:1.5;margin-bottom:10px;">
-        Guardá todo tu planner en un archivo. Si algún día se pierde o se rompe algo,
-        con ese archivo volvés a como estabas.
-      </p>
-      <button class="dashedbtn" style="margin-top:0;" onclick="App.exportarBackup()">⬇️ Bajar copia (.json)</button>
-      <button class="dashedbtn" style="margin-top:10px;" onclick="document.getElementById('backupFileInput').click()">⬆️ Restaurar desde archivo</button>
-      <input type="file" id="backupFileInput" accept=".json,application/json" style="display:none" onchange="App.importarBackup(event)"/>
-    </div>
-  </div>`;
+  <button class="dashedbtn" onclick="App.exportBackup()">${ICONS.download} ${esc(t('btn_backup_download'))}</button>
+  <button class="dashedbtn" onclick="document.getElementById('backupFileInput').click()">${ICONS.upload} ${esc(t('btn_backup_restore'))}</button>
+  <input type="file" id="backupFileInput" accept="application/json,.json" style="display:none" onchange="App.importBackup(event)"/>
+  <p style="font-size:11px;color:var(--sub);text-align:center;margin-top:8px;line-height:1.5;">${esc(t('txt_backup_hint'))}</p>`;
 }
 
 /* ---------- FINANZAS ---------- */
@@ -977,16 +697,11 @@ function renderProyectos(){
   const lista = state.proyectos.lista;
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    ${lista.map((p,i)=>`
+    ${lista.map((p)=>`
       <div class="card">
         <div class="card-b">
           <div class="row">
-            <span class="habitnum" title="Orden">${i+1}</span>
             <input type="text" style="font-weight:700;font-size:15px;" placeholder="${esc(t('ph_nombre_proyecto'))}" value="${esc(p.nombre)}" oninput="App.setListField('proyectos','lista','${p.id}','nombre',this.value)"/>
-            <span class="ordbtns">
-              <button title="Subir" onclick="App.moverEnLista('proyectos','lista','${p.id}',-1)" ${i===0?'disabled':''}>⬆️</button>
-              <button title="Bajar" onclick="App.moverEnLista('proyectos','lista','${p.id}',1)" ${i===lista.length-1?'disabled':''}>⬇️</button>
-            </span>
             <button class="xbtn" onclick="App.removeItem('proyectos','lista','${p.id}')">${ICONS.x}</button>
           </div>
           <input type="text" placeholder="${esc(t('ph_fecha_objetivo'))}" value="${esc(p.fecha)}" style="margin-top:4px;font-size:12.5px;color:var(--sub);" oninput="App.setListField('proyectos','lista','${p.id}','fecha',this.value)"/>
@@ -1004,9 +719,6 @@ function renderProyectos(){
           </div>
         `).join('')}
         <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_paso'))}</button>
-        ${(p.pasos||[]).some(x=>x.done) ? `<button class="limpiarbtn" onclick="App.borrarPasosTildados('${p.id}')">
-          🧹 Borrar los ${(p.pasos||[]).filter(x=>x.done).length} pasos tildados
-        </button>` : ''}
       `)}
       <div class="card">
         <div class="card-h"><span>${esc(t('card_ideas'))}</span></div>
@@ -1018,199 +730,44 @@ function renderProyectos(){
 }
 
 /* Notas usa el sistema de texto enriquecido — una sola caja para escribir, dibujar, stickers e imágenes */
-/* Cartelito de "Guardado" que aparece un segundo cuando algo se graba.
-   La app siempre guardó sola, pero no se veía, y daba la sensación de que no lo hacía. */
-let avisoTimer = null;
-function avisoGuardado(){
-  let el = document.getElementById('avisoGuardado');
-  if (!el){
-    el = document.createElement('div');
-    el.id = 'avisoGuardado';
-    el.className = 'avisoguardado';
-    el.textContent = '✓ Guardado';
-    document.body.appendChild(el);
-  }
-  el.classList.add('visible');
-  clearTimeout(avisoTimer);
-  avisoTimer = setTimeout(() => el.classList.remove('visible'), 1400);
-}
-
-/* ---------- NOTAS ---------- */
-let notaAbierta = null;
-let notaArrastrada = null;   // índice de la nota que se está arrastrando
-
-/* Antes las Notas eran un único recuadro sin fin (r_notas): todo se apilaba en la misma
-   hoja, sin título ni fecha, y no había forma de separar una nota de otra ni de borrarlas.
-   Esto convierte lo que ya estaba escrito en la primera nota de la lista, una sola vez. */
-function migrarNotasAFichas(){
-  if (DB.get('notasEnFichas', false)) return;
-  const viejo = DB.get('rich_r_notas', null);
-  if (viejo && (viejo.html || viejo.drawing)){
-    const id = uid();
-    state.notas.lista.push({ id, titulo:'Mis notas', fecha: isoFecha(new Date()) });
-    state.richContent = state.richContent || {};
-    state.richContent['nota_'+id] = viejo;
-    DB.set('rich_nota_'+id, viejo);
-    DB.set('notas', state.notas);
-  }
-  DB.set('notasEnFichas', true);
-}
-
 function renderNotasRich(){
-  migrarNotasAFichas();
-
-  if (notaAbierta){
-    const n = state.notas.lista.find(x => x.id === notaAbierta);
-    if (!n){ notaAbierta = null; return renderNotasRich(); }
-    const key = 'nota_' + n.id;
-    return `
-      <div class="backrow" onclick="App.cerrarNota()">${ICONS.chevron} Todas las notas</div>
-      <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-      <div class="card">
-        <div class="card-b">
-          <input type="text" id="notaTitulo-${n.id}" value="${esc(n.titulo)}" placeholder="Título de la nota"
-            style="font-weight:700;font-size:15px;border-bottom:1px solid var(--mintLine);padding-bottom:7px;"
-            oninput="App.setNotaCampo('${n.id}','titulo',this.value)"/>
-          <div class="row" style="margin-top:10px;align-items:center;">
-            <input type="date" value="${esc(n.fecha||'')}"
-              oninput="App.setNotaCampo('${n.id}','fecha',this.value)"/>
-            <button class="xbtn" style="margin-left:auto;" title="Eliminar nota" onclick="App.borrarNota('${n.id}')">${ICONS.x}</button>
-          </div>
-        </div>
-        ${richBoxOnly(key, n.titulo || 'Nota', 'Texto, imágenes, stickers, dibujo a mano…')}
-      </div>
-      <p style="font-size:11.5px;color:var(--sub);text-align:center;margin-top:6px;">
-        Se guarda solo mientras escribís.
-      </p>
-    `;
-  }
-
-  /* El orden lo manda la posición en la lista, no la fecha: así se pueden acomodar a mano. */
-  const lista = state.notas.lista;
   return `
-    <button class="dashedbtn" style="margin:0 0 14px;" onclick="App.nuevaNota()">${ICONS.plus} Nota nueva</button>
-    ${lista.length === 0
-      ? `<p style="font-size:13px;color:var(--sub);text-align:center;margin-top:20px;line-height:1.6;">
-           Todavía no tenés notas.<br>Tocá “Nota nueva” para empezar.
-         </p>`
-      : `${lista.length > 1 ? `<p style="font-size:11.5px;color:var(--sub);text-align:center;margin:-6px 0 12px;">
-           Arrastrá los recuadros para reordenarlos, o usá las flechitas.
-         </p>` : ''}
-         <div class="notas-grid">
-         ${lista.map((n, i) => {
-          const txt = soloTexto(getRich('nota_'+n.id).html);
-          const tieneDibujo = !!getRich('nota_'+n.id).drawing;
-          const vista = txt ? txt.slice(0,110) + (txt.length>110?'…':'') : (tieneDibujo ? '(dibujo)' : '(vacía)');
-          return `
-          <div class="card notacard" draggable="true" data-idx="${i}"
-               ondragstart="App.notaDragStart(event,${i})"
-               ondragover="App.notaDragOver(event)"
-               ondragleave="this.classList.remove('sobre')"
-               ondrop="App.notaDrop(event,${i})"
-               ondragend="App.notaDragEnd(event)">
-            <div class="card-b" style="cursor:pointer;" onclick="App.abrirNota('${n.id}')">
-              <div class="row" style="align-items:flex-start;">
-                <div style="flex:1;min-width:0;">
-                  <b style="font-size:14px;color:var(--ink);">${esc(n.titulo || 'Sin título')}</b>
-                  <div style="font-size:11px;color:var(--sub);margin-top:2px;">${esc(n.fecha ? fechaLinda(n.fecha) : 'sin fecha')}</div>
-                  <div style="font-size:12.5px;color:var(--sub);margin-top:6px;line-height:1.5;">${esc(vista)}</div>
-                </div>
-                <button class="xbtn" title="Eliminar" onclick="event.stopPropagation();App.borrarNota('${n.id}')">${ICONS.x}</button>
-              </div>
-            </div>
-            <div class="notamover">
-              <button title="Mover antes" onclick="event.stopPropagation();App.moverNotaOrden(${i},-1)" ${i===0?'disabled':''}>⬅️</button>
-              <span class="notagarra" title="Arrastrar">⠿</span>
-              <button title="Mover después" onclick="event.stopPropagation();App.moverNotaOrden(${i},1)" ${i===lista.length-1?'disabled':''}>➡️</button>
-            </div>
-          </div>`;
-        }).join('')}
-         </div>`}
+    <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
+    ${richCard(t('title_notas'),'r_notas', state.lang==='en' ? 'Text, images, stickers, hand-drawing...' : 'Texto, imágenes, stickers, dibujo a mano...', '', 'notas')}
   `;
 }
 
 /* ---------- OBJETIVOS ---------- */
-/* Objetivos pasó de ser 4 categorías fijas (personal/trabajo/bienestar/dinero) a una lista
-   a la que se le pueden agregar y sacar categorías propias. Las 4 originales quedan con su
-   'clave' para que sigan traduciéndose al cambiar de idioma; las nuevas guardan su nombre. */
-function migrarObjetivosALista(){
-  const actual = state.objetivos || {};
-  /* 'sembrado' marca que las 4 categorías originales ya se crearon. Sin esa marca, una lista
-     vacía se confundiría con "recién instalado" y volverían a aparecer las que borraste. */
-  if (Array.isArray(actual.lista) && actual.sembrado) return;
-  const viejos = actual;
-  const lista = ['personal','trabajo','bienestar','dinero'].map(clave => {
-    const o = viejos[clave] || {};
-    return { id: uid(), clave, nombre:'', meta:o.meta||'', paso:o.paso||'', fecha:o.fecha||'' };
-  });
-  state.objetivos = { lista: (Array.isArray(actual.lista) && actual.lista.length) ? actual.lista : lista, sembrado: true };
-  DB.set('objetivos', state.objetivos);
-}
-function nombreObjetivo(o){ return o.clave ? t('cat_'+o.clave) : (o.nombre || ''); }
-
 function renderObjetivos(){
-  migrarObjetivosALista();
-  const lista = state.objetivos.lista;
-  return lista.map((o,i)=>
-    cardBox(`${esc(nombreObjetivo(o))}`, `
-      <div class="row" style="margin-bottom:8px;align-items:center;">
-        ${o.clave ? '' : `<input type="text" value="${esc(o.nombre)}" placeholder="Nombre de la categoría" style="font-weight:700;font-size:13px;border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setObjetivo('${o.id}','nombre',this.value)"/>`}
-        <span class="ordbtns" style="margin-left:auto;">
-          <button title="Subir" onclick="App.moverEnLista('objetivos','lista','${o.id}',-1)" ${i===0?'disabled':''}>⬆️</button>
-          <button title="Bajar" onclick="App.moverEnLista('objetivos','lista','${o.id}',1)" ${i===lista.length-1?'disabled':''}>⬇️</button>
-        </span>
-        <button class="xbtn" title="Eliminar categoría" onclick="App.borrarObjetivo('${o.id}')">${ICONS.x}</button>
-      </div>
-      `+`
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_meta'))}</label><input type="text" placeholder="${esc(t('ph_meta'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o.meta)}" oninput="App.setObjetivo('${o.id}','meta',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_primer_paso'))}</label><input type="text" placeholder="${esc(t('ph_primer_paso'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o.paso)}" oninput="App.setObjetivo('${o.id}','paso',this.value)"/></div>
-      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_senal'))}</label><input type="text" value="${esc(o.fecha)}" placeholder="${esc(t('ph_senal'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setObjetivo('${o.id}','fecha',this.value)"/></div>
-    `, (i % 2 === 1) ? 'terracota' : '')
-  ).join('') + `
-    <button class="dashedbtn" onclick="App.agregarObjetivo()">${ICONS.plus} Agregar una categoría</button>`;
+  const cats = [['personal','cat_personal',''],['trabajo','cat_trabajo','terracota'],['bienestar','cat_bienestar','terracota'],['dinero','cat_dinero','']];
+  const o = state.objetivos;
+  return cats.map(([key,labelKey,tint])=>
+    cardBox(t(labelKey), `
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_meta'))}</label><input type="text" placeholder="${esc(t('ph_meta'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].meta)}" oninput="App.setNestedSimple('objetivos','${key}','meta',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_primer_paso'))}</label><input type="text" placeholder="${esc(t('ph_primer_paso'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(o[key].paso)}" oninput="App.setNestedSimple('objetivos','${key}','paso',this.value)"/></div>
+      <div class="row"><label style="font-size:11px;font-weight:700;width:60px;flex-shrink:0;">${esc(t('lbl_senal'))}</label><input type="text" value="${esc(o[key].fecha)}" placeholder="${esc(t('ph_senal'))}" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" oninput="App.setNestedSimple('objetivos','${key}','fecha',this.value)"/></div>
+    `, tint)
+  ).join('');
 }
 
 /* ---------- COMPRAS ---------- */
 function renderCompras(){
   const c = state.compras;
   return cardBox(t('card_lista_compras'), `
-    ${c.lista.map((item,i)=>`
+    ${c.lista.map(item=>`
       <div class="row">
         <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
         <input type="text" value="${esc(item.text)}" placeholder="${esc(t('ph_compra'))}" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
-        <span class="ordbtns">
-          <button title="Subir" onclick="App.moverEnLista('compras','lista','${item.id}',-1)" ${i===0?'disabled':''}>⬆️</button>
-          <button title="Bajar" onclick="App.moverEnLista('compras','lista','${item.id}',1)" ${i===c.lista.length-1?'disabled':''}>⬇️</button>
-        </span>
         <button class="xbtn" onclick="App.removeItem('compras','lista','${item.id}')">${ICONS.x}</button>
       </div>
     `).join('')}
     <button class="addlink" onclick="App.addItem('compras','lista',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar'))}</button>
-    ${c.lista.some(x=>x.done) ? `<button class="limpiarbtn" onclick="App.borrarTildados('compras','lista')">
-      🧹 Borrar los ${c.lista.filter(x=>x.done).length} tildados
-    </button>` : ''}
   `, 'terracota');
 }
 
 /* ---------- TURNOS ---------- */
-let verVencidos = false;   // si se muestran los turnos que ya pasaron
 function renderTurnos(){
-  /* Antes salían en el orden en que se habían cargado: el turno de pasado mañana podía
-     quedar debajo de uno de dentro de dos meses. Ahora van por fecha y hora, y los que
-     ya pasaron se van al final en vez de estorbar arriba. */
-  const ahora = isoFecha(new Date());
-  const vencidos = state.turnos.lista.filter(x => x.fecha && x.fecha < ahora);
-  const vigentes = state.turnos.lista.filter(x => !(x.fecha && x.fecha < ahora));
-  /* Los vencidos quedan plegados: siguen guardados, pero no estorban arriba de la lista. */
-  const visibles = verVencidos ? state.turnos.lista : vigentes;
-  const turnosList = visibles.slice().sort((a,b) => {
-    const fa = (a.fecha||'9999-99-99') + ' ' + (a.hora||'99:99');
-    const fb = (b.fecha||'9999-99-99') + ' ' + (b.hora||'99:99');
-    const pa = (a.fecha && a.fecha < ahora) ? 1 : 0;
-    const pb = (b.fecha && b.fecha < ahora) ? 1 : 0;
-    if (pa !== pb) return pa - pb;
-    return fa.localeCompare(fb);
-  });
+  const turnosList = state.turnos.lista;
   const notifOn = ('Notification' in window) && Notification.permission === 'granted';
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
@@ -1219,28 +776,19 @@ function renderTurnos(){
         ${ICONS.bell} ${esc(t('btn_activar_recordatorios'))}
       </button>
     ` : ''}
-    ${vencidos.length ? `
-      <button class="limpiarbtn" style="margin-top:0;margin-bottom:12px;" onclick="App.toggleVencidos()">
-        ${verVencidos ? '▾' : '▸'} ${vencidos.length} turno${vencidos.length===1?'':'s'} que ya ${vencidos.length===1?'pasó':'pasaron'}
-      </button>
-      ${verVencidos ? `<button class="limpiarbtn" style="margin-top:0;margin-bottom:12px;" onclick="App.borrarVencidos()">
-        🧹 Borrar los ${vencidos.length} vencidos
-      </button>` : ''}
-    ` : ''}
     ${turnosList.map((item)=>{
       const key = 'turno_'+item.id;
       migrateDayTextToRich(key, item.notas);
-      const pasado = item.fecha && item.fecha < ahora;
       return `
-      <div class="card" style="${pasado?'opacity:.55;':''}">
+      <div class="card">
         <div class="card-b">
           <div class="row">
             <input type="text" style="font-weight:700;font-size:14px;" placeholder="${esc(t('ph_turno_titulo'))}" value="${esc(item.titulo)}" oninput="App.setListField('turnos','lista','${item.id}','titulo',this.value)"/>
             <button class="xbtn" onclick="App.removeItem('turnos','lista','${item.id}')">${ICONS.x}</button>
           </div>
           <div class="row" style="margin-top:6px;">
-            <input type="date" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
-            <input type="time" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
+            <input type="date" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.fecha)}" oninput="App.setListField('turnos','lista','${item.id}','fecha',this.value); App.resetNotified('${item.id}')"/>
+            <input type="time" style="border-bottom:1px solid var(--mintLine);padding-bottom:4px;" value="${esc(item.hora)}" oninput="App.setListField('turnos','lista','${item.id}','hora',this.value); App.resetNotified('${item.id}')"/>
           </div>
           <button class="bellbtn ${item.recordar?'on':''}" onclick="App.toggleRecordar('${item.id}')">${ICONS.bell} ${esc(item.recordar?t('btn_te_avisare'):t('btn_avisarme'))}</button>
         </div>
@@ -1252,199 +800,21 @@ function renderTurnos(){
 }
 
 /* ---------- COMIDAS ---------- */
-/* Semana que se está mirando en Comidas (independiente de la de la pantalla Semana). */
-let comidasOffset = 0;
-function semanaComidas(){
-  const l = lunesDe(new Date());
-  l.setDate(l.getDate() + comidasOffset*7);
-  return Array.from({length:7}, (_,i) => { const d = new Date(l); d.setDate(l.getDate()+i); return d; });
-}
-function rotuloComidas(){
-  const ds = semanaComidas(), a = ds[0], b = ds[6];
-  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
-  const mes = d => d.toLocaleDateString(loc, { month:'short' }).replace('.','');
-  return a.getMonth() === b.getMonth()
-    ? `${a.getDate()} – ${b.getDate()} ${mes(b)}`
-    : `${a.getDate()} ${mes(a)} – ${b.getDate()} ${mes(b)}`;
-}
-
-/* Igual que pasaba con la Semana: los menús se guardaban por nombre de día fijo
-   (comida_lunes, comida_martes…) y se pisaban todas las semanas. Ahora van por fecha.
-   Esto traslada lo que ya estaba escrito a la semana en curso, una sola vez. */
-function migrarComidasAFechas(){
-  if (DB.get('comidasPorFechas', false)) return;
-  const l = lunesDe(new Date());
-  DIAS.forEach((dia, i) => {
-    const viejo = DB.get('rich_comida_' + DIA_SLUGS[dia], null);
-    if (!viejo || (!viejo.html && !viejo.drawing)) return;
-    const f = new Date(l); f.setDate(l.getDate()+i);
-    const nuevaClave = 'comida_' + isoFecha(f);
-    if (DB.get('rich_' + nuevaClave, null)) return;   // ya hay algo ahí: no lo tocamos
-    if (!state.richContent) state.richContent = {};
-    state.richContent[nuevaClave] = viejo;
-    DB.set('rich_' + nuevaClave, viejo);
-  });
-  DB.set('comidasPorFechas', true);
-}
-
 function renderComidas(){
-  migrarComidasAFechas();
-  const ds = semanaComidas();
-  const hoy = isoFecha(new Date());
+  const d = state.comidas.dias;
   return `
     <div id="richToolbarWrap" class="richtoolbar">${renderRichToolbar()}</div>
-    <div class="semana-nav">
-      <button class="semnavbtn" onclick="App.moverComidas(-1)" title="Semana anterior">‹</button>
-      <div class="semana-nav-mid">
-        <b>${esc(rotuloComidas())}</b>
-        ${comidasOffset !== 0 ? `<button class="semhoybtn" onclick="App.comidasHoy()">${state.lang==='en'?'Today':'Hoy'}</button>` : ''}
-      </div>
-      <button class="semnavbtn" onclick="App.moverComidas(1)" title="Semana siguiente">›</button>
-    </div>
-    <div class="semana-grid">
-    ${ds.map((fecha)=>{
-      const key = 'comida_' + isoFecha(fecha);
-      const tint = (fecha.getDay()===0 || fecha.getDay()===6) ? 'terracota' : '';
-      const esHoy = isoFecha(fecha) === hoy;
-      const label = rotuloDia(fecha);
+    ${DIAS.map((dia)=>{
+      const key = 'comida_'+DIA_SLUGS[dia];
+      migrateDayTextToRich(key, d[dia]);
+      const tint = ['Sábado','Domingo'].includes(dia) ? 'terracota' : '';
+      const label = dayLabel(dia);
       return `
-      <div class="card ${tint} ${esHoy?'dia-hoy':''}">
+      <div class="card ${tint}">
         <div class="card-h"><span>${esc(label.toUpperCase())}</span></div>
         ${richBoxOnly(key, label, t('ph_comida'))}
       </div>`;
     }).join('')}
-    </div>
-  `;
-}
-
-/* ---------- BUSCAR ---------- */
-let buscarTexto = '';
-
-/* Convierte el HTML de una nota en texto plano, para poder buscar adentro
-   sin que las etiquetas ensucien el resultado. */
-function soloTexto(html){
-  const d = document.createElement('div');
-  d.innerHTML = html || '';
-  return (d.textContent || '').replace(/\s+/g, ' ').trim();
-}
-function sinTildes(x){
-  return (x||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-}
-function fechaLinda(iso){
-  const [y,m,d] = iso.split('-').map(Number);
-  if (!y) return iso;
-  const f = new Date(y, m-1, d);
-  const loc = state.lang==='en' ? 'en-US' : 'es-AR';
-  const dia = DIAS[(f.getDay()+6) % 7];
-  const mes = f.toLocaleDateString(loc, { month:'short' }).replace('.','');
-  return dayLabel(dia) + ' ' + d + ' ' + mes + ' ' + y;
-}
-
-/* Devuelve, para cada clave guardada, dónde vive y cómo se llama, para poder
-   mostrar el resultado y llevar a la persona hasta ahí. */
-function ubicacionDe(clave){
-  if (clave.indexOf('semana_') === 0){
-    const iso = clave.slice(7);
-    return { zona:'Semana', titulo: fechaLinda(iso), ir: `App.buscarIrASemana('${iso}')` };
-  }
-  if (clave.indexOf('comida_') === 0){
-    const iso = clave.slice(7);
-    return { zona:'Comidas', titulo: fechaLinda(iso), ir: `App.buscarIrAComidas('${iso}')` };
-  }
-  if (clave.indexOf('turno_') === 0){
-    const id = clave.slice(6);
-    const it = (state.turnos.lista || []).find(x => x.id === id);
-    return { zona:'Turnos', titulo: (it && it.titulo) || 'Turno', ir: `App.goto('mas','turnos')` };
-  }
-  if (clave.indexOf('r_inicio_') === 0) return { zona:'Inicio', titulo:'Notas de hoy', ir:`App.goto('inicio')` };
-  if (clave.indexOf('nota_') === 0){
-    const id = clave.slice(5);
-    const n = (state.notas.lista || []).find(x => x.id === id);
-    if (n) return { zona:'Notas', titulo: (n.titulo || 'Sin título'), ir:`App.abrirNotaDesdeBuscar('${id}')` };
-  }
-  if (clave.indexOf('notas') === 0 || clave.indexOf('r_notas') === 0)
-    return { zona:'Notas', titulo:'Notas', ir:`App.goto('mas','notas')` };
-  if (clave.indexOf('proyecto_') === 0) return { zona:'Proyectos', titulo:'Proyecto', ir:`App.goto('mas','proyectos')` };
-  return { zona:'Otros', titulo: clave, ir:`App.goto('mas', null)` };
-}
-
-function buscarResultados(q){
-  const aguja = sinTildes(q);
-  if (aguja.length < 2) return [];
-  const out = [];
-
-  /* 1) notas con formato (días, comidas, turnos, notas sueltas) */
-  const vistas = {};
-  const revisar = (clave, obj) => {
-    if (!obj || vistas[clave]) return;
-    vistas[clave] = true;
-    const txt = soloTexto(obj.html);
-    if (!txt) return;
-    const pos = sinTildes(txt).indexOf(aguja);
-    if (pos === -1) return;
-    const desde = Math.max(0, pos - 40);
-    const frag = (desde > 0 ? '…' : '') + txt.slice(desde, pos + q.length + 90) + (txt.length > pos + q.length + 90 ? '…' : '');
-    out.push(Object.assign({ fragmento: frag }, ubicacionDe(clave)));
-  };
-  Object.keys(state.richContent || {}).forEach(k => revisar(k, state.richContent[k]));
-  try{
-    for (let i = 0; i < localStorage.length; i++){
-      const lk = localStorage.key(i);
-      if (lk && lk.indexOf('planner:rich_') === 0){
-        const clave = lk.slice(13);
-        if (!vistas[clave]) revisar(clave, DB.get('rich_' + clave, null));
-      }
-    }
-  }catch(e){}
-
-  /* 2) campos de texto sueltos de las otras secciones */
-  const sueltos = [
-    ['Inicio', 'Hoy', state.inicio.hoy, `App.goto('inicio')`],
-    ['Inicio', 'Recordatorios', state.inicio.recordatorios, `App.goto('inicio')`],
-  ];
-  (state.inicio.prioridades || []).forEach(p => sueltos.push(['Inicio','Prioridad',p.text,`App.goto('inicio')`]));
-  (state.compras.lista || []).forEach(c => sueltos.push(['Compras','Lista',c.text,`App.goto('mas','compras')`]));
-  (state.habitos.lista || []).forEach(h => sueltos.push(['Hábitos','Hábito',h.nombre,`App.goto('habitos')`]));
-  (state.proyectos.lista || []).forEach(p => sueltos.push(['Proyectos', p.nombre||'Proyecto', p.nombre, `App.goto('mas','proyectos')`]));
-  (state.turnos.lista || []).forEach(x => sueltos.push(['Turnos', x.titulo||'Turno', x.titulo, `App.goto('mas','turnos')`]));
-  Object.keys(state.semana.enfoques || {}).forEach(k =>
-    sueltos.push(['Semana', 'Enfoque · ' + fechaLinda(k), state.semana.enfoques[k], `App.buscarIrASemana('${k}')`]));
-  ((state.objetivos && state.objetivos.lista) || []).forEach(o => {
-    sueltos.push(['Objetivos', nombreObjetivo(o) || 'Categoría', [o.meta, o.paso].filter(Boolean).join(' · '), `App.goto('mas','objetivos')`]);
-  });
-
-  sueltos.forEach(([zona, titulo, texto, ir]) => {
-    if (!texto) return;
-    if (sinTildes(texto).indexOf(aguja) === -1) return;
-    out.push({ zona, titulo, fragmento: texto.slice(0, 140), ir });
-  });
-
-  return out;
-}
-
-function renderBuscar(){
-  const res = buscarResultados(buscarTexto);
-  const corta = buscarTexto.trim().length < 2;
-  return `
-    <div class="card">
-      <div class="card-b">
-        <input type="text" id="buscarInput" value="${esc(buscarTexto)}" placeholder="Escribí una palabra…"
-          style="font-size:15px;border-bottom:1px solid var(--mintLine);padding-bottom:8px;"
-          oninput="App.setBuscar(this.value)"/>
-      </div>
-    </div>
-    ${corta
-      ? `<p style="font-size:12.5px;color:var(--sub);text-align:center;margin-top:18px;line-height:1.6;">
-           Buscá en los días, las comidas, los turnos, las notas y las listas.<br>Escribí al menos dos letras.
-         </p>`
-      : res.length === 0
-        ? `<p style="font-size:13px;color:var(--sub);text-align:center;margin-top:18px;">Sin resultados para “${esc(buscarTexto)}”.</p>`
-        : `<p style="font-size:12px;color:var(--sub);margin:2px 0 10px;">${res.length} resultado${res.length===1?'':'s'}</p>
-           ${res.map(r => `
-             <button class="resultado" onclick="${r.ir}">
-               <span class="res-zona">${esc(r.zona)} · ${esc(r.titulo)}</span>
-               <span class="res-frag">${esc(r.fragmento)}</span>
-             </button>`).join('')}`}
   `;
 }
 
@@ -1465,12 +835,7 @@ function renderSync(){
           </p>
         </div>
       </div>
-      <button class="dashedbtn" onclick="App.subirTodo()">${ICONS.cloud} Subir todo a la nube</button>
-      <p style="font-size:11.5px;color:var(--sub);margin-top:8px;line-height:1.5;">
-        Usalo cuando cambiás de código de sincronización: manda todo lo que tenés en este
-        dispositivo al código nuevo. También sirve como copia de respaldo.
-      </p>
-      <button class="dashedbtn" style="margin-top:14px;" onclick="App.disableSync()">${ICONS.x} ${esc(t('btn_desconectar'))}</button>
+      <button class="dashedbtn" onclick="App.disableSync()">${ICONS.x} ${esc(t('btn_desconectar'))}</button>
     `;
   }
   return `
@@ -1495,12 +860,6 @@ function renderSync(){
   `;
 }
 
-/* ---------- PIZARRA / LIENZO REUTILIZABLE ---------- */
-/* El sistema de Pizarra/tableros (lienzo con stickers arrastrables) fue reemplazado por el
-   de texto enriquecido que usan hoy todas las cajas. Quedaba entero en el archivo pero sin
-   ninguna forma de llegar a él desde la app: se sacó por completo.
-   Lo único que se conserva de ese bloque es cardBox, que sí usa media aplicación. */
-/* Caja de tarjeta simple (sin lienzo/pizarra — ese sistema fue reemplazado por el de texto enriquecido) */
 function cardBox(title, content, tint, bodyClass, printKey){
   const cls = 'card-b' + (bodyClass ? ' '+bodyClass : '');
   const printBtn = printKey ? `<button class="card-h-printbtn" onclick="App.printCard('${printKey}')" title="${esc(t('btn_print'))}">${ICONS.printer}</button>` : '';
@@ -1583,11 +942,13 @@ function getRich(key){
   return state.richContent[key];
 }
 function saveRich(key){ DB.set('rich_'+key, state.richContent[key]); }
-/* Trae al lienzo nuevo el texto viejo escrito en un día de Semana antes de esta actualización, para no perderlo.
-   DESACTIVADA: causaba que, en dispositivos donde el contenido nuevo (con imagen) todavía no había
-   llegado de la nube, se pisara con el texto viejo antes de que la sincronización terminara de cargar. */
+/* Trae al lienzo nuevo el texto viejo escrito en un día de Semana antes de esta actualización, para no perderlo */
 function migrateDayTextToRich(key, oldText){
-  return;
+  if (!oldText) return;
+  const data = getRich(key);
+  if (data.html) return;
+  data.html = esc(oldText);
+  saveRich(key);
 }
 
 let richActive = null, richActiveTitle = '', richPanel = null;
@@ -1596,8 +957,6 @@ let richStickerSearch = '';
 let richDrawHistory = {}, richDrawFuture = {};
 let richCopied = '';
 let richCustomTextColor = '#7A3B3B', richCustomHighlightColor = '#FFF59D';
-let richSelectedImage = null;
-let richImageClipboard = null;
 
 function richCard(title, key, placeholder, tint, printKey){
   const data = getRich(key);
@@ -1618,7 +977,6 @@ function richBoxOnly(key, title, placeholder){
       <div class="richbox">
         <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
              onfocus="RichText.setActive('${key}','${esc(title)}')"
-             onclick="RichText.handleBoxClick(event)"
              oninput="RichText.persist('${key}')">${data.html}</div>
         <canvas class="richink" id="richink-${key}" data-key="${key}"></canvas>
       </div>
@@ -1659,30 +1017,6 @@ function renderRichToolbar(){
         <button class="richbtn ${richPanel==='more'?'active':''}" onclick="RichText.togglePanel('more')">${ICONS.more}</button>
       </div>
     </div>
-
-    ${richSelectedImage ? `
-      <div class="richpanel" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;">
-        <span style="font-size:11px;color:var(--sub);width:100%;">${state.lang==='en'?'Image selected:':'Imagen seleccionada:'}</span>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.viewImageFull()">🔍 ${state.lang==='en'?'View big':'Ver grande'}</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.escalarImagen(0.85)" title="${state.lang==='en'?'Smaller':'Más chica'}">➖</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.escalarImagen(1.18)" title="${state.lang==='en'?'Bigger':'Más grande'}">➕</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.medidaOriginal()" title="${state.lang==='en'?'Reset size':'Tamaño original'}">↔️ ${state.lang==='en'?'Reset':'Original'}</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('izq')" title="${state.lang==='en'?'Left':'A la izquierda'}">⬅️</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('centro')" title="${state.lang==='en'?'Center':'Centrada'}">⏺️</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('der')" title="${state.lang==='en'?'Right':'A la derecha'}">➡️</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.alignImage('flota')" title="${state.lang==='en'?'Text beside':'Texto al lado'}">📄 ${state.lang==='en'?'Beside':'Al lado'}</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageUp()">⬆️ ${state.lang==='en'?'Up':'Subir'}</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.moveImageDown()">⬇️ ${state.lang==='en'?'Down':'Bajar'}</button>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.cutImageToClipboard()">${ICONS.scissors} ${state.lang==='en'?'Cut':'Cortar'}</button>
-        <button class="richimgbtn" style="color:#B23B3B;border-color:#e2b3b3;" onmousedown="event.preventDefault()" onclick="RichText.deleteSelectedImage()">${ICONS.trash} ${state.lang==='en'?'Delete':'Eliminar'}</button>
-      </div>
-    ` : ''}
-    ${(!richSelectedImage && richImageClipboard) ? `
-      <div class="richpanel" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;">
-        <span style="font-size:11px;color:var(--sub);">${state.lang==='en'?'Cut image ready:':'Imagen cortada, lista:'}</span>
-        <button class="richimgbtn" onmousedown="event.preventDefault()" onclick="RichText.pasteImageFromClipboard()">${ICONS.clipboard} ${state.lang==='en'?'Paste here':'Pegar acá'}</button>
-      </div>
-    ` : ''}
 
     ${richPanel==='fonts' ? `
       <div class="richpanel">
@@ -1780,6 +1114,7 @@ function renderRichToolbar(){
           <button class="dashedbtn" style="margin-top:0;flex:1;" onclick="RichText.pasteBox()">${ICONS.clipboard} ${esc(t('rich_pegar'))}</button>
           <button class="dashedbtn" style="margin-top:0;flex:1;color:#B23B3B;" onclick="RichText.clearBox()">${ICONS.trash} ${esc(t('rich_vaciar'))}</button>
         </div>
+        <button class="dashedbtn" onclick="RichText.downloadImages()">${ICONS.download} ${esc(t('rich_descargar_imgs'))}</button>
       </div>
     ` : ''}
 
@@ -1808,21 +1143,10 @@ const RichText = {
     if (!el) return;
     getRich(key).html = el.innerHTML;
     saveRich(key);
-    avisoGuardado();
   },
   focusActive(){
-    /* Si richActive quedó apuntando a una caja que ya no está en pantalla (o nunca se tocó),
-       lo reapuntamos a la única caja visible. Sin esto, insertar una imagen en un día que
-       todavía no se tocó no guarda nada, porque persist() sale antes de escribir. */
-    let el = richActive ? document.getElementById('richtext-'+richActive) : null;
-    if (!el){
-      const boxes = document.querySelectorAll('.richtext');
-      if (boxes.length !== 1) return;
-      el = boxes[0];
-      richActive = el.dataset.key;
-      richActiveTitle = '';
-    }
-    el.focus();
+    const el = document.getElementById('richtext-'+richActive);
+    if (el) el.focus();
   },
   command(cmd, value){
     this.focusActive();
@@ -1889,209 +1213,44 @@ const RichText = {
   },
   customTextColor(v){ richCustomTextColor = v; this.command('foreColor', v); },
   customHighlightColor(v){ richCustomHighlightColor = v; this.command('backColor', v); },
-  /* Inserta HTML en la caja activa SIN usar execCommand.
-     execCommand('insertHTML') depende de que el cursor siga adentro del recuadro; al abrir
-     el selector de archivos del celular se pierde esa selección y la imagen terminaba
-     insertándose en la nada. Acá la metemos directo en el DOM, que siempre funciona. */
-  insertHtmlInActive(html){
-    this.focusActive();
-    const target = richActive ? document.getElementById('richtext-'+richActive) : null;
-    if (!target){
-      alert('No encontré en qué nota insertar. Tocá primero dentro del recuadro del día y volvé a intentar.');
-      return false;
-    }
-    const frag = document.createRange().createContextualFragment(html);
-    const sel = window.getSelection();
-    let range = null;
-    if (sel && sel.rangeCount){
-      const r = sel.getRangeAt(0);
-      if (target.contains(r.commonAncestorContainer)) range = r;
-    }
-    if (range){ range.deleteContents(); range.insertNode(frag); }
-    else { target.appendChild(frag); }
-    this.persist(richActive);
-    return true;
-  },
   insertImage(evt){
     const file = evt.target.files[0];
     if (!file) return;
     if (file.type === 'image/gif'){
       /* los GIF se insertan tal cual, sin recomprimir, para no perder la animación */
-      if (file.size > 1.5*1024*1024){
+      if (file.size > 3*1024*1024){
         const ok = confirm(state.lang==='en'
-          ? 'This GIF is quite heavy and may fail to sync. Insert it anyway?'
-          : 'Este GIF pesa bastante y puede fallar al sincronizar. ¿Lo insertás igual?');
+          ? 'This GIF is quite heavy and could fill up storage quickly. Insert it anyway?'
+          : 'Este GIF pesa bastante y puede llenar rápido el espacio guardado en el navegador. ¿Lo insertás igual?');
         if (!ok) return;
       }
       const reader = new FileReader();
       reader.onload = (e) => {
-        RichText.insertHtmlInActive(`<img src="${e.target.result}" alt="GIF" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
+        RichText.focusActive();
+        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF"/>`);
+        RichText.persist(richActive);
       };
       reader.readAsDataURL(file);
-      evt.target.value = '';
       return;
     }
     const reader = new FileReader();
     reader.onload = (e) => {
       const img = new Image();
       img.onload = () => {
-        /* Antes: 900px y calidad 0.75, que daba fotos de 300-500 KB en base64.
-           Firestore rechaza cualquier documento de más de 1 MB, así que la nota del día
-           con foto no se llegaba a subir nunca y al recargar volvía la versión vieja sin imagen.
-           Con 900px y calidad 0.78 una foto/placa queda en torno a 150-200 KB: entra
-           holgada en la nube y el texto de las placas sigue leyéndose al ampliarla. */
         const maxDim = 900;
         let w = img.width, h = img.height;
         if (w > maxDim || h > maxDim){ const r = Math.min(maxDim/w, maxDim/h); w=Math.round(w*r); h=Math.round(h*r); }
         const c = document.createElement('canvas'); c.width=w; c.height=h;
         c.getContext('2d').drawImage(img,0,0,w,h);
-        const dataUrl = c.toDataURL('image/jpeg', 0.78);
-        RichText.insertHtmlInActive(`<img src="${dataUrl}" alt="Imagen" class="rt-img" onclick="RichText.selectImage(event,this)"/>`);
+        const dataUrl = c.toDataURL('image/jpeg', 0.75);
+        RichText.focusActive();
+        document.execCommand('insertHTML', false, `<img src="${dataUrl}" alt="Imagen"/>`);
+        RichText.persist(richActive);
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
     evt.target.value = '';
-  },
-  selectImage(evt, img){
-    if (evt) evt.stopPropagation();
-    document.querySelectorAll('.rt-img-selected').forEach(el => el.classList.remove('rt-img-selected'));
-    img.classList.add('rt-img', 'rt-img-selected');
-    richSelectedImage = img;
-    dibujarMarco(img);
-    refreshRichToolbar();
-  },
-  handleBoxClick(evt){
-    if (evt.target && evt.target.tagName === 'IMG'){
-      this.selectImage(evt, evt.target);
-    } else {
-      this.deselectImage();
-    }
-  },
-  deselectImage(){
-    if (richSelectedImage){
-      richSelectedImage.classList.remove('rt-img-selected');
-      richSelectedImage = null;
-      borrarMarco();
-      refreshRichToolbar();
-    }
-  },
-  moveImageUp(){
-    const img = richSelectedImage;
-    if (!img) return;
-    const prev = img.previousSibling;
-    if (prev){ img.parentNode.insertBefore(img, prev); this.persist(richActive); }
-  },
-  moveImageDown(){
-    const img = richSelectedImage;
-    if (!img) return;
-    const next = img.nextSibling;
-    if (next){ img.parentNode.insertBefore(next, img); this.persist(richActive); }
-  },
-  deleteSelectedImage(){
-    const img = richSelectedImage;
-    if (!img) return;
-    img.remove();
-    richSelectedImage = null;
-    this.persist(richActive);
-    refreshRichToolbar();
-  },
-  cutImageToClipboard(){
-    const img = richSelectedImage;
-    if (!img) return;
-    richImageClipboard = img.outerHTML;
-    img.remove();
-    richSelectedImage = null;
-    this.persist(richActive);
-    refreshRichToolbar();
-  },
-  pasteImageFromClipboard(){
-    if (!richImageClipboard) return;
-    this.insertHtmlInActive(richImageClipboard);
-    richImageClipboard = null;
-    refreshRichToolbar();
-  },
-  /* Abre la imagen seleccionada a pantalla completa, para poder mirarla sin
-     que ocupe media pantalla dentro de la nota. */
-  viewImageFull(){
-    const img = richSelectedImage;
-    if (!img) return;
-    const ov = document.createElement('div');
-    ov.className = 'imgviewer';
-    ov.innerHTML = '<button>Cerrar</button>';
-    const big = document.createElement('img');
-    big.src = img.src;
-    ov.appendChild(big);
-    ov.onclick = () => ov.remove();
-    document.body.appendChild(ov);
-  },
-  /* Alterna entre miniatura (por defecto) e imagen grande dentro de la nota. */
-  /* Cambia dónde se ubica la imagen dentro del recuadro. 'flota' hace que el texto
-     se acomode al costado, y vuelve a alternar entre izquierda y derecha. */
-  alignImage(donde){
-    const img = richSelectedImage;
-    if (!img) return;
-    const clases = ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'];
-    const eraFlotaIzq = img.classList.contains('rt-flota-izq');
-    clases.forEach(c => img.classList.remove(c));
-    if (donde === 'izq')   img.classList.add('rt-izq');
-    if (donde === 'der')   img.classList.add('rt-der');
-    if (donde === 'flota') img.classList.add(eraFlotaIzq ? 'rt-flota-der' : 'rt-flota-izq');
-    /* 'centro' no agrega nada: es el comportamiento por defecto. */
-    this.persist(richActive);
-    refreshRichToolbar();
-  },
-  /* Activa/desactiva el modo libre de una imagen. Con el modo activo se la agarra
-     con el dedo, el mouse o el lápiz y se la suelta donde uno quiera. */
-  toggleLibre(){
-    const img = richSelectedImage;
-    if (!img) return;
-    if (img.classList.contains('rt-libre')){
-      img.classList.remove('rt-libre');
-      img.style.left = ''; img.style.top = '';
-    } else {
-      ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'].forEach(c => img.classList.remove(c));
-      img.classList.add('rt-libre');
-      if (!img.style.left) img.style.left = '0px';
-      if (!img.style.top)  img.style.top  = '0px';
-      img.setAttribute('draggable','false');
-    }
-    this.persist(richActive);
-    refreshRichToolbar();
-  },
-  /* Cambia el ancho de la imagen por un porcentaje. La altura va sola, para no deformarla. */
-  escalarImagen(factor){
-    const img = richSelectedImage;
-    if (!img) return;
-    const actual = img.getBoundingClientRect().width || 240;
-    const caja = img.closest('.richtext');
-    const contW = anchoInterno(caja);
-    const nuevoPx = Math.max(30, Math.min(Math.round(actual * factor), contW));
-    /* Se guarda en % del ancho del cuadro (no en píxeles fijos) para que se adapte
-       sola al pasar de una pantalla ancha (PC) a una angosta (celu). */
-    const pct = Math.max(8, Math.min(100, Math.round((nuevoPx / contW) * 100)));
-    img.classList.add('rt-medida');
-    img.classList.remove('rt-img-big');
-    img.style.width = pct + '%';
-    img.style.height = 'auto';
-    this.persist(richActive);
-    refreshRichToolbar();
-  },
-  /* Vuelve al tamaño de miniatura con el que entró. */
-  medidaOriginal(){
-    const img = richSelectedImage;
-    if (!img) return;
-    img.classList.remove('rt-medida','rt-img-big');
-    img.style.width = ''; img.style.height = '';
-    this.persist(richActive);
-    refreshRichToolbar();
-  },
-  toggleImageSize(){
-    const img = richSelectedImage;
-    if (!img) return;
-    img.classList.toggle('rt-img-big');
-    this.persist(richActive);
-    refreshRichToolbar();
   },
   cutBox(){
     const el = document.getElementById('richtext-'+richActive);
@@ -2115,6 +1274,26 @@ const RichText = {
     if (!el) return;
     el.innerHTML = '';
     this.persist(richActive);
+  },
+  downloadImages(){
+    const el = document.getElementById('richtext-'+richActive);
+    if (!el) return;
+    const imgs = Array.from(el.querySelectorAll('img'));
+    if (!imgs.length){ alert(t('rich_sin_imgs')); return; }
+    imgs.forEach((img, i) => {
+      const src = img.getAttribute('src') || '';
+      const a = document.createElement('a');
+      let ext = 'png';
+      const m = src.match(/^data:image\/(\w+);/);
+      if (m) ext = m[1] === 'jpeg' ? 'jpg' : m[1];
+      else if (/\.gif(\?|$)/i.test(src)) ext = 'gif';
+      a.href = src;
+      a.download = `${richActive}-imagen-${i+1}.${ext}`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
   },
   togglePanel(name){
     richPanel = (richPanel===name) ? null : name;
@@ -2261,6 +1440,70 @@ function initRichInk(key){
   canvas.dataset.inited = '1';
 }
 
+/* ---------- ASISTENTE ---------- */
+let asisTab = 'chat';
+let dumpResult = null, dumpLoading = false;
+
+function renderAsistente(){
+  return `
+    <div class="chat-wrap">
+      <div class="asis-top">
+        <div><h1 style="font-size:24px;">${esc(t('title_asistente'))}</h1><p style="font-size:13px;color:var(--sub);margin-top:4px;">${esc(t('sub_asistente'))}</p></div>
+        <button class="gearbtn" onclick="App.openSettings()">${ICONS.gear}</button>
+      </div>
+      <div class="asistabs">
+        <button class="asistab ${asisTab==='chat'?'active':''}" onclick="App.setAsisTab('chat')">${esc(t('tab_chat'))}</button>
+        <button class="asistab ${asisTab==='dump'?'active':''}" onclick="App.setAsisTab('dump')">${esc(t('tab_dump'))}</button>
+      </div>
+      ${asisTab==='chat' ? `
+        <div class="chat-msgs" id="chatMsgs">
+          ${(state.chat.length?state.chat:[{role:'bot', text:t('chat_welcome')}]).map(m=>`<div class="msg ${m.role==='user'?'user':'bot'}">${esc(m.text)}</div>`).join('')}
+        </div>
+        <div class="chat-input">
+          <input type="text" id="chatInput" placeholder="${state.apiKey?esc(t('ph_chat_msg')):esc(t('ph_chat_apikey'))}" onkeydown="if(event.key==='Enter')App.sendChat()"/>
+          <button class="sendbtn" onclick="App.sendChat()">${ICONS.send}</button>
+        </div>
+      ` : renderBrainDump()}
+    </div>
+  `;
+}
+
+function renderBrainDump(){
+  return `
+    <div class="dump-scroll">
+      <div class="card">
+        <div class="card-b" style="display:flex;gap:10px;align-items:flex-start;">
+          <span class="notascard-icon" style="margin:0;flex-shrink:0;">${ICONS.sparkle}</span>
+          <p style="font-size:13px;color:var(--sub);margin:0;">${esc(t('dump_intro'))}</p>
+        </div>
+      </div>
+      <textarea id="dumpInput" rows="6" placeholder="${esc(t('ph_dump'))}" style="width:100%;border:1px solid var(--mintLine);border-radius:14px;padding:12px;font-size:14px;color:var(--ink);background:var(--card);"></textarea>
+      <button class="dashedbtn" style="margin-top:10px;" onclick="App.runBrainDump()">${ICONS.sparkle} ${esc(dumpLoading?t('btn_organizando'):t('btn_organizar'))}</button>
+
+      ${dumpResult ? `
+        <p style="font-size:13px;font-weight:700;color:var(--ink);margin:16px 0 8px;">${esc(t('txt_propuesta'))} (${dumpResult.length})</p>
+        ${dumpResult.map((item,i)=>`
+          <div class="card">
+            <div class="card-b">
+              <input type="text" value="${esc(item.text)}" oninput="App.updateDumpItem(${i},this.value)" style="font-weight:600;font-size:14px;"/>
+              <div class="dumpchoices">
+                <button class="dumpchoice ${item.destino==='prioridades'?'active':''}" onclick="App.setDumpDestino(${i},'prioridades')">${esc(t('btn_a_prioridades'))}</button>
+                <button class="dumpchoice ${item.destino==='compras'?'active':''}" onclick="App.setDumpDestino(${i},'compras')">${esc(t('btn_a_compras'))}</button>
+                <button class="xbtn" onclick="App.removeDumpItem(${i})">${ICONS.x}</button>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+        <button class="dashedbtn" onclick="App.acceptBrainDump()">${ICONS.check} ${esc(t('btn_agregar_todo'))}</button>
+      ` : ''}
+    </div>
+  `;
+}
+
+function scrollChatToBottom(){
+  const el = document.getElementById('chatMsgs');
+  if (el) el.scrollTop = el.scrollHeight;
+}
 
 /* ---------- lógica ---------- */
 const App = {
@@ -2271,180 +1514,11 @@ const App = {
     render();
   },
   goto(tab, masScreen){
-    /* Si nos vamos de Notas, cerramos la nota abierta: si no, al volver aparecía
-       la nota de adentro en vez de la lista, y parecía que se había perdido el resto. */
-    if (tab !== 'notas' && !(tab === 'mas' && masScreen === 'notas')) notaAbierta = null;
     state.tab = tab;
     state.masScreen = (tab==='mas' && masScreen) ? masScreen : null;
     render();
   },
-  toggleDay(i){ openDayIdx = (openDayIdx===i) ? null : i; render(); },
-  moverSemana(n){ semanaOffset += n; openDayIdx = null; render(); },
-  semanaHoy(){ semanaOffset = 0; openDayIdx = null; render(); },
-  /* Salta directo a la fecha elegida y deja ese día abierto, sin tener que ir
-     apretando las flechas una semana por vez. */
-  irAFecha(iso){
-    if (!iso) return;
-    const [y, m, dd] = iso.split('-').map(Number);
-    if (!y || !m || !dd) return;
-    const destino = new Date(y, m-1, dd);
-    const base = lunesDe(new Date());
-    const diff = Math.round((destino - base) / 86400000);
-    semanaOffset = Math.floor(diff / vistaDias);
-    openDayIdx = diff - semanaOffset * vistaDias;
-    render();
-  },
-  /* Mueve la nota entera (texto, imágenes y dibujo) de un día a otro, sin copiar y pegar.
-     Si el día de destino ya tiene algo escrito, lo respeta y agrega la nota abajo. */
-  moverNota(isoOrigen, isoDestino){
-    if (!isoDestino || isoDestino === isoOrigen) return;
-    const kO = 'semana_' + isoOrigen, kD = 'semana_' + isoDestino;
-    const origen = getRich(kO);
-    if (!origen || (!origen.html && !origen.drawing)){
-      alert('Ese día no tiene nada para mover.');
-      return;
-    }
-    const destino = getRich(kD);
-    const ocupado = !!(destino && (destino.html || destino.drawing));
-    const fmt = iso => { const [y,m,d] = iso.split('-'); return d+'/'+m; };
-    const aviso = ocupado
-      ? 'El día ' + fmt(isoDestino) + ' ya tiene una nota.\n\nLa nota del ' + fmt(isoOrigen) + ' se va a agregar abajo de la que ya está.\n\n¿Seguimos?'
-      : '¿Mover la nota del ' + fmt(isoOrigen) + ' al ' + fmt(isoDestino) + '?';
-    if (!confirm(aviso)) return;
-
-    destino.html = ocupado && destino.html
-      ? destino.html + '<br>' + (origen.html || '')
-      : (origen.html || '');
-    if (!destino.drawing && origen.drawing) destino.drawing = origen.drawing;
-    saveRich(kD);
-
-    origen.html = '';
-    origen.drawing = null;
-    saveRich(kO);
-
-    richActive = null;
-    this.irAFecha(isoDestino);
-  },
-  setVistaDias(n){
-    vistaDias = n;
-    DB.set('vistaDias', n);   // no se sincroniza: es una preferencia de este dispositivo
-    semanaOffset = 0;
-    openDayIdx = null;
-    render();
-  },
-  setEnfoqueSemana(claveSem, valor){
-    if (!state.semana.enfoques) state.semana.enfoques = {};
-    state.semana.enfoques[claveSem] = valor;
-    DB.set('semana', state.semana);
-  },
-
-  /* --- copia de seguridad --- */
-  /* Claves guardadas que forman parte del planner (excluye configuración y marcas internas). */
-  clavesDelPlanner(){
-    /* Marcas internas de este dispositivo (claves de migración y preferencias de vista):
-       no son datos del planner, no se exportan ni se suben. */
-    const fuera = ['syncConfig','migratedToDocs','pendienteSubirTodo',
-                   'semanaPorFechas','habitosPorFechas','comidasPorFechas','notasEnFichas','vistaDias'];
-    const out = [];
-    for (let i=0;i<localStorage.length;i++){
-      const k = localStorage.key(i);
-      if (k && k.indexOf('planner:') === 0){
-        const corta = k.slice(8);
-        if (fuera.indexOf(corta) === -1) out.push(corta);
-      }
-    }
-    return out;
-  },
-  exportarBackup(){
-    const datos = {};
-    this.clavesDelPlanner().forEach(k => { datos[k] = localStorage.getItem('planner:'+k); });
-    const paquete = { app:'mi-planner-digital', version:1, fecha:new Date().toISOString(), datos };
-    const blob = new Blob([JSON.stringify(paquete)], { type:'application/json' });
-    const url = URL.createObjectURL(blob);
-    const f = new Date(), dd = n => String(n).padStart(2,'0');
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `planner-${f.getFullYear()}-${dd(f.getMonth()+1)}-${dd(f.getDate())}.json`;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-  },
-  importarBackup(evt){
-    const file = evt.target.files[0];
-    evt.target.value = '';
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      let paquete = null;
-      try{ paquete = JSON.parse(e.target.result); }catch(err){}
-      if (!paquete || paquete.app !== 'mi-planner-digital' || !paquete.datos){
-        alert('Ese archivo no es una copia de este planner. Elegí el .json que bajaste con "Bajar copia".');
-        return;
-      }
-      const claves = Object.keys(paquete.datos);
-      const cuando = paquete.fecha ? new Date(paquete.fecha).toLocaleString('es-AR') : 'fecha desconocida';
-      if (!confirm('Vas a reemplazar TODO lo que tenés ahora por la copia del ' + cuando +
-                   ' (' + claves.length + ' secciones).\n\nEsto no se puede deshacer. ¿Seguimos?')) return;
-      try{
-        this.clavesDelPlanner().forEach(k => localStorage.removeItem('planner:'+k));
-        claves.forEach(k => localStorage.setItem('planner:'+k, paquete.datos[k]));
-      }catch(err){
-        alert('No entró toda la copia: se quedó sin espacio el navegador.\n\n' + err);
-        return;
-      }
-      /* Al recargar, la copia restaurada se sube a la nube; si no, la versión de la nube
-         (la vieja) la pisaría de nuevo. */
-      DB.set('pendienteSubirTodo', true);
-      alert('Copia restaurada. La app se recarga ahora.');
-      location.reload();
-    };
-    reader.readAsText(file);
-  },
-
-  /* Fuerza la subida de TODO lo que hay en este dispositivo al código actual.
-     Necesario al cambiar de código: la nube nueva arranca vacía y el push normal
-     solo se dispara cuando algo cambia. */
-  subirTodo(){
-    if (!Sync.db){ alert('Todavía no está conectado a la nube. Esperá unos segundos y probá de nuevo.'); return; }
-    let n = 0;
-    this.clavesDelPlanner().forEach(k => { if (isSyncKey(k)){ Sync.push(k); n++; } });
-    alert('Subiendo ' + n + ' secciones a la nube. Esperá unos segundos y fijate que diga "Última sincronización".');
-  },
-
-  /* Panel de diagnóstico: muestra en pantalla dónde se corta la cadena
-     pantalla -> memoria -> navegador -> nube, para no seguir adivinando. */
-  diagnostico(){
-    const L = [];
-    const key = 'semana_lunes';
-    const countImgs = (h) => ((h||'').match(/<img/g) || []).length;
-    const el = document.getElementById('richtext-'+key);
-    const mem = (state.richContent && state.richContent[key]) ? state.richContent[key].html : null;
-    const local = localStorage.getItem('planner:rich_'+key);
-
-    L.push('CAJA ACTIVA: ' + (richActive || '(ninguna)'));
-    L.push('');
-    L.push('1) EN PANTALLA (Lunes): ' + (el ? countImgs(el.innerHTML) + ' imagen(es), ' + el.innerHTML.length + ' car.' : 'el recuadro no está abierto'));
-    L.push('2) EN MEMORIA: ' + (mem !== null && mem !== undefined ? countImgs(mem) + ' imagen(es), ' + mem.length + ' car.' : 'VACÍO'));
-    L.push('3) EN EL NAVEGADOR: ' + (local ? countImgs(local) + ' imagen(es), ' + local.length + ' car.' : 'NO GUARDADO'));
-
-    let total = 0;
-    try{ for (let i=0;i<localStorage.length;i++){ const k = localStorage.key(i); total += k.length + (localStorage.getItem(k)||'').length; } }catch(e){}
-    L.push('   espacio usado en total: ' + Math.round(total/1024) + ' KB (el tope suele ser ~5000 KB)');
-    L.push('');
-    L.push('4) SINCRONIZACIÓN configurada: ' + (state.syncConfig ? 'SÍ — código "' + state.syncConfig.code + '"' : 'NO — nunca se conectó a Firebase'));
-    L.push('   conectada ahora: ' + (Sync.db ? 'sí' : 'no'));
-    L.push('   estado: ' + (state.syncStatus || '(sin datos todavía)'));
-
-    const ov = document.createElement('div');
-    ov.className = 'imgviewer';
-    ov.style.alignItems = 'flex-start';
-    ov.innerHTML = '<button>Cerrar</button>';
-    const pre = document.createElement('pre');
-    pre.textContent = L.join('\n');
-    pre.style.cssText = 'background:#fff;color:#333;padding:18px 14px;border-radius:12px;font-size:12px;line-height:1.55;white-space:pre-wrap;word-break:break-word;max-width:100%;max-height:80vh;overflow:auto;margin-top:52px;font-family:monospace;';
-    ov.appendChild(pre);
-    ov.onclick = (e) => { if (e.target !== pre) ov.remove(); };
-    document.body.appendChild(ov);
-  },
+  toggleDay(dia){ openDay = (openDay===dia) ? null : dia; render(); },
 
   setField(section, field, value){
     state[section][field] = value;
@@ -2474,218 +1548,10 @@ const App = {
     state[section][listKey] = state[section][listKey].filter(x=>x.id!==id);
     DB.set(section, state[section]); render();
   },
-  toggleHabitDay(id, iso){
+  toggleHabitDay(id, n){
     const h = state.habitos.lista.find(x=>x.id===id);
-    if (h){ h.marcas[iso] = !h.marcas[iso]; DB.set('habitos', state.habitos); render(); }
+    if (h){ h.marcas[n] = !h.marcas[n]; DB.set('habitos', state.habitos); render(); }
   },
-  moverMes(n){ habitosOffset += n; render(); },
-
-  /* Reordenar hábitos: el orden de la lista es la prioridad que se ve numerada. */
-  /* Reordenar cualquier lista simple (compras, proyectos…) por el id del ítem. */
-  moverEnLista(section, listKey, id, delta){
-    const l = state[section][listKey];
-    const i = l.findIndex(x => x.id === id);
-    const j = i + delta;
-    if (i < 0 || j < 0 || j >= l.length) return;
-    const [it] = l.splice(i, 1);
-    l.splice(j, 0, it);
-    DB.set(section, state[section]);
-    avisoGuardado();
-    render();
-  },
-  /* Saca de una vez todo lo tildado, en vez de ir borrando uno por uno. */
-  borrarTildados(section, listKey){
-    const l = state[section][listKey] || [];
-    const n = l.filter(x => x.done).length;
-    if (!n) return;
-    if (!confirm('¿Borrar ' + n + (n === 1 ? ' ítem tildado?' : ' ítems tildados?') + '\n\nEsto no se puede deshacer.')) return;
-    state[section][listKey] = l.filter(x => !x.done);
-    DB.set(section, state[section]);
-    avisoGuardado();
-    render();
-  },
-  borrarPasosTildados(proyectoId){
-    const p = state.proyectos.lista.find(x => x.id === proyectoId);
-    if (!p || !p.pasos) return;
-    const n = p.pasos.filter(x => x.done).length;
-    if (!n) return;
-    if (!confirm('¿Borrar ' + n + (n === 1 ? ' paso tildado?' : ' pasos tildados?') + '\n\nEsto no se puede deshacer.')) return;
-    p.pasos = p.pasos.filter(x => !x.done);
-    DB.set('proyectos', state.proyectos);
-    avisoGuardado();
-    render();
-  },
-  toggleVencidos(){ verVencidos = !verVencidos; render(); },
-  borrarVencidos(){
-    const hoy = isoFecha(new Date());
-    const n = state.turnos.lista.filter(x => x.fecha && x.fecha < hoy).length;
-    if (!n) return;
-    if (!confirm('¿Borrar ' + n + (n === 1 ? ' turno que ya pasó?' : ' turnos que ya pasaron?') + '\n\nEsto no se puede deshacer.')) return;
-    /* Vaciamos también sus notas para no dejar contenido huérfano ocupando lugar. */
-    state.turnos.lista.filter(x => x.fecha && x.fecha < hoy).forEach(x => {
-      const vacio = { html:'', drawing:null };
-      if (state.richContent) state.richContent['turno_'+x.id] = vacio;
-      DB.set('rich_turno_'+x.id, vacio);
-    });
-    state.turnos.lista = state.turnos.lista.filter(x => !(x.fecha && x.fecha < hoy));
-    DB.set('turnos', state.turnos);
-    avisoGuardado();
-    render();
-  },
-
-  /* --- objetivos --- */
-  setObjetivo(id, campo, valor){
-    const o = state.objetivos.lista.find(x => x.id === id);
-    if (!o) return;
-    o[campo] = valor;
-    DB.set('objetivos', state.objetivos);
-    avisoGuardado();
-  },
-  agregarObjetivo(){
-    state.objetivos.lista.push({ id: uid(), clave: null, nombre:'', meta:'', paso:'', fecha:'' });
-    DB.set('objetivos', state.objetivos);
-    render();
-  },
-  borrarObjetivo(id){
-    const o = state.objetivos.lista.find(x => x.id === id);
-    if (!o) return;
-    if (!confirm('¿Eliminar la categoría “' + (nombreObjetivo(o) || 'sin nombre') + '”?\n\nSe pierde lo que hayas escrito adentro.')) return;
-    state.objetivos.lista = state.objetivos.lista.filter(x => x.id !== id);
-    DB.set('objetivos', state.objetivos);
-    avisoGuardado();
-    render();
-  },
-  moverHabito(i, delta){
-    const j = i + delta, l = state.habitos.lista;
-    if (j < 0 || j >= l.length) return;
-    const [h] = l.splice(i, 1);
-    l.splice(j, 0, h);
-    DB.set('habitos', state.habitos);
-    avisoGuardado();
-    render();
-  },
-  habitoDragStart(ev, i){
-    habitoArrastrado = i;
-    ev.dataTransfer.effectAllowed = 'move';
-    try{ ev.dataTransfer.setData('text/plain', String(i)); }catch(e){}
-    ev.currentTarget.classList.add('arrastrando');
-  },
-  habitoDragOver(ev){
-    if (habitoArrastrado === null) return;
-    ev.preventDefault();
-    ev.dataTransfer.dropEffect = 'move';
-    ev.currentTarget.classList.add('sobre');
-  },
-  habitoDrop(ev, destino){
-    ev.preventDefault();
-    ev.currentTarget.classList.remove('sobre');
-    if (habitoArrastrado === null || habitoArrastrado === destino) return;
-    const l = state.habitos.lista;
-    const [h] = l.splice(habitoArrastrado, 1);
-    l.splice(destino, 0, h);
-    habitoArrastrado = null;
-    DB.set('habitos', state.habitos);
-    avisoGuardado();
-    render();
-  },
-  habitoDragEnd(ev){
-    habitoArrastrado = null;
-    ev.currentTarget.classList.remove('arrastrando');
-    document.querySelectorAll('.habitcard.sobre').forEach(el => el.classList.remove('sobre'));
-  },
-  moverComidas(n){ comidasOffset += n; render(); },
-
-  /* --- notas --- */
-  nuevaNota(){
-    const n = { id: uid(), titulo:'', fecha: isoFecha(new Date()) };
-    state.notas.lista.push(n);
-    DB.set('notas', state.notas);
-    notaAbierta = n.id;
-    render();
-    const inp = document.querySelector('.card-b input[type=text]');
-    if (inp) inp.focus();
-  },
-  abrirNota(id){ notaAbierta = id; richActive = null; render(); },
-
-  /* Reordenar notas. Las flechas funcionan en cualquier lado; arrastrar, en pantallas
-     con mouse. Las dos cosas hacen lo mismo: mover la nota dentro de la lista. */
-  moverNotaOrden(i, delta){
-    const j = i + delta;
-    const l = state.notas.lista;
-    if (j < 0 || j >= l.length) return;
-    const [n] = l.splice(i, 1);
-    l.splice(j, 0, n);
-    DB.set('notas', state.notas);
-    avisoGuardado();
-    render();
-  },
-  notaDragStart(ev, i){
-    notaArrastrada = i;
-    ev.dataTransfer.effectAllowed = 'move';
-    try{ ev.dataTransfer.setData('text/plain', String(i)); }catch(e){}
-    ev.currentTarget.classList.add('arrastrando');
-  },
-  notaDragOver(ev){
-    if (notaArrastrada === null) return;
-    ev.preventDefault();
-    ev.dataTransfer.dropEffect = 'move';
-    ev.currentTarget.classList.add('sobre');
-  },
-  notaDrop(ev, destino){
-    ev.preventDefault();
-    ev.currentTarget.classList.remove('sobre');
-    if (notaArrastrada === null || notaArrastrada === destino) return;
-    const l = state.notas.lista;
-    const [n] = l.splice(notaArrastrada, 1);
-    l.splice(destino, 0, n);
-    notaArrastrada = null;
-    DB.set('notas', state.notas);
-    avisoGuardado();
-    render();
-  },
-  notaDragEnd(ev){
-    notaArrastrada = null;
-    ev.currentTarget.classList.remove('arrastrando');
-    document.querySelectorAll('.notacard.sobre').forEach(el => el.classList.remove('sobre'));
-  },
-  cerrarNota(){ notaAbierta = null; richActive = null; render(); },
-  setNotaCampo(id, campo, valor){
-    const n = state.notas.lista.find(x => x.id === id);
-    if (!n) return;
-    n[campo] = valor;
-    DB.set('notas', state.notas);
-    avisoGuardado();
-  },
-  borrarNota(id){
-    const n = state.notas.lista.find(x => x.id === id);
-    if (!n) return;
-    if (!confirm('¿Eliminar la nota “' + (n.titulo || 'Sin título') + '”?\n\nEsto no se puede deshacer.')) return;
-    state.notas.lista = state.notas.lista.filter(x => x.id !== id);
-    DB.set('notas', state.notas);
-    /* Vaciamos también el contenido para que no quede ocupando lugar ni aparezca en el buscador. */
-    const vacio = { html:'', drawing:null };
-    if (state.richContent) state.richContent['nota_'+id] = vacio;
-    DB.set('rich_nota_'+id, vacio);
-    notaAbierta = null;
-    render();
-  },
-  setBuscar(v){
-    buscarTexto = v;
-    render();
-    /* render() rehace el HTML, así que hay que devolverle el foco y el cursor al final. */
-    const el = document.getElementById('buscarInput');
-    if (el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); }
-  },
-  buscarIrASemana(iso){ this.goto('semana'); this.irAFecha(iso); },
-  abrirNotaDesdeBuscar(id){ notaAbierta = id; this.goto('mas','notas'); },
-  buscarIrAComidas(iso){
-    const [y,m,d] = iso.split('-').map(Number);
-    const destino = lunesDe(new Date(y, m-1, d));
-    comidasOffset = Math.round((destino - lunesDe(new Date())) / 604800000);
-    this.goto('mas','comidas');
-  },
-  comidasHoy(){ comidasOffset = 0; render(); },
-  mesHoy(){ habitosOffset = 0; render(); },
   setNestedSimple(section, key, field, value){
     state[section][key][field] = value;
     DB.set(section, state[section]);
@@ -2705,6 +1571,114 @@ const App = {
     parent[listKey] = parent[listKey] || [];
     parent[listKey].push(Object.assign({id:uid()}, blank));
     DB.set(section, state[section]); render();
+  },
+
+  /* --- asistente / API key --- */
+  openSettings(){
+    const wrap = document.createElement('div');
+    wrap.className = 'modal-bg';
+    wrap.innerHTML = `
+      <div class="modal">
+        <h3>Conectar el asistente</h3>
+        <p>Pegá tu API key de Gemini para que el asistente pueda responderte. Se guarda solo en este dispositivo (localStorage), nunca se envía a ningún otro lado más que a Google.<br><br>Conseguí una gratis en <b>aistudio.google.com/apikey</b>.</p>
+        <input type="text" id="apiKeyInput" placeholder="AIza..." value="${esc(state.apiKey)}"/>
+        <div class="actions">
+          <button class="btn ghost" onclick="this.closest('.modal-bg').remove()">Cancelar</button>
+          <button class="btn primary" onclick="App.saveKey()">Guardar</button>
+        </div>
+      </div>`;
+    document.body.appendChild(wrap);
+  },
+  saveKey(){
+    const val = document.getElementById('apiKeyInput').value.trim();
+    state.apiKey = val;
+    DB.set('apiKey', val);
+    document.querySelector('.modal-bg').remove();
+    render();
+  },
+  async sendChat(){
+    const input = document.getElementById('chatInput');
+    const text = input.value.trim();
+    if (!text) return;
+    if (!state.apiKey){ App.openSettings(); return; }
+    state.chat.push({role:'user', text});
+    input.value = '';
+    render();
+    state.chat.push({role:'bot', text:'…'});
+    render();
+    try{
+      const contents = state.chat.filter(m=>m.text!=='…').map(m=>({
+        role: m.role==='user' ? 'user' : 'model',
+        parts: [{text:m.text}]
+      }));
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${state.apiKey}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          systemInstruction: { parts: [{text:"Sos el asistente de 'Mi Planner Digital'. Hablás en español rioplatense (voseo), tono cálido y breve. Ayudás a definir el enfoque de la semana, bajar metas a un primer paso concreto, u organizar prioridades. Respuestas cortas (2-4 líneas), sin relleno."}] },
+          contents
+        })
+      });
+      const data = await res.json();
+      const reply = data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join('') || 'No pude generar una respuesta, ¿probamos de nuevo?';
+      state.chat.pop();
+      state.chat.push({role:'bot', text:reply});
+    }catch(e){
+      state.chat.pop();
+      state.chat.push({role:'bot', text:'Hubo un problema de conexión. Revisá tu API key o probá de nuevo.'});
+    }
+    render();
+  },
+
+  setAsisTab(tab){ asisTab = tab; render(); },
+
+  async runBrainDump(){
+    const input = document.getElementById('dumpInput');
+    const raw = input ? input.value.trim() : '';
+    if (!raw) return;
+    if (!state.apiKey){ App.openSettings(); return; }
+    dumpLoading = true;
+    render();
+    try{
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.7-flash:generateContent?key=${state.apiKey}`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          systemInstruction: { parts: [{text:"Separás una lista desordenada de pendientes en ítems sueltos. Para cada ítem decidís si es algo para comprar (destino 'compras') o cualquier otra tarea/pendiente (destino 'prioridades'). Respondé ÚNICAMENTE con un JSON válido: un array de objetos {\"text\":\"...\", \"destino\":\"prioridades\"|\"compras\"}. Sin texto extra, sin markdown, sin comillas triples."}] },
+          contents: [{ role:'user', parts:[{text: raw}] }]
+        })
+      });
+      const data = await res.json();
+      if (data?.error) throw new Error(data.error.message || 'error');
+      let text = (data?.candidates?.[0]?.content?.parts||[]).map(p=>p.text).join('').trim();
+      text = text.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+      const parsed = JSON.parse(text);
+      dumpResult = parsed.filter(x=>x && x.text).map(x=>({ text:x.text, destino: x.destino==='compras'?'compras':'prioridades' }));
+    }catch(e){
+      console.warn('Volcar pendientes: error', e);
+      alert('No pude organizar la lista. Revisá tu conexión o tu API key, y probá de nuevo.');
+    }
+    dumpLoading = false;
+    render();
+  },
+  updateDumpItem(i, val){ if (dumpResult && dumpResult[i]) dumpResult[i].text = val; },
+  setDumpDestino(i, destino){ if (dumpResult && dumpResult[i]){ dumpResult[i].destino = destino; render(); } },
+  removeDumpItem(i){ if (dumpResult){ dumpResult.splice(i,1); render(); } },
+  acceptBrainDump(){
+    if (!dumpResult || !dumpResult.length) return;
+    dumpResult.forEach(item=>{
+      if (item.destino === 'compras'){
+        state.compras.lista.push({ id:uid(), text:item.text, done:false });
+      } else {
+        state.inicio.prioridades.push({ id:uid(), text:item.text, done:false });
+      }
+    });
+    DB.set('compras', state.compras);
+    DB.set('inicio', state.inicio);
+    dumpResult = null;
+    const input2 = document.getElementById('dumpInput');
+    if (input2) input2.value = '';
+    render();
   },
 
   /* --- notificaciones locales (sin backend) --- */
@@ -2789,6 +1763,52 @@ const App = {
     div.innerHTML = buildPrintSectionHTML(cardKey);
     document.body.appendChild(div);
     setTimeout(() => window.print(), 50);
+  },
+
+  /* --- copia de seguridad: descarga todo lo guardado en el navegador como un archivo .json --- */
+  exportBackup(){
+    const data = {};
+    for (let i=0; i<localStorage.length; i++){
+      const k = localStorage.key(i);
+      if (k && k.startsWith('planner:')) data[k] = localStorage.getItem(k);
+    }
+    const payload = { app:'mi-planner-digital', exportedAt:new Date().toISOString(), data };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const today = new Date().toISOString().slice(0,10);
+    a.href = url;
+    a.download = `mi-planner-backup-${today}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  },
+
+  /* --- copia de seguridad: restaura desde un archivo .json exportado antes --- */
+  importBackup(evt){
+    const file = evt.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      evt.target.value = '';
+      let parsed;
+      try{ parsed = JSON.parse(e.target.result); }
+      catch(err){ alert(t('txt_backup_error')); return; }
+      const data = (parsed && parsed.data) ? parsed.data : null;
+      if (!data || typeof data !== 'object'){ alert(t('txt_backup_error')); return; }
+      if (!confirm(t('txt_backup_confirm'))) return;
+      const toRemove = [];
+      for (let i=0; i<localStorage.length; i++){
+        const k = localStorage.key(i);
+        if (k && k.startsWith('planner:')) toRemove.push(k);
+      }
+      toRemove.forEach(k => localStorage.removeItem(k));
+      Object.keys(data).forEach(k => { if (k.startsWith('planner:')) localStorage.setItem(k, data[k]); });
+      alert(t('txt_backup_done'));
+      location.reload();
+    };
+    reader.readAsText(file);
   }
 };
 
@@ -2832,23 +1852,16 @@ const PRINT_BUILDERS = {
   },
   semana(){
     let html = `<section class="p-section"><h2>${esc(t('title_semana'))}</h2>`;
-    const ds = diasDeLaSemana();
-    html += `<p class="p-sub">${esc(rotuloSemana())}</p>`;
-    html += `<p class="p-sub"><b>${esc(t('card_enfoque'))}:</b> ${esc((state.semana.enfoques||{})[isoFecha(ds[0])]||'—')}</p>`;
-    ds.forEach((f,i)=>{ html += `<h3>${esc(rotuloDia(f,i))}</h3>${pRichBlock(claveDia(f))}`; });
+    html += `<p class="p-sub"><b>${esc(t('card_enfoque'))}:</b> ${esc(state.semana.enfoque||'—')}</p>`;
+    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('semana_'+DIA_SLUGS[dia])}`; });
     return html + `</section>`;
   },
   habitos(){
     let html = `<section class="p-section"><h2>${esc(t('title_habitos'))}</h2>`;
     const habitos = state.habitos.lista.filter(h=>h.nombre);
     if (habitos.length){
-      /* Antes sumaba las marcas de todos los meses juntos, así que el número no
-         correspondía al mes que se estaba mirando. */
-      const base = mesVisible();
-      const prefijo = base.getFullYear() + '-' + String(base.getMonth()+1).padStart(2,'0');
-      html += `<p class="p-sub">${esc(rotuloMes())}</p>`;
       html += `<ul>${habitos.map(h=>{
-        const marcados = Object.keys(h.marcas||{}).filter(k=>h.marcas[k] && k.indexOf(prefijo) === 0).length;
+        const marcados = Object.keys(h.marcas||{}).filter(k=>h.marcas[k]).length;
         return `<li>${esc(h.nombre)} — ${marcados} ${state.lang==='en'?'days checked':'días marcados'}</li>`;
       }).join('')}</ul>`;
     } else html += pEmpty();
@@ -2884,9 +1897,9 @@ const PRINT_BUILDERS = {
   },
   objetivos(){
     let html = `<section class="p-section"><h2>${esc(t('title_objetivos'))}</h2>`;
-    migrarObjetivosALista();
-    state.objetivos.lista.forEach(o => {
-      html += `<h3>${esc(nombreObjetivo(o) || '—')}</h3><p class="p-sub"><b>${esc(t('lbl_meta'))}:</b> ${esc(o.meta||'—')} &nbsp; <b>${esc(t('lbl_primer_paso'))}:</b> ${esc(o.paso||'—')} &nbsp; <b>${esc(t('lbl_senal'))}:</b> ${esc(o.fecha||'—')}</p>`;
+    [['personal','cat_personal'],['trabajo','cat_trabajo'],['bienestar','cat_bienestar'],['dinero','cat_dinero']].forEach(([key,labelKey])=>{
+      const o = state.objetivos[key];
+      html += `<h3>${esc(t(labelKey))}</h3><p class="p-sub"><b>${esc(t('lbl_meta'))}:</b> ${esc(o.meta||'—')} &nbsp; <b>${esc(t('lbl_primer_paso'))}:</b> ${esc(o.paso||'—')} &nbsp; <b>${esc(t('lbl_senal'))}:</b> ${esc(o.fecha||'—')}</p>`;
     });
     return html + `</section>`;
   },
@@ -2908,31 +1921,19 @@ const PRINT_BUILDERS = {
   },
   comidas(){
     let html = `<section class="p-section"><h2>${esc(t('title_comidas'))}</h2>`;
-    /* Comidas pasó a guardarse por fecha; con las claves viejas se imprimía todo vacío. */
-    html += `<p class="p-sub">${esc(rotuloComidas())}</p>`;
-    semanaComidas().forEach(f => { html += `<h3>${esc(rotuloDia(f))}</h3>${pRichBlock('comida_'+isoFecha(f))}`; });
+    DIAS.forEach(dia=>{ html += `<h3>${esc(dayLabel(dia))}</h3>${pRichBlock('comida_'+DIA_SLUGS[dia])}`; });
     return html + `</section>`;
   },
   notas(){
-    const l = state.notas.lista || [];
-    if (!l.length) return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pEmpty()}</section>`;
-    let html = `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>`;
-    l.forEach(n => {
-      const fecha = n.fecha ? ' — ' + fechaLinda(n.fecha) : '';
-      html += `<h3>${esc((n.titulo || 'Sin título') + fecha)}</h3>${pRichBlock('nota_'+n.id)}`;
-    });
-    return html + `</section>`;
+    return `<section class="p-section"><h2>${esc(t('title_notas'))}</h2>${pRichBlock('r_notas')}</section>`;
   }
 };
-/* Impresión de un día suelto de Semana.
-   Antes había un constructor fijo por índice (0..6), armado con DIAS: al mirar 14 o 30 días,
-   el botón de imprimir de cualquier día del 8 en adelante llamaba a algo que no existía.
-   Ahora la clave lleva la fecha, así que funciona con cualquier vista. */
-function buildPrintDiaHTML(iso){
-  const [y,m,d] = iso.split('-').map(Number);
-  const f = new Date(y, m-1, d);
-  return `<section class="p-section"><h2>${esc(rotuloDia(f).toUpperCase())}</h2>${pRichBlock('semana_'+iso)}</section>`;
-}
+/* Constructores de impresión para cada día individual de Semana */
+DIAS.forEach(dia=>{
+  PRINT_BUILDERS['semana_dia_'+DIA_SLUGS[dia]] = function(){
+    return `<section class="p-section"><h2>${esc(dayLabel(dia).toUpperCase())}</h2>${pRichBlock('semana_'+DIA_SLUGS[dia])}</section>`;
+  };
+});
 const PRINT_ORDER = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
 
 function printCover(){
@@ -2948,34 +1949,38 @@ function buildPrintHTML(){
 
 /* Arma el documento de UNA sola sección, para el botón de imprimir de cada pantalla */
 function buildPrintSectionHTML(screenKey){
-  /* Días sueltos de Semana: la clave trae la fecha (dia_2026-08-17). */
-  if (screenKey && screenKey.indexOf('dia_') === 0 && screenKey.length === 14){
-    return `<div class="p-doc">${printCover()}${buildPrintDiaHTML(screenKey.slice(4))}</div>`;
-  }
   const builder = PRINT_BUILDERS[screenKey];
   if (!builder) return buildPrintHTML();
   return `<div class="p-doc">${printCover()}${builder()}</div>`;
 }
 
 /* ---------- módulo de sincronización ---------- */
-/* CADA clave (cada día, cada sección) se guarda en SU PROPIO documento de Firestore,
-   en vez de compartir un único documento entre todos. Así cada uno tiene su propio
-   límite de 1MB, y una foto en "Lunes" no compite por espacio con "Martes" o "Viernes". */
-const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas','notas'];
-/* 'board_*' se mantiene por compatibilidad: son tableros de la versión vieja que pueden
-   seguir guardados en algún dispositivo. Se sincronizan para no perderlos, aunque la app
-   ya no los muestre. */
-function isSyncKey(k){ return SYNC_KEYS.includes(k) || k.indexOf('rich_') === 0 || k.indexOf('board_') === 0; }
-/* 'migratedToDocs' es una marca local del navegador, no un dato del planner: nunca se sube. */
+/* claves "de arriba" del state (viven directo en state[clave]) */
+const SYNC_KEYS = ['inicio','semana','habitos','finanzas','proyectos','objetivos','compras','turnos','comidas'];
+/* claves que NUNCA se sincronizan: configuración propia de este dispositivo, no contenido */
+const SYNC_EXCLUDE = ['syncConfig','apiKey','lang'];
+
+/* recorre TODO lo guardado en este dispositivo (incluye las cajas de texto enriquecido:
+   rich_r_inicio_hoy, rich_semana_lunes, rich_r_notas, rich_turno_<id>, etc.) para que
+   la sincronización no se quede afuera de nada, sea lo que sea que se agregue a futuro */
+function syncableKeys(){
+  const keys = [];
+  for (let i=0; i<localStorage.length; i++){
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith('planner:')) continue;
+    const short = k.slice('planner:'.length);
+    if (SYNC_EXCLUDE.includes(short)) continue;
+    keys.push(short);
+  }
+  return keys;
+}
 
 const Sync = {
   db: null,
   unsub: null,
   applyingRemote: false,
-  pushTimers: {},
-  /* Claves con un cambio local que todavía NO se confirmó en la nube.
-     Mientras una clave esté acá, ninguna versión que llegue de la nube la puede pisar. */
-  dirty: {},
+  pushTimer: null,
+  hasReceivedInitial: false,
   loadScript(src){
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) return resolve();
@@ -2986,157 +1991,72 @@ const Sync = {
   },
   async start(){
     if (!state.syncConfig) return;
+    this.hasReceivedInitial = false;
     try{
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
       await this.loadScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
       const app = firebase.apps.length ? firebase.app() : firebase.initializeApp(state.syncConfig.firebaseConfig);
       this.db = firebase.firestore();
-      const parentRef = this.db.collection('planners').doc(state.syncConfig.code);
-      const dataCol = parentRef.collection('data');
-
-      /* Migración de una sola vez: si existían datos en el documento viejo (compartido),
-         los copiamos a documentos individuales para liberar espacio. */
-      /* ESTE ERA EL BUG DE FONDO.
-         Antes: this.migrated era una variable en memoria, así que se reseteaba en CADA arranque,
-         y la migración volvía a copiar los campos viejos del documento padre encima de los datos
-         actuales. Resultado: guardabas una foto, y al abrir la app de nuevo la nota volvía a la
-         versión vieja. Ahora la migración corre una sola vez (queda anotado en el navegador),
-         nunca pisa un documento que ya existe, y al terminar borra los campos viejos del padre. */
-      if (!DB.get('migratedToDocs', false)){
-        try{
-          const oldDoc = await parentRef.get();
-          if (oldDoc.exists){
-            const oldData = oldDoc.data() || {};
-            const keysToMigrate = Object.keys(oldData).filter(isSyncKey);
-            if (keysToMigrate.length){
-              const existing = await dataCol.get();
-              const yaEstan = {};
-              existing.forEach(doc => { yaEstan[doc.id] = true; });
-              const faltantes = keysToMigrate.filter(k => !yaEstan[k]);
-              if (faltantes.length){
-                const batch = this.db.batch();
-                faltantes.forEach(k => batch.set(dataCol.doc(k), { value: oldData[k] }, { merge: true }));
-                await batch.commit();
-              }
-              /* Limpiamos los campos viejos del documento padre para que no puedan volver a pisar nada. */
-              const borrado = {};
-              keysToMigrate.forEach(k => { borrado[k] = firebase.firestore.FieldValue.delete(); });
-              await parentRef.set(borrado, { merge: true });
-            }
-          }
-          DB.set('migratedToDocs', true);
-        }catch(migErr){ /* si falla, seguimos con la sincronización normal */ }
-      }
-
-      /* Todo lo que se editó antes de que Firebase terminara de cargar quedó en espera:
-         ahora que hay conexión, lo mandamos. */
-      this.flushPending();
-
-      /* Si se acaba de restaurar una copia, mandamos todo a la nube antes de escuchar cambios. */
-      if (DB.get('pendienteSubirTodo', false)){
-        DB.set('pendienteSubirTodo', false);
-        App.clavesDelPlanner().forEach(k => { if (isSyncKey(k)) this.push(k); });
-      }
-
-      this.unsub = dataCol.onSnapshot(snap => {
+      const ref = this.db.collection('planners').doc(state.syncConfig.code);
+      this.unsub = ref.onSnapshot(doc => {
+        /* importante: hasta no recibir esto una vez (aunque el documento esté vacío), este dispositivo
+           no manda nada a la nube — así evitamos que un dispositivo nuevo sin datos borre lo que ya había */
+        this.hasReceivedInitial = true;
+        if (!doc.exists) return;
+        const remote = doc.data();
         this.applyingRemote = true;
-        snap.docChanges().forEach(change => {
-          if (change.type === 'removed') return;
-          const k = change.doc.id;
-          /* Si acá hay un cambio local sin subir (por ejemplo una foto recién insertada
-             mientras Firebase todavía estaba cargando), la copia de la nube está vieja.
-             Pisarla era lo que hacía "desaparecer" la imagen a los pocos segundos. */
-          if (this.dirty[k]) return;
-          const remote = change.doc.data();
-          if (remote && remote.value !== undefined){
-            state[k] = remote.value;
-            DB.set(k, state[k]);
-            /* getRich()/richBoxOnly leen de state.richContent[...], que se cachea en memoria
-               apenas se abre un día por primera vez. Si no refrescamos también esa caché acá,
-               un día que ya se haya abierto (como Lunes, que se abre solo al entrar) se queda
-               mostrando y guardando la versión vieja, aunque llegue una más nueva de la nube. */
-            if (k.indexOf('rich_') === 0){
-              const richKey = k.slice(5);
-              if (!state.richContent) state.richContent = {};
-              state.richContent[richKey] = remote.value;
-            }
-            /* Misma lógica para los tableros: getBoard() cachea en state.boards, así que
-               sin esto el tablero abierto seguiría mostrando la versión vieja. */
-            if (k.indexOf('board_') === 0){
-              if (!state.boards) state.boards = {};
-              state.boards[k.slice(6)] = remote.value;
-            }
+        Object.keys(remote).forEach(k => {
+          if (SYNC_EXCLUDE.includes(k)) return;
+          DB.set(k, remote[k]);
+          if (SYNC_KEYS.includes(k)){
+            state[k] = remote[k];
+          } else if (k.startsWith('rich_')){
+            if (!state.richContent) state.richContent = {};
+            state.richContent[k.slice('rich_'.length)] = remote[k];
           }
         });
         this.applyingRemote = false;
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
-        renderSeguro();
+        render();
       }, err => {
         state.syncStatus = 'No se pudo conectar (revisá la config o tu conexión).';
-        renderSeguro();
+        render();
       });
     }catch(e){
       state.syncStatus = 'No se pudo cargar Firebase. Revisá tu conexión a internet.';
-      renderSeguro();
+      render();
     }
   },
   stop(){
     if (this.unsub) this.unsub();
     this.db = null;
+    this.hasReceivedInitial = false;
   },
-  push(key){
-    if (this.applyingRemote || !key) return;
-    /* Antes, si Firebase todavía no había terminado de cargar (this.db === null), este push
-       se descartaba en silencio y el cambio no se subía nunca. Ahora se anota como pendiente
-       y se manda apenas hay conexión. */
-    this.dirty[key] = true;
-    clearTimeout(this.pushTimers[key]);
-    this.pushTimers[key] = setTimeout(() => this.flushKey(key), 500);
-  },
-  flushKey(key){
-    if (!this.db || !state.syncConfig) return;   // sigue pendiente; se manda al conectar
-    /* Para las claves de texto enriquecido (imágenes incluidas), el contenido real y actualizado
-       vive en state.richContent[...], no en state[key] directamente — ahí es donde hay que leerlo
-       antes de subirlo, o se termina mandando una copia vieja o vacía. */
-    let value;
-    if (key.indexOf('rich_') === 0){
-      const rk = key.slice(5);
-      value = (state.richContent && state.richContent[rk] !== undefined)
-        ? state.richContent[rk]
-        : DB.get(key, undefined);
-    } else if (key.indexOf('board_') === 0){
-      /* Los tableros viven en state.boards, que getBoard() cachea recién al abrirlos.
-         Si todavía no se abrió en esta sesión, lo leemos del navegador. */
-      const bk = key.slice(6);
-      value = (state.boards && state.boards[bk] !== undefined)
-        ? state.boards[bk]
-        : DB.get(key, undefined);
-    } else {
-      value = (state[key] !== undefined) ? state[key] : DB.get(key, undefined);
-    }
-    if (value === undefined) return;
-    const dataCol = this.db.collection('planners').doc(state.syncConfig.code).collection('data');
-    dataCol.doc(key).set({ value }, { merge: true })
-      .then(() => {
-        delete this.dirty[key];
-        state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
-        renderSeguro();
-      })
-      .catch(err => {
-        const msg = (err && err.message) ? err.message : String(err);
-        /* Queda en dirty a propósito: así la copia local no se pisa y se reintenta al reconectar. */
-        state.syncStatus = 'Sin subir "' + key + '": ' + msg;
-        renderSeguro();
-      });
-  },
-  flushPending(){
-    Object.keys(this.dirty).forEach(k => this.flushKey(k));
+  push(){
+    if (!this.db || this.applyingRemote || !this.hasReceivedInitial) return;
+    clearTimeout(this.pushTimer);
+    this.pushTimer = setTimeout(() => {
+      const payload = {};
+      syncableKeys().forEach(k => { const v = DB.get(k, null); if (v !== null) payload[k] = v; });
+      this.db.collection('planners').doc(state.syncConfig.code).set(payload, {merge:true})
+        .then(() => {
+          state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
+          render();
+        })
+        .catch(err => {
+          const size = JSON.stringify(payload).length;
+          state.syncStatus = size > 900000
+            ? 'No se pudo sincronizar: hay demasiadas imágenes/dibujos guardados (límite de la base gratuita). Probá sacar alguna imagen grande.'
+            : 'No se pudo sincronizar (' + (err && err.message ? err.message : 'error desconocido') + ').';
+          render();
+        });
+    }, 500);
   }
 };
 
 /* engancha cada guardado local con un push a Firebase, si está conectado */
 const _dbSet = DB.set.bind(DB);
-DB.set = (key, value) => { _dbSet(key, value); if (isSyncKey(key)) Sync.push(key); };
+DB.set = (key, value) => { _dbSet(key, value); if (!SYNC_EXCLUDE.includes(key)) Sync.push(); };
 
 /* revisa recordatorios de turnos cada 30s (mientras la app está abierta) */
 function checkReminders(){
@@ -3153,214 +2073,6 @@ function checkReminders(){
   });
 }
 setInterval(checkReminders, 30000);
-
-/* ---------- arrastrar imágenes a mano ----------
-   Los eventos van sobre document (no sobre cada imagen) porque render() rehace el HTML
-   a cada rato: si se engancharan a la imagen, se perderían en el primer redibujado.
-   'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
-/* Dibuja el marco con las manijas de las esquinas sobre la imagen seleccionada.
-   Es solo visual (pointer-events:none): los toques los sigue manejando la imagen. */
-function borrarMarco(){
-  document.querySelectorAll('.rt-marco').forEach(m => m.remove());
-}
-function dibujarMarco(img){
-  borrarMarco();
-  const caja = img && img.closest('.richbox');
-  if (!caja) return;
-  const m = document.createElement('div');
-  m.className = 'rt-marco';
-  m.innerHTML = '<i class="nw"></i><i class="ne"></i><i class="sw"></i><i class="se"></i>';
-  caja.appendChild(m);
-  ubicarMarco(img);
-}
-function ubicarMarco(img){
-  const m = document.querySelector('.rt-marco');
-  const caja = img && img.closest('.richbox');
-  if (!m || !caja) return;
-  const a = img.getBoundingClientRect(), b = caja.getBoundingClientRect();
-  m.style.left   = (a.left - b.left) + 'px';
-  m.style.top    = (a.top  - b.top)  + 'px';
-  m.style.width  = a.width  + 'px';
-  m.style.height = a.height + 'px';
-}
-
-/* ---------- mover y redimensionar imágenes a mano ----------
-   Los eventos van sobre document (no sobre cada imagen) porque render() rehace el HTML
-   a cada rato: si se engancharan a la imagen, se perderían en el primer redibujado.
-   'pointer' cubre mouse, dedo y lápiz óptico con el mismo código. */
-/* Ancho contra el que el navegador resuelve un 'left' en porcentaje: es el ancho
-   INTERNO del contenedor (sin sus márgenes internos), no el que devuelve
-   getBoundingClientRect. Usar el equivocado corría la imagen unos píxeles cada vez. */
-function anchoInterno(caja){
-  if (!caja) return 300;
-  const cs = getComputedStyle(caja);
-  const w = caja.clientWidth - parseFloat(cs.paddingLeft || 0) - parseFloat(cs.paddingRight || 0);
-  return w > 0 ? w : (caja.getBoundingClientRect().width || 300);
-}
-
-(function initArrastreImagenes(){
-  let img = null, modo = null, x0 = 0, y0 = 0, ix = 0, iy = 0, w0 = 0;
-  let dx = 0, dy = 0, movio = false, pedido = null, esquina = null;
-  let topeIzq = 0, topeDer = 0, topeArr = 0, topeAba = 0;
-  const num = v => parseFloat(v) || 0;
-  const ESQUINA = 30;   // zona de las esquinas, en píxeles
-
-  /* Devuelve cuál de las 4 esquinas se tocó ('br','bl','tr','tl') o null si no fue en ninguna. */
-  function queEsquina(el, ev){
-    const r = el.getBoundingClientRect();
-    const cerca_der = ev.clientX > r.right - ESQUINA;
-    const cerca_izq = ev.clientX < r.left + ESQUINA;
-    const cerca_aba = ev.clientY > r.bottom - ESQUINA;
-    const cerca_arr = ev.clientY < r.top + ESQUINA;
-    if (cerca_der && cerca_aba) return 'br';
-    if (cerca_izq && cerca_aba) return 'bl';
-    if (cerca_der && cerca_arr) return 'tr';
-    if (cerca_izq && cerca_arr) return 'tl';
-    return null;
-  }
-  function enEsquina(el, ev){ return !!queEsquina(el, ev); }
-
-  /* Un solo repintado por cuadro de video: sin esto el arrastre se siente pesado
-     porque el navegador recalcula el diseño en cada evento del dedo. */
-  function pintar(){
-    pedido = null;
-    if (!img) return;
-    if (modo === 'estirar'){
-      /* Si la esquina agarrada está del lado izquierdo, arrastrar hacia la izquierda debe
-         AGRANDAR la imagen (dx negativo suma ancho); del lado derecho es al revés, como antes. */
-      const signo = (esquina === 'bl' || esquina === 'tl') ? -1 : 1;
-      const tope = Math.min(1600, Math.round(w0 + (signo===1?topeDer:-topeIzq)));
-      const nuevo = Math.max(60, Math.min(Math.round(w0 + signo*dx), tope));
-      img.style.width = nuevo + 'px';
-      img.style.height = 'auto';
-      /* Si la imagen está en posición libre y se agarró del lado izquierdo, hay que correr
-         el borde izquierdo para que el lado derecho quede fijo (si no, "flota" para el lado
-         que no corresponde). */
-      if (img.classList.contains('rt-libre') && (esquina === 'bl' || esquina === 'tl')){
-        img.style.left = (ix - (nuevo - w0)) + 'px';
-      }
-    } else {
-      /* No dejamos que se escape del recuadro: quedaría flotando sobre la tarjeta. */
-      const mx = Math.max(topeIzq, Math.min(dx, topeDer));
-      const my = Math.max(topeArr, Math.min(dy, topeAba));
-      img.style.transform = `translate(${mx}px, ${my}px)`;
-    }
-    ubicarMarco(img);
-  }
-
-  document.addEventListener('pointerdown', ev => {
-    const el = ev.target;
-    if (!el || el.tagName !== 'IMG' || !el.closest('.richtext')) return;
-    if (!el.classList.contains('rt-img-selected')) return;   // primero se toca para seleccionar
-
-    esquina = queEsquina(el, ev);
-    modo = esquina ? 'estirar' : 'mover';
-    /* Medimos ANTES de tocar las clases: al quitarle el tope de miniatura la imagen
-       saltaba a su tamaño original y el estirado arrancaba de un ancho equivocado. */
-    const r = el.getBoundingClientRect();
-    const c = el.closest('.richtext').getBoundingClientRect();
-    w0 = r.width;
-    if (modo === 'mover'){
-      /* Una imagen seleccionada se mueve directamente: no hace falta activar nada antes. */
-      ['rt-izq','rt-der','rt-flota-izq','rt-flota-der'].forEach(c => el.classList.remove(c));
-      /* Si la posición había quedado guardada en % (para adaptarse a cada pantalla), la
-         convertimos a píxeles reales de ESTA pantalla antes de arrastrar — así el arrastre
-         arranca del lugar correcto y no de un número tomado de otra pantalla. */
-      const anchoRef = anchoInterno(el.closest('.richtext'));
-      if (el.style.left && el.style.left.indexOf('%') !== -1) el.style.left = Math.round(parseFloat(el.style.left)/100 * anchoRef) + 'px';
-      /* Compatibilidad: las notas viejas pueden tener el 'top' guardado en %; lo pasamos a píxeles. */
-      if (el.style.top && el.style.top.indexOf('%') !== -1) el.style.top = Math.round(parseFloat(el.style.top)/100 * anchoRef) + 'px';
-      if (!el.style.left) el.style.left = '0px';
-      if (!el.style.top)  el.style.top  = '0px';
-      el.classList.add('rt-libre');
-      el.setAttribute('draggable','false');
-      /* El modo libre anula el 'margin:auto' que centraba la imagen, así que al agarrarla
-         daba un salto hacia la izquierda. Acá medimos ese corrimiento y lo compensamos,
-         para que la imagen arranque exactamente donde estaba. */
-      const desp = el.getBoundingClientRect();
-      const salto = { x: desp.left - r.left, y: desp.top - r.top };
-      if (salto.x || salto.y){
-        el.style.left = (num(el.style.left) - salto.x) + 'px';
-        el.style.top  = (num(el.style.top)  - salto.y) + 'px';
-      }
-    } else {
-      /* Fijamos el ancho actual en el mismo momento en que se quita el tope,
-         así no hay ningún salto visible. */
-      el.style.width = Math.round(w0) + 'px';
-      el.style.height = 'auto';
-      el.classList.add('rt-medida');
-      el.classList.remove('rt-img-big');
-    }
-
-    img = el; movio = false; dx = 0; dy = 0;
-    x0 = ev.clientX; y0 = ev.clientY;
-    ix = num(el.style.left); iy = num(el.style.top);   // ya compensado el salto de arriba
-    topeIzq = c.left + 4 - r.left;   topeDer = c.right - 4 - r.right;
-    topeArr = c.top  + 4 - r.top;    topeAba = c.bottom - 4 - r.bottom;
-    if (topeDer < topeIzq) topeDer = topeIzq;
-    if (topeAba < topeArr) topeAba = topeArr;
-    el.classList.add(modo === 'estirar' ? 'rt-estirando' : 'rt-agarrada');
-    try{ el.setPointerCapture(ev.pointerId); }catch(e){}
-    ev.preventDefault();
-  }, true);
-
-  document.addEventListener('pointermove', ev => {
-    if (!img){
-      const el = ev.target;
-      if (el && el.tagName === 'IMG' && el.classList.contains('rt-img-selected') && el.closest('.richtext')){
-        el.style.cursor = enEsquina(el, ev) ? 'nwse-resize' : 'grab';
-      }
-      return;
-    }
-    dx = ev.clientX - x0;
-    dy = ev.clientY - y0;
-    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) movio = true;
-    if (!pedido) pedido = requestAnimationFrame(pintar);
-    ev.preventDefault();
-  });
-
-  function soltar(){
-    if (!img) return;
-    if (pedido){ cancelAnimationFrame(pedido); pedido = null; }
-    const caja = img.closest('.richtext');
-    const contW = anchoInterno(caja);
-    if (modo === 'mover' && movio){
-      /* Pasamos el desplazamiento temporal a la posición definitiva, ya recortado. */
-      const mx = Math.max(topeIzq, Math.min(dx, topeDer));
-      const my = Math.max(topeArr, Math.min(dy, topeAba));
-      img.style.transform = '';
-      /* El corrimiento horizontal va en % del ancho del cuadro, para que en una pantalla
-         más angosta (el celu) la imagen caiga en el lugar proporcional correcto.
-         El vertical va en píxeles: un 'top' en porcentaje CSS lo calcula contra la ALTURA
-         del contenedor, que acá depende del contenido, y el navegador lo tomaba como cero.
-         Ese era el motivo de que la imagen no se pudiera mover ni para arriba ni para abajo. */
-      img.style.left = (((ix + mx) / contW) * 100) + '%';
-      img.style.top  = (iy + my) + 'px';
-    } else if (modo === 'estirar' && movio){
-      const wPx = num(img.style.width);
-      const pct = Math.max(8, Math.min(100, (wPx / contW) * 100));
-      img.style.width = pct + '%';
-      if (img.classList.contains('rt-libre') && (esquina === 'bl' || esquina === 'tl')){
-        img.style.left = ((num(img.style.left) / contW) * 100) + '%';
-      }
-      img.style.transform = '';
-    } else {
-      img.style.transform = '';
-    }
-    img.classList.remove('rt-agarrada','rt-estirando');
-    const guardar = movio;
-    ubicarMarco(img);
-    const el = img;
-    img = null; modo = null;
-    if (guardar && caja && caja.dataset.key) RichText.persist(caja.dataset.key);
-    else if (!guardar) RichText.selectImage(null, el);
-  }
-  document.addEventListener('pointerup', soltar);
-  document.addEventListener('pointercancel', soltar);
-
-  /* Si cambia el tamaño de la ventana, el marco tiene que seguir a la imagen. */
-  window.addEventListener('resize', () => { if (richSelectedImage) ubicarMarco(richSelectedImage); });
-})();
 
 document.documentElement.lang = state.lang;
 window.addEventListener('afterprint', () => {
