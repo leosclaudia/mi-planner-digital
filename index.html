@@ -139,6 +139,11 @@
   .richink.active{z-index:20;cursor:crosshair;}
   .richink:not(.active){pointer-events:none;z-index:0;}
   .richtext img{max-width:85%;height:auto;display:block;margin:8px auto;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.12);}
+  .richimgwrap{position:absolute;touch-action:none;z-index:15;}
+  .richimgwrap img{width:100%;height:100%;display:block;margin:0;border-radius:10px;box-shadow:0 3px 10px rgba(85,72,65,.18);pointer-events:none;}
+  .richimg-del{position:absolute;top:-11px;right:-11px;width:24px;height:24px;border-radius:50%;background:#B23B3B;color:#fff;border:2px solid #fff;font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+  .richimg-resize{position:absolute;right:-8px;bottom:-8px;width:20px;height:20px;background:var(--ink);border:2px solid #fff;border-radius:5px;cursor:nwse-resize;box-shadow:0 2px 6px rgba(0,0,0,.2);}
+  @media print{ .richimg-del, .richimg-resize{display:none !important;} }
 
   .card-h span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .card-h-btn{background:none;border:none;color:var(--ink);opacity:.6;padding:2px;cursor:pointer;flex-shrink:0;}
@@ -977,7 +982,8 @@ function richBoxOnly(key, title, placeholder){
       <div class="richbox">
         <div class="richtext" contenteditable="true" id="richtext-${key}" data-key="${key}" data-placeholder="${esc(placeholder)}"
              onfocus="RichText.setActive('${key}','${esc(title)}')"
-             oninput="RichText.persist('${key}')">${data.html}</div>
+             oninput="RichText.persist('${key}')"
+             onpaste="RichText.handlePaste(event)">${data.html}</div>
         <canvas class="richink" id="richink-${key}" data-key="${key}"></canvas>
       </div>
     </div>
@@ -1176,9 +1182,7 @@ const RichText = {
       if (errEl) errEl.textContent = state.lang==='en' ? 'That doesn\'t look like a valid link.' : 'Eso no parece un link válido.';
       return;
     }
-    this.focusActive();
-    document.execCommand('insertHTML', false, `<img src="${esc(url)}" alt="GIF" style="max-width:100%;"/>`);
-    this.persist(richActive);
+    this.insertImageWrapped(url, 'GIF');
     if (input) input.value = '';
   },
   setStickerSearch(v){
@@ -1213,6 +1217,50 @@ const RichText = {
   },
   customTextColor(v){ richCustomTextColor = v; this.command('foreColor', v); },
   customHighlightColor(v){ richCustomHighlightColor = v; this.command('backColor', v); },
+  /* inserta una imagen "libre": se puede arrastrar a cualquier lugar de la caja y cambiarle el tamaño desde la esquina */
+  insertImageWrapped(dataUrl, alt){
+    this.focusActive();
+    const id = 'img'+Math.random().toString(36).slice(2,9);
+    const html = `<span class="richimgwrap" id="${id}" contenteditable="false" style="left:12px;top:12px;width:160px;height:120px;">`
+      + `<img src="${dataUrl}" alt="${esc(alt||'imagen')}"/>`
+      + `<button class="richimg-del" onmousedown="event.preventDefault();event.stopPropagation();" onclick="RichText.deleteImageWrap('${id}')">×</button>`
+      + `<span class="richimg-resize"></span>`
+      + `</span>`;
+    document.execCommand('insertHTML', false, html);
+    this.persist(richActive);
+    const wrap = document.getElementById(id);
+    const imgEl = wrap ? wrap.querySelector('img') : null;
+    if (imgEl){
+      const applySize = () => {
+        if (wrap && imgEl.naturalWidth) wrap.style.height = (160 * imgEl.naturalHeight / imgEl.naturalWidth) + 'px';
+        RichText.persist(richActive);
+      };
+      if (imgEl.complete && imgEl.naturalWidth) applySize();
+      else imgEl.onload = applySize;
+    }
+  },
+  deleteImageWrap(id){
+    const wrap = document.getElementById(id);
+    if (!wrap) return;
+    const key = wrap.closest('.richtext') ? wrap.closest('.richtext').dataset.key : richActive;
+    wrap.remove();
+    this.persist(key);
+  },
+  handlePaste(e){
+    const items = (e.clipboardData || window.clipboardData) ? (e.clipboardData || window.clipboardData).items : null;
+    if (!items) return;
+    for (const item of items){
+      if (item.type && item.type.indexOf('image') !== -1){
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (!file) continue;
+        const reader = new FileReader();
+        reader.onload = (ev) => { RichText.insertImageWrapped(ev.target.result, 'imagen pegada'); };
+        reader.readAsDataURL(file);
+        return;
+      }
+    }
+  },
   insertImage(evt){
     const file = evt.target.files[0];
     if (!file) return;
@@ -1225,12 +1273,9 @@ const RichText = {
         if (!ok) return;
       }
       const reader = new FileReader();
-      reader.onload = (e) => {
-        RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${e.target.result}" alt="GIF"/>`);
-        RichText.persist(richActive);
-      };
+      reader.onload = (e) => { RichText.insertImageWrapped(e.target.result, 'GIF'); };
       reader.readAsDataURL(file);
+      evt.target.value = '';
       return;
     }
     const reader = new FileReader();
@@ -1243,9 +1288,7 @@ const RichText = {
         const c = document.createElement('canvas'); c.width=w; c.height=h;
         c.getContext('2d').drawImage(img,0,0,w,h);
         const dataUrl = c.toDataURL('image/jpeg', 0.75);
-        RichText.focusActive();
-        document.execCommand('insertHTML', false, `<img src="${dataUrl}" alt="Imagen"/>`);
-        RichText.persist(richActive);
+        RichText.insertImageWrapped(dataUrl, 'imagen');
       };
       img.src = e.target.result;
     };
@@ -2077,6 +2120,59 @@ function checkReminders(){
   });
 }
 setInterval(checkReminders, 30000);
+
+/* ---------- arrastrar y redimensionar imágenes libres dentro de una caja ---------- */
+let richImgDrag = null;
+function richImgPointerStart(e){
+  const target = e.target;
+  const wrap = target.closest ? target.closest('.richimgwrap') : null;
+  if (!wrap) return;
+  const isResize = !!(target.closest && target.closest('.richimg-resize'));
+  const isDelete = !!(target.closest && target.closest('.richimg-del'));
+  if (isDelete) return; // el botón de borrar maneja lo suyo
+  e.preventDefault();
+  const box = wrap.closest('.richtext');
+  const point = e.touches ? e.touches[0] : e;
+  richImgDrag = {
+    type: isResize ? 'resize' : 'move',
+    wrap,
+    boxKey: box ? box.dataset.key : richActive,
+    startX: point.clientX,
+    startY: point.clientY,
+    startLeft: parseFloat(wrap.style.left) || 0,
+    startTop: parseFloat(wrap.style.top) || 0,
+    startW: wrap.offsetWidth,
+    startH: wrap.offsetHeight
+  };
+}
+function richImgPointerMove(e){
+  if (!richImgDrag) return;
+  e.preventDefault();
+  const point = e.touches ? e.touches[0] : e;
+  const dx = point.clientX - richImgDrag.startX;
+  const dy = point.clientY - richImgDrag.startY;
+  if (richImgDrag.type === 'move'){
+    richImgDrag.wrap.style.left = (richImgDrag.startLeft + dx) + 'px';
+    richImgDrag.wrap.style.top = (richImgDrag.startTop + dy) + 'px';
+  } else {
+    const newW = Math.max(40, richImgDrag.startW + dx);
+    const ratio = richImgDrag.startH / richImgDrag.startW;
+    richImgDrag.wrap.style.width = newW + 'px';
+    richImgDrag.wrap.style.height = (newW * ratio) + 'px';
+  }
+}
+function richImgPointerEnd(){
+  if (!richImgDrag) return;
+  const key = richImgDrag.boxKey;
+  richImgDrag = null;
+  RichText.persist(key);
+}
+document.addEventListener('mousedown', richImgPointerStart);
+document.addEventListener('mousemove', richImgPointerMove);
+document.addEventListener('mouseup', richImgPointerEnd);
+document.addEventListener('touchstart', richImgPointerStart, {passive:false});
+document.addEventListener('touchmove', richImgPointerMove, {passive:false});
+document.addEventListener('touchend', richImgPointerEnd);
 
 document.documentElement.lang = state.lang;
 window.addEventListener('afterprint', () => {
