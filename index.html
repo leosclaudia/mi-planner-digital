@@ -1282,6 +1282,7 @@ const RichText = {
     if (!imgs.length){ alert(t('rich_sin_imgs')); return; }
     imgs.forEach((img, i) => {
       const src = img.getAttribute('src') || '';
+      const isDataUrl = src.startsWith('data:');
       const a = document.createElement('a');
       let ext = 'png';
       const m = src.match(/^data:image\/(\w+);/);
@@ -1289,7 +1290,10 @@ const RichText = {
       else if (/\.gif(\?|$)/i.test(src)) ext = 'gif';
       a.href = src;
       a.download = `${richActive}-imagen-${i+1}.${ext}`;
-      a.target = '_blank';
+      /* las fotos guardadas en la nota (data:) descargan directo, sin abrir nada;
+         los GIF pegados por link (URL externa) sí necesitan pestaña nueva, porque
+         normalmente el sitio de origen no permite bajarlos directo */
+      if (!isDataUrl) a.target = '_blank';
       document.body.appendChild(a);
       a.click();
       a.remove();
