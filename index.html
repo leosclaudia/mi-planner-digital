@@ -573,7 +573,7 @@ function renderInicio(){
       ${d.prioridades.map(p=>`
         <div class="row">
           <button class="chk ${p.done?'done':''}" onclick="App.toggle('inicio','prioridades','${p.id}')">${p.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-          <input type="text" value="${esc(p.text)}" placeholder="${esc(t('ph_prioridad'))}" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
+          <input type="text" id="li-${p.id}" value="${esc(p.text)}" placeholder="${esc(t('ph_prioridad'))}" style="${p.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('inicio','prioridades','${p.id}','text',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('inicio','prioridades','${p.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
@@ -688,7 +688,7 @@ function renderFinanzas(){
       ${f.recordar.map(r=>`
         <div class="row">
           <button class="chk ${r.done?'done':''}" onclick="App.toggle('finanzas','recordar','${r.id}')">${r.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-          <input type="text" value="${esc(r.text)}" placeholder="${esc(t('ph_algo_recordar'))}" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
+          <input type="text" id="li-${r.id}" value="${esc(r.text)}" placeholder="${esc(t('ph_algo_recordar'))}" style="${r.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('finanzas','recordar','${r.id}','text',this.value)"/>
           <button class="xbtn" onclick="App.removeItem('finanzas','recordar','${r.id}')">${ICONS.x}</button>
         </div>
       `).join('')}
@@ -720,7 +720,7 @@ function renderProyectos(){
         ${(p.pasos||[]).map(ps=>`
           <div class="row">
             <button class="chk ${ps.done?'done':''}" onclick="App.toggleNested('proyectos','${p.id}','pasos','${ps.id}')">${ps.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-            <input type="text" value="${esc(ps.text)}" placeholder="${esc(t('ph_paso'))}" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
+            <input type="text" id="li-${ps.id}" value="${esc(ps.text)}" placeholder="${esc(t('ph_paso'))}" style="${ps.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setNestedField('proyectos','${p.id}','pasos','${ps.id}','text',this.value)"/>
           </div>
         `).join('')}
         <button class="addlink" onclick="App.addNested('proyectos','${p.id}','pasos',{text:'',done:false})">${ICONS.plus} ${esc(t('btn_agregar_paso'))}</button>
@@ -762,7 +762,7 @@ function renderCompras(){
     ${c.lista.map(item=>`
       <div class="row">
         <button class="chk ${item.done?'done':''}" onclick="App.toggle('compras','lista','${item.id}')">${item.done?ICONS.check.replace('<rect x="3" y="3" width="18" height="18" rx="2"/>',''):''}</button>
-        <input type="text" value="${esc(item.text)}" placeholder="${esc(t('ph_compra'))}" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
+        <input type="text" id="li-${item.id}" value="${esc(item.text)}" placeholder="${esc(t('ph_compra'))}" style="${item.done?'text-decoration:line-through;opacity:.5;':''}" oninput="App.setListField('compras','lista','${item.id}','text',this.value)"/>
         <button class="xbtn" onclick="App.removeItem('compras','lista','${item.id}')">${ICONS.x}</button>
       </div>
     `).join('')}
@@ -1588,8 +1588,13 @@ const App = {
     if (item){ item.done = !item.done; DB.set(section, state[section]); render(); }
   },
   addItem(section, listKey, blank){
-    state[section][listKey].push(Object.assign({id:uid()}, blank));
+    const newItem = Object.assign({id:uid()}, blank);
+    state[section][listKey].push(newItem);
     DB.set(section, state[section]); render();
+    requestAnimationFrame(() => {
+      const el = document.getElementById('li-'+newItem.id);
+      if (el) el.focus();
+    });
   },
   removeItem(section, listKey, id){
     state[section][listKey] = state[section][listKey].filter(x=>x.id!==id);
@@ -1616,8 +1621,13 @@ const App = {
   addNested(section, parentId, listKey, blank){
     const parent = state[section].lista.find(x=>x.id===parentId);
     parent[listKey] = parent[listKey] || [];
-    parent[listKey].push(Object.assign({id:uid()}, blank));
+    const newItem = Object.assign({id:uid()}, blank);
+    parent[listKey].push(newItem);
     DB.set(section, state[section]); render();
+    requestAnimationFrame(() => {
+      const el = document.getElementById('li-'+newItem.id);
+      if (el) el.focus();
+    });
   },
 
   /* --- asistente / API key --- */
