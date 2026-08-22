@@ -2074,7 +2074,12 @@ const Sync = {
         });
         this.applyingRemote = false;
         state.syncStatus = 'Última sincronización: ' + new Date().toLocaleTimeString('es-AR');
-        render();
+        /* si estás escribiendo algo en este momento, no refresques la pantalla ahora —
+           te sacaría el teclado de foco a mitad de la escritura. El cambio ya quedó
+           guardado igual; se va a ver en pantalla la próxima vez que la app se actualice. */
+        const active = document.activeElement;
+        const isTyping = active && (active.tagName==='INPUT' || active.tagName==='TEXTAREA' || active.isContentEditable);
+        if (!isTyping) render();
       }, err => {
         state.syncStatus = 'No se pudo conectar (revisá la config o tu conexión).';
         render();
